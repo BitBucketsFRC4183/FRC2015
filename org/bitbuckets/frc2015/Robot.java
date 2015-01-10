@@ -1,12 +1,17 @@
 
 package org.bitbuckets.frc2015;
 
+import org.bitbuckets.frc2015.commands.ExampleCommand;
+import org.bitbuckets.frc2015.subsystems.DriveTrain;
+import org.bitbuckets.frc2015.subsystems.ExampleSubsystem;
+
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
-import org.bitbuckets.frc2015.commands.ExampleCommand;
-import org.bitbuckets.frc2015.subsystems.ExampleSubsystem;
+import edu.wpi.first.wpilibj.networktables.NetworkTable;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -17,8 +22,8 @@ import org.bitbuckets.frc2015.subsystems.ExampleSubsystem;
  */
 public class Robot extends IterativeRobot {
 
-	public static final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
 	public static OI oi;
+	public static DriveTrain dt;
 
     Command autonomousCommand;
 
@@ -28,8 +33,11 @@ public class Robot extends IterativeRobot {
      */
     public void robotInit() {
 		oi = new OI();
+		dt = new DriveTrain();
         // instantiate the command used for the autonomous period
         autonomousCommand = new ExampleCommand();
+        System.out.println("intiiadf");
+        SmartDashboard.putString("test", "This is a test!");
     }
 	
 	public void disabledPeriodic() {
@@ -69,6 +77,8 @@ public class Robot extends IterativeRobot {
      */
     public void teleopPeriodic() {
         Scheduler.getInstance().run();
+    	SmartDashboard.putString("hey", "listen!");
+    	dt.drive(oi.stick.getY(), oi.stick.getX());
     }
     
     /**

@@ -17,19 +17,27 @@ public class RobotMap {
 	/**
      * The right front motor on the drivetrain.
      */
-    public static final int R_MOTOR_A = 1;
+    public static final int R_MOTOR_A = 4;
     /**
      * The right rear motor on the drivetrain.
      */
-    public static final int R_MOTOR_B = 2;
+    public static final int R_MOTOR_B = 5;
+    /**
+     * The right rear motor on the drivetrain.
+     */
+    public static final int R_MOTOR_C = 6;
     /**
      * The left front motor on the drivetrain.
      */
-    public static final int L_MOTOR_A = 3;
+    public static final int L_MOTOR_A = 1;
     /**
      * The left rear motor on the drivetrain.
      */
-    public static final int L_MOTOR_B = 4;
+    public static final int L_MOTOR_B = 2;
+    /**
+     * The left rear motor on the drivetrain.
+     */
+    public static final int L_MOTOR_C = 3;
     /**
      * The top intake roller motor.
      */

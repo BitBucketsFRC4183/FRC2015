@@ -4,6 +4,7 @@ import org.bitbuckets.frc2015.RobotMap;
 
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
@@ -24,6 +25,9 @@ public class DriveTrain extends Subsystem {
     }
     
     public void drive(double throttle, double curve){
+    	System.out.println("Blah");
+    	SmartDashboard.putNumber("Throttle", throttle);
+    	SmartDashboard.putNumber("Curve", curve);
     	drive.arcadeDrive(throttle, curve);
     }
 }
