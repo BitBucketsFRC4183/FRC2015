@@ -1,9 +1,9 @@
 package org.bitbuckets.frc2015.control;
 
 import org.bitbuckets.frc2015.RandomConstants;
-import org.bitbuckets.frc2015.lib.SpeedManager;
+import org.bitbuckets.frc2015.lib.MotionController;
 
-public class ExampleSpeedManager implements SpeedManager{
+public class ExampleMotionController implements MotionController{
 	/** The sensor value the last time <code>update()</code> was called. **/
 	private float prevSense;
 	/** The current speed of the <code>SpeedManager</code>. **/

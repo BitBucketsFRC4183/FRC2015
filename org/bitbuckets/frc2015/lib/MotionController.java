@@ -1,6 +1,6 @@
 package org.bitbuckets.frc2015.lib;
 
-public interface SpeedManager {
+public interface MotionController {
 	public void init(float... inputs);
 	
 	/**
