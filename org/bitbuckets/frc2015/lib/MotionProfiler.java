@@ -14,12 +14,12 @@ public interface MotionProfiler {
 	 * 
 	 * @return The current speed of this profiler.
 	 */
-	public float getSpeed();
+	public double getSpeed();
 	
 	/**
 	 * Updates the speed at which the motor should be running.
 	 * 
 	 * @return The current speed to set the motor to.
 	 */
-	public float update();
+	public double update();
 }

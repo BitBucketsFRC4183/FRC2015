@@ -3,10 +3,10 @@ package org.bitbuckets.frc2015.control;
 import org.bitbuckets.frc2015.lib.MotionProfiler;
 
 public class ExampleMotionProfiler implements MotionProfiler {
-	private float maxPos;
-	private float maxVel;
-	private float currPos;
-	private float currVel;
+	private double maxPos;
+	private double maxVel;
+	private double currPos;
+	private double currVel;
 	
 	@Override
 	public void init(int pos, int maxVel) {
@@ -15,12 +15,12 @@ public class ExampleMotionProfiler implements MotionProfiler {
 	}
 
 	@Override
-	public float getSpeed() {
+	public double getSpeed() {
 		return currVel;
 	}
 
 	@Override
-	public float update() {
+	public double update() {
 		
 		
 		return currVel;

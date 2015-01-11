@@ -34,12 +34,12 @@ public class DriveTrain extends Subsystem {
         //setDefaultCommand(new MySpecialCommand());
     }
     
-    public void drive(float throttle, float curve){
+    public void drive(double throttle, double curve){
     	System.out.println("Blah");
     	SmartDashboard.putNumber("Throttle", throttle);
     	SmartDashboard.putNumber("Curve", curve);
-    	float right = throttle - curve;
-    	float left = throttle + curve;
+    	double right = throttle - curve;
+    	double left = throttle + curve;
     	
     	RMA.set(right);
     	RMB.set(right);

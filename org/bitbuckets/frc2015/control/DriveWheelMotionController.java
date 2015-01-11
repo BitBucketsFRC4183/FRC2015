@@ -3,23 +3,23 @@ package org.bitbuckets.frc2015.control;
 import org.bitbuckets.frc2015.lib.MotionController;
 
 public class DriveWheelMotionController implements MotionController{
-	private float speed;
+	private double speed;
 	
 	@Override
-	public void init(float... inputs) {
+	public void init(double... inputs) {
 		
 		
 	}
 
 	@Override
-	public float getSpeed() {
+	public double getSpeed() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public float update(float set, float... input) {
-		float sense = input[0];
+	public double update(double set, double... input) {
+		double sense = input[0];
 		return 0;
 	}
 

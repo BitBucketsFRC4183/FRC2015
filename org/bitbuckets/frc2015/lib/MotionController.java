@@ -1,14 +1,14 @@
 package org.bitbuckets.frc2015.lib;
 
 public interface MotionController {
-	public void init(float... inputs);
+	public void init(double... inputs);
 	
 	/**
 	 * Gets the current speed of the <code>SpeedManager</code>.
 	 * 
 	 * @return The current speed.
 	 */
-	public float getSpeed();
+	public double getSpeed();
 	
 	/**
 	 * Updates the <code>speed</code> of this manager based on sensor inputs
@@ -17,5 +17,5 @@ public interface MotionController {
 	 * @param input The inputs from all the sensors this <code>SpeedManager</code> needs inputs from.
 	 * @return The updated <code>speed</code> of this <code>SpeedManager</code>.
 	 */
-	public float update(float set, float... input);
+	public double update(double set, double... input);
 }
