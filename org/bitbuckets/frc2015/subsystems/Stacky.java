@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 /**
  *
  */
-public class Stacker extends Subsystem {
+public class Stacky extends Subsystem {
     Talon winch;
 
     public void initDefaultCommand() {

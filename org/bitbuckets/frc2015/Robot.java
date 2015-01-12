@@ -1,7 +1,7 @@
 
 package org.bitbuckets.frc2015;
 
-import org.bitbuckets.frc2015.subsystems.DriveTrain;
+import org.bitbuckets.frc2015.subsystems.Drivey;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends IterativeRobot {
 
 	public static OI oi;
-	public static DriveTrain dt;
+	public static Drivey dt;
 
     Command autonomousCommand;
 
@@ -29,7 +29,7 @@ public class Robot extends IterativeRobot {
      */
     public void robotInit() {
 		oi = new OI();
-		dt = new DriveTrain();
+		dt = new Drivey();
         // instantiate the command used for the autonomous period
         System.out.println("intiiadf");
         SmartDashboard.putString("test", "This is a test!");

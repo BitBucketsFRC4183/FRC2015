@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 /**
  *
  */
-public class DriveTrain extends Subsystem {
+public class Drivey extends Subsystem {
 	private RobotDrive drive;
 	private Talon RMA;
 	private Talon RMB;
@@ -19,7 +19,7 @@ public class DriveTrain extends Subsystem {
 	private Talon LMB;
 	private Talon LMC;
 	
-	public DriveTrain(){
+	public Drivey(){
 		super();
 		RMA = new Talon(RobotMap.R_MOTOR_A);
 		RMB = new Talon(RobotMap.R_MOTOR_B);
