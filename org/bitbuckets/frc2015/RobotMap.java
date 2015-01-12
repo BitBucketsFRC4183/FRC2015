@@ -15,43 +15,31 @@ public class RobotMap {
 	/////////////////////////////////////////////////////////////////////////////
 	
 	/**
-     * The right front motor on the drivetrain.
+     * A right motor on the drivetrain.
      */
     public static final int R_MOTOR_A = 4;
     /**
-     * The right rear motor on the drivetrain.
+     * A right motor on the drivetrain.
      */
     public static final int R_MOTOR_B = 5;
     /**
-     * The right rear motor on the drivetrain.
+     * A right motor on the drivetrain.
      */
     public static final int R_MOTOR_C = 6;
     /**
-     * The left front motor on the drivetrain.
+     * A left motor on the drivetrain.
      */
     public static final int L_MOTOR_A = 1;
     /**
-     * The left rear motor on the drivetrain.
+     * A left motor on the drivetrain.
      */
     public static final int L_MOTOR_B = 2;
     /**
-     * The left rear motor on the drivetrain.
+     * A left motor on the drivetrain.
      */
     public static final int L_MOTOR_C = 3;
     /**
-     * The top intake roller motor.
-     */
-    public static final int TOP_ROLLER_MOTOR = 5;
-    /**
-     * The right intake roller motor.
-     */
-    public static final int RIGHT_ROLLER_MOTOR = 6;
-    /**
-     * The left intake roller motor.
-     */
-    public static final int LEFT_ROLLER_MOTOR = 7;
-    /**
-     * Mini-CIMs driving ball-shifter winch.
+     * Motors driving the winch for the hooks.
      */
     public static final int WINCH_MOTOR = 8;
     
