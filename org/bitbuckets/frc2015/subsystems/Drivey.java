@@ -2,8 +2,8 @@ package org.bitbuckets.frc2015.subsystems;
 
 import org.bitbuckets.frc2015.RobotMap;
 
+import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.RobotDrive;
-import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -12,21 +12,21 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class Drivey extends Subsystem {
 	private RobotDrive drive;
-	private Talon RMA;
-	private Talon RMB;
-	private Talon RMC;
-	private Talon LMA;
-	private Talon LMB;
-	private Talon LMC;
+	private CANTalon RMA;
+	private CANTalon RMB;
+//	private CANTalon RMC;
+	private CANTalon LMA;
+	private CANTalon LMB;
+//	private CANTalon LMC;
 	
 	public Drivey(){
 		super();
-		RMA = new Talon(RobotMap.R_MOTOR_A);
-		RMB = new Talon(RobotMap.R_MOTOR_B);
-		RMC = new Talon(RobotMap.R_MOTOR_C);
-		LMA = new Talon(RobotMap.L_MOTOR_A);
-		LMB = new Talon(RobotMap.L_MOTOR_B);
-	    LMC = new Talon(RobotMap.L_MOTOR_C);
+		RMA = new CANTalon(RobotMap.R_MOTOR_A);
+		RMB = new CANTalon(RobotMap.R_MOTOR_B);
+//		RMC = new CANTalon(RobotMap.R_MOTOR_C);
+		LMA = new CANTalon(RobotMap.L_MOTOR_A);
+		LMB = new CANTalon(RobotMap.L_MOTOR_B);
+//	    LMC = new CANTalon(RobotMap.L_MOTOR_C);
 	}
 
     public void initDefaultCommand() {
@@ -43,10 +43,10 @@ public class Drivey extends Subsystem {
     	
     	RMA.set(right);
     	RMB.set(right);
-    	RMC.set(right);
+//    	RMC.set(right);
     	LMA.set(left);
     	LMB.set(left);
-    	LMC.set(left);
+//    	LMC.set(left);
     }
 }
 
