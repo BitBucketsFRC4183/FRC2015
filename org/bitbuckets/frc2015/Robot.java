@@ -1,7 +1,9 @@
 
 package org.bitbuckets.frc2015;
 
+import org.bitbuckets.frc2015.control.OmniDriveWheelMotionController;
 import org.bitbuckets.frc2015.subsystems.Drivey;
+import org.bitbuckets.frc2015.command.*;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
@@ -31,8 +33,8 @@ public class Robot extends IterativeRobot {
 		oi = new OI();
 		dt = new Drivey();
         // instantiate the command used for the autonomous period
-        System.out.println("intiiadf");
-        SmartDashboard.putString("test", "This is a test!");
+		
+		SmartDashboardSetup dashboardSetup = new SmartDashboardSetup();
     }
 
     /**
