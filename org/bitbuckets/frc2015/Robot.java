@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.bitbuckets.frc2015.command.CloseGrabber;
 import org.bitbuckets.frc2015.command.OpenGrabber;
-import org.bitbuckets.frc2015.command.SmartDashboardSetup;
 import org.bitbuckets.frc2015.subsystems.*;
 
 /**
@@ -50,10 +49,11 @@ public class Robot extends IterativeRobot {
         OpenGrabber openGrabber = new OpenGrabber();
         CloseGrabber closeGrabber = new CloseGrabber();
 
-        SmartDashboardSetup dashboardSetup = new SmartDashboardSetup();
-
+        SmartDashboardInit();
+        
         oi.trigger.whenPressed(openGrabber);
         oi.trigger.whenReleased(closeGrabber);
+        
     }
 
     /**
@@ -102,5 +102,13 @@ public class Robot extends IterativeRobot {
      */
     public void testPeriodic() {
         LiveWindow.run();
+    }
+    
+    public void SmartDashboardInit(){
+        SmartDashboard.putString("test", "This is a test!");
+        SmartDashboard.putData(Scheduler.getInstance());
+        //SmartDashboard.putNumber("Speed", drivey.getSpeed());
+        //SmartDashboard.putNumber("Tilty Angle", tilty.getAngle());
+        //SmartDashboard.put
     }
 }

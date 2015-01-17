@@ -40,6 +40,10 @@ public class Grabby extends Subsystem {
 		return true;
 	}
 
+	/**
+	 * 
+	 * @param closed setting to true closes the grabber at speed kForward
+	 */
 	public void setGrabby(boolean closed){
 		grabby.set(closed ? DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kReverse);
 	}
