@@ -42,19 +42,23 @@ public class RobotMap {
      * Motors driving the winch for the hooks.
      */
     public static final int WINCH_MOTOR = 8;
+    /**
+     * 
+     */
+    public static final int GRAB_TILT_MOTOR = 6;
     
     ///////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////----SOLENOIDS----/////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////
     
     /**
-     * The first port for the double solenoid controlling the intake pistons.
+     * The first port for the double solenoid controlling the grabber pistons.
      */
-    public static final int INTAKE_SOLENOID_1 = 1;
+    public static final int GRABBY_SOLENOID_1 = 1;
     /**
-     * The second port for the double solenoid controlling the intake pistons.
+     * The second port for the double solenoid controlling the grabber pistons.
      */
-    public static final int INTAKE_SOLENOID_2 = 2;
+    public static final int GRABBY_SOLENOID_2 = 2;
     /**
      * The first port for the double solenoid controlling the winch shifter.
      */

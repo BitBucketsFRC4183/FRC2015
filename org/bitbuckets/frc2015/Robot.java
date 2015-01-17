@@ -1,15 +1,15 @@
-
 package org.bitbuckets.frc2015;
 
-import org.bitbuckets.frc2015.control.OmniDriveWheelMotionController;
-import org.bitbuckets.frc2015.subsystems.Drivey;
-import org.bitbuckets.frc2015.command.*;
-
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.bitbuckets.frc2015.command.CloseGrabber;
+import org.bitbuckets.frc2015.command.OpenGrabber;
+import org.bitbuckets.frc2015.command.SmartDashboardSetup;
+import org.bitbuckets.frc2015.subsystems.*;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -20,8 +20,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class Robot extends IterativeRobot {
 
-	public static OI oi;
-	public static Drivey dt;
+    public static OI oi;
+    public static Drivey drivey;
+    public static Esteemy esteemy;
+    public static Grabby grabby;
+    public static Stacky stacky;
+    public static Tilty tilty;
+
+    public static Compressor compressor;
 
     Command autonomousCommand;
 
@@ -30,24 +36,37 @@ public class Robot extends IterativeRobot {
      * used for any initialization code.
      */
     public void robotInit() {
-		oi = new OI();
-		dt = new Drivey();
+        oi = new OI();
+        drivey = new Drivey();
+        esteemy = new Esteemy();
+        grabby = new Grabby();
+        stacky = new Stacky();
+        tilty = new Tilty();
+
+        compressor = new Compressor(0);
+        compressor.setClosedLoopControl(true);
         // instantiate the command used for the autonomous period
-		
-		SmartDashboardSetup dashboardSetup = new SmartDashboardSetup();
+
+        OpenGrabber openGrabber = new OpenGrabber();
+        CloseGrabber closeGrabber = new CloseGrabber();
+
+        SmartDashboardSetup dashboardSetup = new SmartDashboardSetup();
+
+        oi.trigger.whenPressed(openGrabber);
+        oi.trigger.whenReleased(closeGrabber);
     }
 
     /**
      * This function is called when the disabled button is hit.
      * You can use it to reset subsystems before shutting down.
      */
-    public void disabledInit(){
+    public void disabledInit() {
 
     }
-	
-	public void disabledPeriodic() {
-		Scheduler.getInstance().run();
-	}
+
+    public void disabledPeriodic() {
+        Scheduler.getInstance().run();
+    }
 
     public void autonomousInit() {
         // schedule the autonomous command (example)
@@ -62,7 +81,7 @@ public class Robot extends IterativeRobot {
     }
 
     public void teleopInit() {
-		// This makes sure that the autonomous stops running when
+        // This makes sure that the autonomous stops running when
         // teleop starts running. If you want the autonomous to 
         // continue until interrupted by another command, remove
         // this line or comment it out.
@@ -74,10 +93,10 @@ public class Robot extends IterativeRobot {
      */
     public void teleopPeriodic() {
         Scheduler.getInstance().run();
-    	SmartDashboard.putString("hey", "listen!");
-    	dt.drive(oi.stick.getY(), oi.stick.getX());
+        SmartDashboard.putString("hey", "listen!");
+        drivey.drive(oi.stick.getY(), oi.stick.getX());
     }
-    
+
     /**
      * This function is called periodically during test mode
      */
