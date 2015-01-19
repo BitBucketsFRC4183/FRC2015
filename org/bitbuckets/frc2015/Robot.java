@@ -93,8 +93,8 @@ public class Robot extends IterativeRobot {
      */
     public void teleopPeriodic() {
         Scheduler.getInstance().run();
-        SmartDashboard.putString("hey", "listen!");
         drivey.drive(oi.stick.getY(), oi.stick.getX());
+        grabby.setSpeed(oi.operatorStick.getY());
     }
 
     /**
