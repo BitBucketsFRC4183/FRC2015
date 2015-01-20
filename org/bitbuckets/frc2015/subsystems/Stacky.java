@@ -6,7 +6,13 @@ import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 /**
- *
+ * Desc: Stacks totes to one distance to another distance vertically.
+ * mapp it to an event 
+ * inside the button library when its press and realease,
+ * when the event happens calls init,
+ * continually call main
+ * until it finish return true.
+ * have interrupt
  */
 public class Stacky extends Subsystem {
     Talon winch;
