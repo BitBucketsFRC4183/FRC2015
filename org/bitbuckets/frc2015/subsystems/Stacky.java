@@ -19,13 +19,11 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 public class Stacky extends Subsystem {
     Talon winch;
     DigitalInput hallSensors[];
-    int totalHallSensors;
 
     public void initDefaultCommand() {
     	winch = new Talon(RobotMap.WINCH_MOTOR);
-    	totalHallSensors = 5;
-    	hallSensors = new DigitalInput[totalHallSensors];
-    	for(int i=0;i<totalHallSensors;totalHallSensors++){
+    	hallSensors = new DigitalInput[Robot.hallSensors.length];
+    	for(int i 0; i < Robot.RobotMap.hallSensors.length; i++){
     		// Zero is the top one
     		// creates 5 hallSesors starting digital input 0 from 5
     		hallSensors[i] = new DigitalInput(i);

@@ -12,6 +12,20 @@ public class RobotMap {
 	
 	public static int opJoyPort = 2;
 	
+	//not sure where sensors go
+	/**
+	 * 
+	 */
+	public static int[] hallSensors = {0, 1, 2, 3, 4};
+	/**
+	 * The right side sensor to detect collision with a tote
+	 */
+	public static int bumperSensorRight = 5;
+	/**
+	 * The left side sensor to detect collision with a tote
+	 */
+	public static int bumperSensorLeft = 6;
+	
 	/////////////////////////////////////////////////////////////////////////////
 	/////////////////////////////////----CAN----/////////////////////////////////
 	/////////////////////////////////////////////////////////////////////////////
