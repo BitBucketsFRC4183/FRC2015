@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  */
 public class Stacky extends Subsystem {
     Talon winch;
+    	
 
     public void initDefaultCommand() {
     	winch = new Talon(RobotMap.WINCH_MOTOR);
