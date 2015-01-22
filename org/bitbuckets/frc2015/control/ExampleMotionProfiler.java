@@ -1,6 +1,6 @@
 package org.bitbuckets.frc2015.control;
 
-import org.bitbuckets.frc2015.lib.MotionProfiler;
+import org.bitbuckets.frc2015.util.MotionProfiler;
 
 public class ExampleMotionProfiler implements MotionProfiler {
 	private double maxPos;

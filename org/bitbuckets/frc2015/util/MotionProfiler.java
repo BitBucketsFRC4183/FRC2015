@@ -1,4 +1,4 @@
-package org.bitbuckets.frc2015.lib;
+package org.bitbuckets.frc2015.util;
 
 public interface MotionProfiler {
 	/**
