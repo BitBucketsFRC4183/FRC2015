@@ -23,7 +23,7 @@ public class EncoderMotionController implements MotionController {
     /**
      * Initializes the <code>EncoderMotionController</code>.
      *
-     * @param inputs This {@link org.bitbuckets.frc2015.util.MotionController} needs to be initialized with 3 doubles. The kp, ki, and kd for the {@link edu.wpi.first.wpilibj.PIDController}
+     * @param inputs This {@link org.bitbuckets.frc2015.util.MotionController} needs to be initialized with 3 doubles. In order, they are kp, ki, and kd for the {@link edu.wpi.first.wpilibj.PIDController}
      */
     @Override
     public void init(double... inputs) {
@@ -47,7 +47,7 @@ public class EncoderMotionController implements MotionController {
 
     @Override
     public double update(double set, double... input) {
-        
+        pidController.setSetpoint(set);
         return 0;
     }
 }
