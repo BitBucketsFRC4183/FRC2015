@@ -16,15 +16,15 @@ public class RobotMap {
 	/**
 	 * 
 	 */
-	public static int[] hallSensors = {0, 1, 2, 3, 4};
+	public static int[] HALL_SENSORS = {0, 1, 2, 3, 4};
 	/**
 	 * The right side sensor to detect collision with a tote
 	 */
-	public static int bumperSensorRight = 5;
+	public static int BUMPER_SENSOR_RIGHT = 5;
 	/**
 	 * The left side sensor to detect collision with a tote
 	 */
-	public static int bumperSensorLeft = 6;
+	public static int BUMPER_SENSOR_LEFT = 6;
 	
 	/////////////////////////////////////////////////////////////////////////////
 	/////////////////////////////////----CAN----/////////////////////////////////
