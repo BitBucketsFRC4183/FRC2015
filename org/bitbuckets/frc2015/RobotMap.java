@@ -70,11 +70,11 @@ public class RobotMap {
     /**
      * The first port for the double solenoid controlling the grabber pistons.
      */
-    public static final int GRABBY_SOLENOID_1 = 1;
+    public static final int GRABBY_SOLENOID_1 = 0;
     /**
      * The second port for the double solenoid controlling the grabber pistons.
      */
-    public static final int GRABBY_SOLENOID_2 = 2;
+    public static final int GRABBY_SOLENOID_2 = 1;
     /**
      * The first port for the double solenoid controlling the winch shifter.
      */
