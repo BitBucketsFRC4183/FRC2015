@@ -1,4 +1,5 @@
 package org.bitbuckets.frc2015;
+
 /**
  * The RobotMap is a mapping from the ports sensors and actuators are wired into
  * to a variable name. This provides flexibility changing wiring, makes checking
@@ -6,12 +7,12 @@ package org.bitbuckets.frc2015;
  * floating around.
  */
 public class RobotMap {
-	
-	/////////////////////////////////////////////////////////////////////////////
-	/////////////////////////////////----CAN----/////////////////////////////////
-	/////////////////////////////////////////////////////////////////////////////
-	
-	/**
+
+    /////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////----CAN----/////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////
+
+    /**
      * A right motor on the drivetrain.
      */
     public static final int R_MOTOR_A = 4;
@@ -40,14 +41,14 @@ public class RobotMap {
      */
     public static final int WINCH_MOTOR = 8;
     /**
-     * 
+     *
      */
     public static final int GRAB_TILT_MOTOR = 6;
     public static final int GRAB_TILT_MOTOR_ALT = 7;
     ///////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////----SOLENOIDS----/////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////
-    
+
     /**
      * The first port for the double solenoid controlling the grabber pistons.
      */
@@ -64,11 +65,19 @@ public class RobotMap {
      * The second port for the double solenoid controlling the tilty pistons.
      */
     public static final int TILTY_SOLENOID_2 = 4;
-    
+    /**
+     * The first port for the double solenoid controlling the flippy pistons.
+     */
+    public static final int FLIPPY_SOLENOID_1 = 5;
+    /**
+     * The second port for the double solenoid controlling the flippy pistons.
+     */
+    public static final int FLIPPY_SOLENOID_2 = 6;
+
     ///////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////----RELAY----/////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////
-    
+
     /**
      * The relay that's connected to the lights.
      */
@@ -77,7 +86,7 @@ public class RobotMap {
      * The relay the compressor is plugged in to
      */
     public static final int COMPRESSOR_RELAY = 4;
-    
+
     /////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////----DIO----/////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////
