@@ -27,6 +27,9 @@ public class Grabby extends Subsystem {
      */
     AnalogPotentiometer grabberTiltPot;
 
+    /**
+     * Sets up all the solenoids and motors.
+     */
     public Grabby() {
         rotator = new CANTalon(RobotMap.GRAB_TILT_MOTOR);
         rotatorAlt = new CANTalon(RobotMap.GRAB_TILT_MOTOR_ALT);
@@ -58,6 +61,11 @@ public class Grabby extends Subsystem {
         grabby.set(closed ? DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kReverse);
     }
 
+    /**
+     * Changes the state of the pneumatic cylinders that flip the can.
+     *
+     * @param flipped Whether the can is flipped or not.
+     */
     public void setFlipped(boolean flipped) {
         flippy.set(flipped ? DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kReverse);
     }
