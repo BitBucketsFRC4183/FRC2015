@@ -1,5 +1,7 @@
 package org.bitbuckets.frc2015.subsystems;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.SpeedController;
 import org.bitbuckets.frc2015.RobotMap;
 import org.bitbuckets.frc2015.Robot;
 
@@ -17,33 +19,30 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  * have interrupt
  */
 public class Stacky extends Subsystem {
-    Talon winch;
-    DigitalInput hallSensors[];
+    private SpeedController winch;
+    private DigitalInput hallMulti;
+    private DigitalInput hallSing;
+
+    public Stacky(){
+        winch = new Talon(RobotMap.WINCH_MOTOR);
+        hallMulti = new DigitalInput(RobotMap.HALL_MULTI);
+        hallSing = new DigitalInput(RobotMap.HALL_SING);
+    }
 
     public void initDefaultCommand() {
-    	winch = new Talon(RobotMap.WINCH_MOTOR);
-    	hallSensors = new DigitalInput[Robot.hallSensors.length];
-    	for(int i 0; i < Robot.RobotMap.hallSensors.length; i++){
-    		// Zero is the top one
-    		// creates 5 hallSesors starting digital input 0 from 5
-    		hallSensors[i] = new DigitalInput(i);
-    	}
-    }
-    // returns the number of hooks
-    public int howManyStack(){
-    	int numberOfStacks = 0;
-    	for(int i=0;i<totalHallSensors;totalHallSensors++){
-    		numberOfStacks = numberOfStacks + (hallSensors[i].get()==true?1:0);
-    	}
-    	return numberOfStacks;
+
     }
     
     public void setWinchMotor(double speed){
     	winch.set(speed);
     }
-    // constructor
-    public Stacky(){
-    	
+
+    public boolean getHallMultiActive() {
+        return hallMulti.get();
+    }
+
+    public boolean getHallSingActive() {
+        return hallSing.get();
     }
 }
 

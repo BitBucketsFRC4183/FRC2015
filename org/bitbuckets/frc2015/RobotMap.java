@@ -1,4 +1,5 @@
 package org.bitbuckets.frc2015;
+
 /**
  * The RobotMap is a mapping from the ports sensors and actuators are wired into
  * to a variable name. This provides flexibility changing wiring, makes checking
@@ -6,31 +7,12 @@ package org.bitbuckets.frc2015;
  * floating around.
  */
 public class RobotMap {
-	
-	////OI////
-	public static int joyPort = 1;
-	
-	public static int opJoyPort = 2;
-	
-	//not sure where sensors go
-	/**
-	 * 
-	 */
-	public static int[] hallSensors = {0, 1, 2, 3, 4};
-	/**
-	 * The right side sensor to detect collision with a tote
-	 */
-	public static int bumperSensorRight = 5;
-	/**
-	 * The left side sensor to detect collision with a tote
-	 */
-	public static int bumperSensorLeft = 6;
-	
-	/////////////////////////////////////////////////////////////////////////////
-	/////////////////////////////////----CAN----/////////////////////////////////
-	/////////////////////////////////////////////////////////////////////////////
-	
-	/**
+
+    /////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////----CAN----/////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////
+
+    /**
      * A right motor on the drivetrain.
      */
     public static final int R_MOTOR_A = 4;
@@ -59,14 +41,14 @@ public class RobotMap {
      */
     public static final int WINCH_MOTOR = 8;
     /**
-     * 
+     *
      */
     public static final int GRAB_TILT_MOTOR = 6;
     public static final int GRAB_TILT_MOTOR_ALT = 7;
     ///////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////----SOLENOIDS----/////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////
-    
+
     /**
      * The first port for the double solenoid controlling the grabber pistons.
      */
@@ -76,22 +58,26 @@ public class RobotMap {
      */
     public static final int GRABBY_SOLENOID_2 = 1;
     /**
-     * The first port for the double solenoid controlling the winch shifter.
+     * The first port for the double solenoid controlling the tilty pistons.
      */
-    public static final int WINCH_SHIFTER_1 = 3;
+    public static final int TILTY_SOLENOID_1 = 3;
     /**
-     * The second port for the double solenoid controlling the winch shifter.
+     * The second port for the double solenoid controlling the tilty pistons.
      */
-    public static final int WINCH_SHIFTER_2 = 4;
+    public static final int TILTY_SOLENOID_2 = 4;
     /**
-     * The latch solenoid for firing
+     * The first port for the double solenoid controlling the flippy pistons.
      */
-    public static final int CATAPULT_LATCH = 5;
-    
+    public static final int FLIPPY_SOLENOID_1 = 5;
+    /**
+     * The second port for the double solenoid controlling the flippy pistons.
+     */
+    public static final int FLIPPY_SOLENOID_2 = 6;
+
     ///////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////----RELAY----/////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////
-    
+
     /**
      * The relay that's connected to the lights.
      */
@@ -100,31 +86,27 @@ public class RobotMap {
      * The relay the compressor is plugged in to
      */
     public static final int COMPRESSOR_RELAY = 4;
-    
+
     /////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////----DIO----/////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////
-    
+
     /**
-     * The limit switch that says when the catapult is all the way back.
+     * The port that the hall effect sensor with the singular magnet is connected to.
      */
-    public static final int CATAPAULT_LIMIT_SWITCH = 1;
+    public static final int HALL_SING = 1;
     /**
-     * The right encoder for the drivetrain.
+     * The port that the hall effect sensor with the multiple magnets is connected to.
      */
-    public static final int R_ENCODER_A = 2;
+    public static final int HALL_MULTI = 2;
     /**
-     * The right encoder for the drivetrain.
+     * The right side sensor to detect collision with a tote
      */
-    public static final int R_ENCODER_B = 2;
+    public static final int BUMP_SENSE_RIGHT = 5;
     /**
-     * The left encoder for the drivetrain.
+     * The left side sensor to detect collision with a tote
      */
-    public static final int L_ENCODER_A = 4;
-    /**
-     * The left encoder for the drivetrain.
-     */
-    public static final int L_ENCODER_B = 4;
+    public static final int BUMP_SENSE_LEFT = 6;
     /**
      * The switch that tells the compressor the max pressure
      */
