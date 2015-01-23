@@ -57,9 +57,13 @@ public class RobotMap {
      */
     public static final int GRABBY_SOLENOID_2 = 2;
     /**
-     *
+     * The first port for the double solenoid controlling the tilty pistons.
      */
-    public static final int TILTY_SOLENOID
+    public static final int TILTY_SOLENOID_1 = 3;
+    /**
+     * The second port for the double solenoid controlling the tilty pistons.
+     */
+    public static final int TILTY_SOLENOID_2 = 4;
     
     ///////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////----RELAY----/////////////////////////////////
