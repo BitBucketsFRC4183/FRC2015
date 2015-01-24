@@ -21,9 +21,6 @@ public class AutoProgram extends CommandGroup {
 	//commandStr holds strings representing commands and their parameters, in the form "Seq/Par commandName 
 	ArrayList<String> commandStr = new ArrayList<String>();
 	
-	//parsedString holds the parsed parts of the string after they are parsed by parse()
-	ArrayList<String> parsedString = new ArrayList<String>();
-	
 	//br reads the text from the file line by line
 	BufferedReader br;
 	
@@ -33,6 +30,9 @@ public class AutoProgram extends CommandGroup {
     	String line = null;
     	//adds each line to the ArrayList
     	while ((line = br.readLine()) != null) {
+    		if(line.startsWith("//")){
+    			continue;
+    		}
     		commandStr.add(line);
     	}
     	//closes the buffered reader
@@ -71,8 +71,15 @@ public class AutoProgram extends CommandGroup {
      * @return an ArrayList containing the 
      */
     private ArrayList<String> parse(String commandName){
-    	parsedString = (ArrayList<String>) Arrays.asList(commandName.split(" "));
-    	return parsedString;
+    	ArrayList<String> parsed = new ArrayList<String>();
+    	for(String s: commandName.split("\\s+")){
+    		if(s.contains("//")){
+    			parsed.add(s.substring(0, s.indexOf("//")));
+    			break;
+    		}
+    		parsed.add(s);
+    	}
+    	return parsed;
     }
     
     /**
