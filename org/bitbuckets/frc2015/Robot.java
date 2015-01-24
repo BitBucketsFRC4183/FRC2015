@@ -1,14 +1,26 @@
 package org.bitbuckets.frc2015;
 
+import java.io.IOException;
+import java.util.ArrayList;
+
+import org.bitbuckets.frc2015.autonomous.AutoProgram;
+import org.bitbuckets.frc2015.autonomous.AutoProgramGenerator;
+import org.bitbuckets.frc2015.command.CloseGrabber;
+import org.bitbuckets.frc2015.command.OpenGrabber;
+import org.bitbuckets.frc2015.subsystems.Drivey;
+import org.bitbuckets.frc2015.subsystems.Esteemy;
+import org.bitbuckets.frc2015.subsystems.Grabby;
+import org.bitbuckets.frc2015.subsystems.Stacky;
+import org.bitbuckets.frc2015.subsystems.Tilty;
+
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import org.bitbuckets.frc2015.command.CloseGrabber;
-import org.bitbuckets.frc2015.command.OpenGrabber;
-import org.bitbuckets.frc2015.subsystems.*;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -27,8 +39,12 @@ public class Robot extends IterativeRobot {
     public static Tilty tilty;
 
     public static Compressor compressor;
-
+    
     Command autonomousCommand;
+
+    SendableChooser autoChooser;
+    
+    ArrayList<AutoProgram> autoPrograms;
 
     /**
      * This function is run when the robot is first started up and should be
@@ -54,6 +70,19 @@ public class Robot extends IterativeRobot {
         oi.trigger.whenPressed(openGrabber);
         oi.trigger.whenReleased(closeGrabber);
         
+        //generate a list of autonomous programs based on all the .txt files in the local directory
+        //TODO make some sort of tag at start of scripts required, so that auto scripts, constant files, etc. dont get confused
+        try {
+			autoPrograms = AutoProgramGenerator.generateAutoPrograms();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
+        autoChooser = new SendableChooser();
+        for(AutoProgram a: autoPrograms){
+        	autoChooser.addObject(a.title, a);
+        }
     }
 
     /**
@@ -70,7 +99,8 @@ public class Robot extends IterativeRobot {
 
     public void autonomousInit() {
         // schedule the autonomous command (example)
-        if (autonomousCommand != null) autonomousCommand.start();
+        autonomousCommand = (Command) autoChooser.getSelected();
+        autonomousCommand.start();
     }
 
     /**

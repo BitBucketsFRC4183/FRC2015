@@ -6,8 +6,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
-
 import org.bitbuckets.frc2015.command.*;
 
 import edu.wpi.first.wpilibj.command.Command;
@@ -24,12 +22,33 @@ public class AutoProgram extends CommandGroup {
 	//br reads the text from the file line by line
 	BufferedReader br;
 	
-    public  AutoProgram() throws IOException {
+	//Title of autonomous program
+	public String title;
+	
+	/**
+	 * <h1>AutoProgram reads and executes a script to create an autonomous program </h1><p>
+	 * Acceptable scripts are as follows: <p>
+	 * Comments are allowed by //. <br>
+	 *     The name of the program is denoted by a line beginning with the String "Title=". <br>
+	 *     Each command is denoted by the following notation:
+	 *       <code>Type Name Param1 Param2 Param3 ...</code> <br>
+	 *     Where type is either "Seq" or "Par", name is the name of the command, and parameters are separated by spaces.<br>
+	 * 
+	 * @param fileName is the name of the file
+	 * @throws IOException
+	 */
+    public  AutoProgram(File script) throws IOException {
     	//created BufferedReader from the file
-    	br = readFile();
+    	br = readFile(script);
     	String line = null;
     	//adds each line to the ArrayList
     	while ((line = br.readLine()) != null) {
+    		//check for a line denoting the title of the script
+    		if(line.startsWith("Title=")){
+    			title = line.substring(line.indexOf("="));
+    			continue;
+    		}
+    		//check for a character denoting a commented line
     		if(line.startsWith("//")){
     			continue;
     		}
@@ -50,12 +69,9 @@ public class AutoProgram extends CommandGroup {
      * @return a BufferedReader for AutoProgram.txt
      * @throws IOException 
      */
-    private BufferedReader readFile() throws IOException{
-    	//get the file location
-    	File dir = new File(".");
-    	File fin = new File(dir.getCanonicalPath() + File.separator + "AutoProgram.txt");
+    private BufferedReader readFile(File script) throws IOException{
     	
-    	FileInputStream fis = new FileInputStream(fin);
+    	FileInputStream fis = new FileInputStream(script);
     	 
     	//Construct BufferedReader from InputStreamReader
     	return new BufferedReader(new InputStreamReader(fis));
