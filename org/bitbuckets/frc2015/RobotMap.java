@@ -111,4 +111,41 @@ public class RobotMap {
      * The switch that tells the compressor the max pressure
      */
     public static final int PRESSURE_SWITCH = 14;
+
+    /////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////----WHEELS----//////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * The X coordinate of the front left wheel from the center of the robot in inches.
+     */
+    public static final int WHEEL_FL_X = -11;
+    /**
+     * The Y coordinate of the front left wheel from the center of the robot in inches.
+     */
+    public static final int WHEEL_FL_Y = 14;
+    /**
+     * The X coordinate of the front right wheel from the center of the robot in inches.
+     */
+    public static final int WHEEL_FR_X = 11;
+    /**
+     * The Y coordinate of the front right wheel from the center of the robot in inches.
+     */
+    public static final int WHEEL_FR_Y = 14;
+    /**
+     * The X coordinate of the rear left wheel from the center of the robot in inches.
+     */
+    public static final int WHEEL_RL_X = -11;
+    /**
+     * The Y coordinate of the rear left wheel from the center of the robot in inches.
+     */
+    public static final int WHEEL_RL_Y = -14;
+    /**
+     * The X coordinate of the rear right wheel from the center of the robot in inches.
+     */
+    public static final int WHEEL_RR_X = 11;
+    /**
+     * The Y coordinate of the rear right wheel from the center of the robot in inches.
+     */
+    public static final int WHEEL_RR_Y = -14;
 }
