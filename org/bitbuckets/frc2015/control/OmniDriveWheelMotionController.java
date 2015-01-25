@@ -43,8 +43,7 @@ public class OmniDriveWheelMotionController implements MotionController {
     public double getWheelSpeed(double xc, double yc, double xw, double yw, double theta, double vxc, double vyc, double rotc) {
         double vtan = Math.sqrt(Math.pow((xc - xw), 2) + Math.pow((yc - yw), 2)) * rotc;
         double thetaR = Math.atan2((yw - yc), (xw - xc));
-        double vwp = Math.sqrt(Math.pow(vtan * Math.cos(thetaR) + vxc, 2) + Math.pow(vtan * Math.sin(thetaR) + vyc, 2));
-        double speed = vwp * Math.cos(thetaR - theta);
+        double speed = vtan * Math.abs(Math.cos(theta - (thetaR + Math.PI / 2))) + vxc * Math.cos(theta) + vyc * Math.sin(theta);
         return speed;
     }
 

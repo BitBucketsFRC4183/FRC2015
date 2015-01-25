@@ -50,10 +50,10 @@ public class Robot extends IterativeRobot {
         CloseGrabber closeGrabber = new CloseGrabber();
 
         SmartDashboardInit();
-        
+
         oi.trigger.whenPressed(openGrabber);
         oi.trigger.whenReleased(closeGrabber);
-        
+
     }
 
     /**
@@ -93,8 +93,7 @@ public class Robot extends IterativeRobot {
      */
     public void teleopPeriodic() {
         Scheduler.getInstance().run();
-        drivey.drive(oi.stick.getY(), oi.stick.getX());
-        grabby.setSpeed(oi.operatorStick.getY());
+        drivey.drive(oi.stick.getRawAxis(1) * 1.414, oi.stick.getRawAxis(0) * 1.414, oi.stick.getRawAxis(4) * .67);
     }
 
     /**
@@ -103,8 +102,8 @@ public class Robot extends IterativeRobot {
     public void testPeriodic() {
         LiveWindow.run();
     }
-    
-    public void SmartDashboardInit(){
+
+    public void SmartDashboardInit() {
         SmartDashboard.putString("test", "This is a test!");
         SmartDashboard.putData(Scheduler.getInstance());
         //SmartDashboard.putNumber("Speed", drivey.getSpeed());

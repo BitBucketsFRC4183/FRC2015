@@ -15,27 +15,19 @@ public class RobotMap {
     /**
      * A right motor on the drivetrain.
      */
-    public static final int R_MOTOR_A = 4;
+    public static final int R_MOTOR_F = 4;
     /**
      * A right motor on the drivetrain.
      */
-    public static final int R_MOTOR_B = 5;
-    /**
-     * A right motor on the drivetrain.
-     */
-    public static final int R_MOTOR_C = 6;
+    public static final int R_MOTOR_R = 5;
     /**
      * A left motor on the drivetrain.
      */
-    public static final int L_MOTOR_A = 1;
+    public static final int L_MOTOR_F = 1;
     /**
      * A left motor on the drivetrain.
      */
-    public static final int L_MOTOR_B = 2;
-    /**
-     * A left motor on the drivetrain.
-     */
-    public static final int L_MOTOR_C = 3;
+    public static final int L_MOTOR_R = 2;
     /**
      * Motors driving the winch for the hooks.
      */
@@ -119,33 +111,33 @@ public class RobotMap {
     /**
      * The X coordinate of the front left wheel from the center of the robot in inches.
      */
-    public static final int WHEEL_FL_X = -11;
+    public static final double WHEEL_FL_X = -11 / 12.0;
     /**
      * The Y coordinate of the front left wheel from the center of the robot in inches.
      */
-    public static final int WHEEL_FL_Y = 14;
+    public static final double WHEEL_FL_Y = 14 / 12.0;
     /**
      * The X coordinate of the front right wheel from the center of the robot in inches.
      */
-    public static final int WHEEL_FR_X = 11;
+    public static final double WHEEL_FR_X = 11 / 12.0;
     /**
      * The Y coordinate of the front right wheel from the center of the robot in inches.
      */
-    public static final int WHEEL_FR_Y = 14;
+    public static final double WHEEL_FR_Y = 14 / 12.0;
     /**
      * The X coordinate of the rear left wheel from the center of the robot in inches.
      */
-    public static final int WHEEL_RL_X = -11;
+    public static final double WHEEL_RL_X = -11 / 12.0;
     /**
      * The Y coordinate of the rear left wheel from the center of the robot in inches.
      */
-    public static final int WHEEL_RL_Y = -14;
+    public static final double WHEEL_RL_Y = -14 / 12.0;
     /**
      * The X coordinate of the rear right wheel from the center of the robot in inches.
      */
-    public static final int WHEEL_RR_X = 11;
+    public static final double WHEEL_RR_X = 11 / 12.0;
     /**
      * The Y coordinate of the rear right wheel from the center of the robot in inches.
      */
-    public static final int WHEEL_RR_Y = -14;
+    public static final double WHEEL_RR_Y = -14 / 12.0;
 }
