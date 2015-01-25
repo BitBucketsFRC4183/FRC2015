@@ -93,7 +93,7 @@ public class Robot extends IterativeRobot {
      */
     public void teleopPeriodic() {
         Scheduler.getInstance().run();
-        drivey.drive(oi.stick.getRawAxis(1) * 1.414, oi.stick.getRawAxis(0) * 1.414, oi.stick.getRawAxis(4) * .67);
+        drivey.drive(oi.stick.getRawAxis(OI.STRAFE) * 1.414, -oi.stick.getRawAxis(OI.GO) * 1.414, oi.stick.getRawAxis(OI.TURN) * .67);
     }
 
     /**
