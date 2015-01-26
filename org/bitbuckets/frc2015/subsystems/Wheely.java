@@ -15,30 +15,36 @@ public class Wheely extends Subsystem {
     private double theta;
     private OmniDriveWheelMotionController mController;
 
+    public enum WheelPos {
+        FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT
+    }
 
-    public Wheely(int index) {
-        talon = new CANTalon(index);
+    public Wheely(WheelPos pos) {
         mController = new OmniDriveWheelMotionController();
-        switch (index) {
-            case 1:
+        switch (pos) {
+            case FRONT_LEFT:
                 x = RobotMap.WHEEL_FL_X;
                 y = RobotMap.WHEEL_FL_Y;
-                theta = Math.PI / 4;
+                theta = RobotMap.WHEEL_FL_THETA;
+                talon = new CANTalon(RobotMap.L_MOTOR_R);
                 break;
-            case 2:
+            case FRONT_RIGHT:
                 x = RobotMap.WHEEL_FR_X;
                 y = RobotMap.WHEEL_FR_Y;
-                theta = 7 * Math.PI / 4;
+                theta = RobotMap.WHEEL_FR_THETA;
+                talon = new CANTalon(RobotMap.R_MOTOR_F);
                 break;
-            case 3:
+            case REAR_LEFT:
                 x = RobotMap.WHEEL_RL_X;
                 y = RobotMap.WHEEL_RL_Y;
-                theta = 3 * Math.PI / 4;
+                theta = RobotMap.WHEEL_RL_THETA;
+                talon = new CANTalon(RobotMap.L_MOTOR_R);
                 break;
-            case 4:
+            case REAR_RIGHT:
                 x = RobotMap.WHEEL_RR_X;
                 y = RobotMap.WHEEL_RR_Y;
-                theta = 5 * Math.PI / 4;
+                theta = RobotMap.WHEEL_RR_THETA;
+                talon = new CANTalon(RobotMap.R_MOTOR_R);
                 break;
             default:
                 x = 0;

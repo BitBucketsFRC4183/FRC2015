@@ -13,10 +13,10 @@ public class Drivey extends Subsystem {
 
     public Drivey() {
         super();
-        FL = new Wheely(1);
-        FR = new Wheely(2);
-        RL = new Wheely(3);
-        RR = new Wheely(4);
+        FL = new Wheely(Wheely.WheelPos.FRONT_LEFT);
+        FR = new Wheely(Wheely.WheelPos.FRONT_RIGHT);
+        RL = new Wheely(Wheely.WheelPos.REAR_LEFT);
+        RR = new Wheely(Wheely.WheelPos.REAR_RIGHT);
     }
 
     public void initDefaultCommand() {

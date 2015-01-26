@@ -104,6 +104,10 @@ public class RobotMap {
      */
     public static final double WHEEL_FL_Y = 14 / 12.0;
     /**
+     * The angle of the front left wheel from top down positive X.
+     */
+    public static final double WHEEL_FL_THETA = Math.PI / 4;
+    /**
      * The X coordinate of the front right wheel from the center of the robot in inches.
      */
     public static final double WHEEL_FR_X = 11 / 12.0;
@@ -111,6 +115,10 @@ public class RobotMap {
      * The Y coordinate of the front right wheel from the center of the robot in inches.
      */
     public static final double WHEEL_FR_Y = 14 / 12.0;
+    /**
+     * The angle of the front right wheel from top down positive X.
+     */
+    public static final double WHEEL_FR_THETA = 7 * Math.PI / 4;
     /**
      * The X coordinate of the rear left wheel from the center of the robot in inches.
      */
@@ -120,6 +128,10 @@ public class RobotMap {
      */
     public static final double WHEEL_RL_Y = -14 / 12.0;
     /**
+     * The angle of the rear left wheel from top down positive X.
+     */
+    public static final double WHEEL_RL_THETA = 3 * Math.PI / 4;
+    /**
      * The X coordinate of the rear right wheel from the center of the robot in inches.
      */
     public static final double WHEEL_RR_X = 11 / 12.0;
@@ -127,4 +139,8 @@ public class RobotMap {
      * The Y coordinate of the rear right wheel from the center of the robot in inches.
      */
     public static final double WHEEL_RR_Y = -14 / 12.0;
+    /**
+     * The angle of the rear right wheel from top down positive X.
+     */
+    public static final double WHEEL_RR_THETA = 5 * Math.PI / 4;
 }
