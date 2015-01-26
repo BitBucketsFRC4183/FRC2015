@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.bitbuckets.frc2015.command.CloseGrabber;
 import org.bitbuckets.frc2015.command.OpenGrabber;
+import org.bitbuckets.frc2015.command.TiltDown;
+import org.bitbuckets.frc2015.command.TiltUp;
 import org.bitbuckets.frc2015.subsystems.*;
 
 /**
@@ -48,12 +50,13 @@ public class Robot extends IterativeRobot {
 
         OpenGrabber openGrabber = new OpenGrabber();
         CloseGrabber closeGrabber = new CloseGrabber();
+        TiltUp tiltUp = new TiltUp();
+        TiltDown tiltDown = new TiltDown();
 
         SmartDashboardInit();
 
-        oi.trigger.whenPressed(openGrabber);
-        oi.trigger.whenReleased(closeGrabber);
-
+        oi.tiltUp.whenActive(tiltUp);
+        oi.tiltDown.whenActive(tiltDown);
     }
 
     /**
@@ -81,10 +84,6 @@ public class Robot extends IterativeRobot {
     }
 
     public void teleopInit() {
-        // This makes sure that the autonomous stops running when
-        // teleop starts running. If you want the autonomous to 
-        // continue until interrupted by another command, remove
-        // this line or comment it out.
         if (autonomousCommand != null) autonomousCommand.cancel();
     }
 
@@ -94,6 +93,8 @@ public class Robot extends IterativeRobot {
     public void teleopPeriodic() {
         Scheduler.getInstance().run();
         drivey.drive(oi.stick.getRawAxis(OI.STRAFE) * 1.414, -oi.stick.getRawAxis(OI.GO) * 1.414, oi.stick.getRawAxis(OI.TURN) * .67);
+        SmartDashboard.putString("thing", "" + oi.stick.getPOV());
+        SmartDashboard.putData(Scheduler.getInstance());
     }
 
     /**
