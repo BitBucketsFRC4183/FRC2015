@@ -14,7 +14,7 @@ public class TiltDown extends Command {
     }
 
     protected void initialize() {
-        Robot.tilty.setTiltyUp(true);
+        Robot.tilty.setTiltyUp(false);
         SmartDashboard.putString("Tilter", "Down");
     }
 

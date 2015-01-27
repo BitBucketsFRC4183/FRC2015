@@ -28,7 +28,7 @@ public class Tilty extends Subsystem {
      * @param up Whether to set the tilter as up or not.
      */
     public void setTiltyUp(boolean up){
-        tilty.set(up? DoubleSolenoid.Value.kForward: DoubleSolenoid.Value.kReverse);
+        tilty.set(up? DoubleSolenoid.Value.kReverse: DoubleSolenoid.Value.kForward);
     }
 }
 
