@@ -2,8 +2,8 @@ package org.bitbuckets.frc2015.subsystems;
 
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import org.bitbuckets.frc2015.Robot;
 import org.bitbuckets.frc2015.RobotMap;
-import org.bitbuckets.frc2015.control.OmniDriveWheelMotionController;
 
 /**
  *
@@ -13,14 +13,12 @@ public class Wheely extends Subsystem {
     private double x;
     private double y;
     private double theta;
-    private OmniDriveWheelMotionController mController;
 
     public enum WheelPos {
         FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT
     }
 
     public Wheely(WheelPos pos) {
-        mController = new OmniDriveWheelMotionController();
         switch (pos) {
             case FRONT_LEFT:
                 x = RobotMap.WHEEL_FL_X;
@@ -67,7 +65,7 @@ public class Wheely extends Subsystem {
      * @param omega The desired rotational velocity of the robot.
      */
     public void moveWheel(double vx, double vy, double omega) {
-        double speed = mController.getWheelSpeed(0, 0, x, y, theta, vx, vy, omega);
+        double speed = Robot.drivey.getWheelSpeed(0, 0, x, y, theta, vx, vy, omega);
         talon.set(speed);
     }
 }
