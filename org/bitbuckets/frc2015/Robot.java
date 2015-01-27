@@ -93,6 +93,7 @@ public class Robot extends IterativeRobot {
     public void teleopPeriodic() {
         Scheduler.getInstance().run();
         drivey.drive(oi.stick.getRawAxis(OI.STRAFE) * RandomConstants.MAX_TRANS_SPEED, -oi.stick.getRawAxis(OI.GO) * RandomConstants.MAX_TRANS_SPEED, oi.stick.getRawAxis(OI.TURN) * RandomConstants.MAX_ROT_SPEED);
+        stacky.setWinchMotor(oi.stick.getRawAxis(3)-oi.stick.getRawAxis(2));
         SmartDashboard.putString("thing", "" + oi.stick.getPOV());
         SmartDashboard.putData(Scheduler.getInstance());
     }
