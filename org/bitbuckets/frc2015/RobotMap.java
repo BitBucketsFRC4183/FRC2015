@@ -8,35 +8,7 @@ package org.bitbuckets.frc2015;
  */
 public class RobotMap {
 
-    /////////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////----CAN----/////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////////
 
-    /**
-     * A right motor on the drivetrain.
-     */
-    public static final int R_MOTOR_F = 4;
-    /**
-     * A right motor on the drivetrain.
-     */
-    public static final int R_MOTOR_R = 5;
-    /**
-     * A left motor on the drivetrain.
-     */
-    public static final int L_MOTOR_F = 1;
-    /**
-     * A left motor on the drivetrain.
-     */
-    public static final int L_MOTOR_R = 2;
-    /**
-     * Motors driving the winch for the hooks.
-     */
-    public static final int WINCH_MOTOR = 7;
-    /**
-     *
-     */
-    public static final int GRAB_TILT_MOTOR = 6;
-    public static final int GRAB_TILT_MOTOR_ALT = 7;
     ///////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////----SOLENOIDS----/////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////
@@ -65,6 +37,36 @@ public class RobotMap {
      * The second port for the double solenoid controlling the flippy pistons.
      */
     public static final int FLIPPY_SOLENOID_2 = 6;
+
+    /////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////----PWM----/////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Motors driving the winch for the elevator on {@link org.bitbuckets.frc2015.subsystems.Stacky}.
+     */
+    public static final int WINCH_MOTOR = 7;
+
+    /////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////----CAN----/////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * The CAN index for the front right motor on the drivetrain.
+     */
+    public static final int WHEEL_FR_MOTOR = 4;
+    /**
+     * The CAN index for the rear right motor on the drivetrain.
+     */
+    public static final int WHEEL_RR_MOTOR = 5;
+    /**
+     * The CAN index for the front left motor on the drivetrain.
+     */
+    public static final int WHEEL_FL_MOTOR = 1;
+    /**
+     * The CAN index for the rear left motor on the drivetrain.
+     */
+    public static final int WHEEL_RL_MOTOR = 2;
 
     /////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////----DIO----/////////////////////////////////
@@ -107,6 +109,7 @@ public class RobotMap {
      * The angle of the front left wheel from top down positive X.
      */
     public static final double WHEEL_FL_THETA = Math.PI / 4;
+
     /**
      * The X coordinate of the front right wheel from the center of the robot in inches.
      */
@@ -119,6 +122,7 @@ public class RobotMap {
      * The angle of the front right wheel from top down positive X.
      */
     public static final double WHEEL_FR_THETA = 7 * Math.PI / 4;
+
     /**
      * The X coordinate of the rear left wheel from the center of the robot in inches.
      */
@@ -131,6 +135,7 @@ public class RobotMap {
      * The angle of the rear left wheel from top down positive X.
      */
     public static final double WHEEL_RL_THETA = 3 * Math.PI / 4;
+
     /**
      * The X coordinate of the rear right wheel from the center of the robot in inches.
      */
@@ -143,4 +148,13 @@ public class RobotMap {
      * The angle of the rear right wheel from top down positive X.
      */
     public static final double WHEEL_RR_THETA = 5 * Math.PI / 4;
+
+    /**
+     * The X coordinate of the center of rotation.
+     */
+    public static final double CENTER_X = 0/12;
+    /**
+     * The Y coordinate of the center of rotation.
+     */
+    public static final double CENTER_Y = 0/12;
 }
