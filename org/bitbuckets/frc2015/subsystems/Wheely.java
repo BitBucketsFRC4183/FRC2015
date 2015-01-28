@@ -24,25 +24,25 @@ public class Wheely extends Subsystem {
                 x = RobotMap.WHEEL_FL_X;
                 y = RobotMap.WHEEL_FL_Y;
                 theta = RobotMap.WHEEL_FL_THETA;
-                talon = new CANTalon(RobotMap.L_MOTOR_R);
+                talon = new CANTalon(RobotMap.WHEEL_RL_MOTOR);
                 break;
             case FRONT_RIGHT:
                 x = RobotMap.WHEEL_FR_X;
                 y = RobotMap.WHEEL_FR_Y;
                 theta = RobotMap.WHEEL_FR_THETA;
-                talon = new CANTalon(RobotMap.R_MOTOR_F);
+                talon = new CANTalon(RobotMap.WHEEL_FR_MOTOR);
                 break;
             case REAR_LEFT:
                 x = RobotMap.WHEEL_RL_X;
                 y = RobotMap.WHEEL_RL_Y;
                 theta = RobotMap.WHEEL_RL_THETA;
-                talon = new CANTalon(RobotMap.L_MOTOR_R);
+                talon = new CANTalon(RobotMap.WHEEL_RL_MOTOR);
                 break;
             case REAR_RIGHT:
                 x = RobotMap.WHEEL_RR_X;
                 y = RobotMap.WHEEL_RR_Y;
                 theta = RobotMap.WHEEL_RR_THETA;
-                talon = new CANTalon(RobotMap.R_MOTOR_R);
+                talon = new CANTalon(RobotMap.WHEEL_RR_MOTOR);
                 break;
             default:
                 x = 0;

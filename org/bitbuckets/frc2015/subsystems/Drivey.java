@@ -1,22 +1,62 @@
 package org.bitbuckets.frc2015.subsystems;
 
+import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import org.bitbuckets.frc2015.RandomConstants;
+import org.bitbuckets.frc2015.RobotMap;
 
 /**
  *
  */
 public class Drivey extends Subsystem {
-    private Wheely FL;
-    private Wheely FR;
-    private Wheely RL;
-    private Wheely RR;
+    private double FL;
+    private double FR;
+    private double RL;
+    private double RR;
 
+    private CANTalon flContr;
+    private CANTalon frContr;
+    private CANTalon rlContr;
+    private CANTalon rrContr;
+
+    private enum Wheels {
+        FRONT_LEFT(RobotMap.WHEEL_FL_X, RobotMap.WHEEL_FL_Y, RobotMap.WHEEL_FL_THETA, RobotMap.WHEEL_FL_MOTOR),
+        FRONT_RIGHT(RobotMap.WHEEL_FR_X, RobotMap.WHEEL_FR_Y, RobotMap.WHEEL_FR_THETA, RobotMap.WHEEL_FR_MOTOR),
+        REAR_LEFT(RobotMap.WHEEL_RL_X, RobotMap.WHEEL_RL_Y, RobotMap.WHEEL_RL_THETA, RobotMap.WHEEL_RL_MOTOR),
+        REAR_RIGHT(RobotMap.WHEEL_RR_X, RobotMap.WHEEL_RR_Y, RobotMap.WHEEL_RR_THETA, RobotMap.WHEEL_RR_MOTOR);
+
+        double x;
+        double y;
+        double theta;
+        int canIndex;
+
+        Wheels(double xi, double yi, double thetai, int canIndexi) {
+            x = xi;
+            y = yi;
+            theta = thetai;
+            canIndex = canIndexi;
+        }
+    }
+
+    /**
+     * The constructor. Sets up the speeds and talons with k values for the internal PID controller.
+     */
     public Drivey() {
         super();
-        FL = new Wheely(Wheely.WheelPos.FRONT_LEFT);
-        FR = new Wheely(Wheely.WheelPos.FRONT_RIGHT);
-        RL = new Wheely(Wheely.WheelPos.REAR_LEFT);
-        RR = new Wheely(Wheely.WheelPos.REAR_RIGHT );
+        FL = 0;
+        FR = 0;
+        RL = 0;
+        RR = 0;
+
+        flContr = new CANTalon(Wheels.FRONT_LEFT.canIndex);
+        frContr = new CANTalon(Wheels.FRONT_RIGHT.canIndex);
+        rlContr = new CANTalon(Wheels.REAR_LEFT.canIndex);
+        rrContr = new CANTalon(Wheels.REAR_RIGHT.canIndex);
+
+        flContr.setPID(RandomConstants.DRIVE_KP, RandomConstants.DRIVE_KI, RandomConstants.DRIVE_KD);
+        frContr.setPID(RandomConstants.DRIVE_KP, RandomConstants.DRIVE_KI, RandomConstants.DRIVE_KD);
+        rlContr.setPID(RandomConstants.DRIVE_KP, RandomConstants.DRIVE_KI, RandomConstants.DRIVE_KD);
+        rrContr.setPID(RandomConstants.DRIVE_KP, RandomConstants.DRIVE_KI, RandomConstants.DRIVE_KD);
     }
 
     public void initDefaultCommand() {
@@ -24,11 +64,38 @@ public class Drivey extends Subsystem {
         //setDefaultCommand(new MySpecialCommand());
     }
 
-    public void drive(double throttle, double side, double curve) {
-        FL.moveWheel(throttle, side, curve);
-        FR.moveWheel(throttle, side, curve);
-        RL.moveWheel(throttle, side, curve);
-        RR.moveWheel(throttle, side, curve);
+    /**
+     * Drives the robot with x, y, and rotational velocity. Gets the intended speed of the wheels, limits it so that no speed is over 1 and but the vector directions are the same, does gyro stuff(not yet), and sets the velocity PID setpoint on the motors.
+     * NOT IN FEET YET
+     *
+     * @param vx    The intended X velocity of the robot.
+     * @param vy    The intended Y velocity of the robot.
+     * @param omega The intended rotation of the robot around the center of rotation.
+     */
+    public void drive(double vx, double vy, double omega) {
+        //Gets the wheel speed
+        FL = getWheelSpeed(RobotMap.CENTER_X, RobotMap.CENTER_Y, Wheels.FRONT_LEFT.x, Wheels.FRONT_LEFT.y, Wheels.FRONT_LEFT.theta, vx, vy, omega);
+        FR = getWheelSpeed(RobotMap.CENTER_X, RobotMap.CENTER_Y, Wheels.FRONT_RIGHT.x, Wheels.FRONT_RIGHT.y, Wheels.FRONT_RIGHT.theta, vx, vy, omega);
+        RL = getWheelSpeed(RobotMap.CENTER_X, RobotMap.CENTER_Y, Wheels.REAR_LEFT.x, Wheels.REAR_LEFT.y, Wheels.REAR_LEFT.theta, vx, vy, omega);
+        RR = getWheelSpeed(RobotMap.CENTER_X, RobotMap.CENTER_Y, Wheels.REAR_RIGHT.x, Wheels.REAR_RIGHT.y, Wheels.REAR_RIGHT.theta, vx, vy, omega);
+
+        //Speed limiiter
+        double kLimit = FL;
+        if (FR > kLimit) {
+            kLimit = FR;
+        }
+        if (RL > kLimit) {
+            kLimit = RL;
+        }
+        if (RR > kLimit) {
+            kLimit = RR;
+        }
+
+        kLimit = 1 / kLimit;
+        FL = FL * kLimit;
+        FR = FR * kLimit;
+        RL = RL * kLimit;
+        RR = RR * kLimit;
     }
 
     /**

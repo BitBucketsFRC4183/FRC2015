@@ -13,4 +13,11 @@ public class RandomConstants {
      * Maximum rotational speed in rad/s.
      */
     public static final double MAX_ROT_SPEED = .67;
+
+    /**
+     *
+     */
+    public static final double DRIVE_KP = 1;
+    public static final double DRIVE_KI = 0;
+    public static final double DRIVE_KD = 0;
 }
