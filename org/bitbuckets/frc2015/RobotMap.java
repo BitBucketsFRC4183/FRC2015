@@ -54,11 +54,11 @@ public class RobotMap {
     /**
      * The CAN index for the front right motor on the drivetrain.
      */
-    public static final int WHEEL_FR_MOTOR = 4;
+    public static final int WHEEL_FR_MOTOR = 2;
     /**
      * The CAN index for the rear right motor on the drivetrain.
      */
-    public static final int WHEEL_RR_MOTOR = 5;
+    public static final int WHEEL_RR_MOTOR = 4;
     /**
      * The CAN index for the front left motor on the drivetrain.
      */
@@ -66,7 +66,7 @@ public class RobotMap {
     /**
      * The CAN index for the rear left motor on the drivetrain.
      */
-    public static final int WHEEL_RL_MOTOR = 2;
+    public static final int WHEEL_RL_MOTOR = 3;
 
     /////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////----DIO----/////////////////////////////////
