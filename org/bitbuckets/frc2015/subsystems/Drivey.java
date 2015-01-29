@@ -19,24 +19,24 @@ public class Drivey extends Subsystem {
     private CANTalon rlContr;
     private CANTalon rrContr;
 
-    private enum Wheels {
-        FRONT_LEFT(RobotMap.WHEEL_FL_X, RobotMap.WHEEL_FL_Y, RobotMap.WHEEL_FL_THETA, RobotMap.WHEEL_FL_MOTOR),
-        FRONT_RIGHT(RobotMap.WHEEL_FR_X, RobotMap.WHEEL_FR_Y, RobotMap.WHEEL_FR_THETA, RobotMap.WHEEL_FR_MOTOR),
-        REAR_LEFT(RobotMap.WHEEL_RL_X, RobotMap.WHEEL_RL_Y, RobotMap.WHEEL_RL_THETA, RobotMap.WHEEL_RL_MOTOR),
-        REAR_RIGHT(RobotMap.WHEEL_RR_X, RobotMap.WHEEL_RR_Y, RobotMap.WHEEL_RR_THETA, RobotMap.WHEEL_RR_MOTOR);
-
-        double x;
-        double y;
-        double theta;
-        int canIndex;
-
-        Wheels(double xi, double yi, double thetai, int canIndexi) {
-            x = xi;
-            y = yi;
-            theta = thetai;
-            canIndex = canIndexi;
-        }
-    }
+//    private enum Wheels {
+//        FRONT_LEFT(RobotMap.WHEEL_FL_X, RobotMap.WHEEL_FL_Y, RobotMap.WHEEL_FL_THETA, RobotMap.WHEEL_FL_MOTOR),
+//        FRONT_RIGHT(RobotMap.WHEEL_FR_X, RobotMap.WHEEL_FR_Y, RobotMap.WHEEL_FR_THETA, RobotMap.WHEEL_FR_MOTOR),
+//        REAR_LEFT(RobotMap.WHEEL_RL_X, RobotMap.WHEEL_RL_Y, RobotMap.WHEEL_RL_THETA, RobotMap.WHEEL_RL_MOTOR),
+//        REAR_RIGHT(RobotMap.WHEEL_RR_X, RobotMap.WHEEL_RR_Y, RobotMap.WHEEL_RR_THETA, RobotMap.WHEEL_RR_MOTOR);
+//
+//        double x;
+//        double y;
+//        double theta;
+//        int canIndex;
+//
+//        Wheels(double xi, double yi, double thetai, int canIndexi) {
+//            x = xi;
+//            y = yi;
+//            theta = thetai;
+//            canIndex = canIndexi;
+//        }
+//    }
 
     /**
      * The constructor. Sets up the speeds and talons with k values for the internal PID controller.
@@ -48,15 +48,15 @@ public class Drivey extends Subsystem {
         RL = 0;
         RR = 0;
 
-        flContr = new CANTalon(Wheels.FRONT_LEFT.canIndex);
-        frContr = new CANTalon(Wheels.FRONT_RIGHT.canIndex);
-        rlContr = new CANTalon(Wheels.REAR_LEFT.canIndex);
-        rrContr = new CANTalon(Wheels.REAR_RIGHT.canIndex);
+        flContr = new CANTalon(RobotMap.WHEEL_FL_MOTOR);
+        frContr = new CANTalon(RobotMap.WHEEL_FR_MOTOR);
+        rlContr = new CANTalon(RobotMap.WHEEL_RL_MOTOR);
+        rrContr = new CANTalon(RobotMap.WHEEL_RR_MOTOR);
 
-        flContr.setPID(RandomConstants.DRIVE_KP, RandomConstants.DRIVE_KI, RandomConstants.DRIVE_KD);
-        frContr.setPID(RandomConstants.DRIVE_KP, RandomConstants.DRIVE_KI, RandomConstants.DRIVE_KD);
-        rlContr.setPID(RandomConstants.DRIVE_KP, RandomConstants.DRIVE_KI, RandomConstants.DRIVE_KD);
-        rrContr.setPID(RandomConstants.DRIVE_KP, RandomConstants.DRIVE_KI, RandomConstants.DRIVE_KD);
+//        flContr.setPID(RandomConstants.DRIVE_KP, RandomConstants.DRIVE_KI, RandomConstants.DRIVE_KD);
+//        frContr.setPID(RandomConstants.DRIVE_KP, RandomConstants.DRIVE_KI, RandomConstants.DRIVE_KD);
+//        rlContr.setPID(RandomConstants.DRIVE_KP, RandomConstants.DRIVE_KI, RandomConstants.DRIVE_KD);
+//        rrContr.setPID(RandomConstants.DRIVE_KP, RandomConstants.DRIVE_KI, RandomConstants.DRIVE_KD);
     }
 
     public void initDefaultCommand() {
@@ -74,28 +74,35 @@ public class Drivey extends Subsystem {
      */
     public void drive(double vx, double vy, double omega) {
         //Gets the wheel speed
-        FL = getWheelSpeed(RobotMap.CENTER_X, RobotMap.CENTER_Y, Wheels.FRONT_LEFT.x, Wheels.FRONT_LEFT.y, Wheels.FRONT_LEFT.theta, vx, vy, omega);
-        FR = getWheelSpeed(RobotMap.CENTER_X, RobotMap.CENTER_Y, Wheels.FRONT_RIGHT.x, Wheels.FRONT_RIGHT.y, Wheels.FRONT_RIGHT.theta, vx, vy, omega);
-        RL = getWheelSpeed(RobotMap.CENTER_X, RobotMap.CENTER_Y, Wheels.REAR_LEFT.x, Wheels.REAR_LEFT.y, Wheels.REAR_LEFT.theta, vx, vy, omega);
-        RR = getWheelSpeed(RobotMap.CENTER_X, RobotMap.CENTER_Y, Wheels.REAR_RIGHT.x, Wheels.REAR_RIGHT.y, Wheels.REAR_RIGHT.theta, vx, vy, omega);
+        FL = getWheelSpeed(RobotMap.CENTER_X, RobotMap.CENTER_Y, RobotMap.WHEEL_FL_X, RobotMap.WHEEL_FL_Y, RobotMap.WHEEL_FL_THETA, vx, vy, omega);
+        FR = getWheelSpeed(RobotMap.CENTER_X, RobotMap.CENTER_Y, RobotMap.WHEEL_FR_X, RobotMap.WHEEL_FR_Y, RobotMap.WHEEL_FR_THETA, vx, vy, omega);
+        RL = getWheelSpeed(RobotMap.CENTER_X, RobotMap.CENTER_Y, RobotMap.WHEEL_RL_X, RobotMap.WHEEL_RL_Y, RobotMap.WHEEL_RL_THETA, vx, vy, omega);
+        RR = getWheelSpeed(RobotMap.CENTER_X, RobotMap.CENTER_Y, RobotMap.WHEEL_RR_X, RobotMap.WHEEL_RR_Y, RobotMap.WHEEL_RR_THETA, vx, vy, omega);
 
         //Speed limiiter
-        double kLimit = FL;
-        if (FR > kLimit) {
-            kLimit = FR;
-        }
-        if (RL > kLimit) {
-            kLimit = RL;
-        }
-        if (RR > kLimit) {
-            kLimit = RR;
-        }
+//        double kLimit = FL;
+//        if (FR > kLimit) {
+//            kLimit = FR;
+//        }
+//        if (RL > kLimit) {
+//            kLimit = RL;
+//        }
+//        if (RR > kLimit) {
+//            kLimit = RR;
+//        }
+//
+//        if (kLimit > 1) {
+//            kLimit = Math.abs(1 / kLimit);
+//            FL = FL * kLimit;
+//            FR = FR * kLimit;
+//            RL = RL * kLimit;
+//            RR = RR * kLimit;
+//        }
 
-        kLimit = 1 / kLimit;
-        FL = FL * kLimit;
-        FR = FR * kLimit;
-        RL = RL * kLimit;
-        RR = RR * kLimit;
+        flContr.set(FL);
+        frContr.set(FR);
+        rlContr.set(RL);
+        rrContr.set(RR);
     }
 
     /**
