@@ -21,6 +21,14 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+<<<<<<< HEAD
+=======
+import org.bitbuckets.frc2015.command.CloseGrabber;
+import org.bitbuckets.frc2015.command.OpenGrabber;
+import org.bitbuckets.frc2015.command.TiltDown;
+import org.bitbuckets.frc2015.command.TiltUp;
+import org.bitbuckets.frc2015.subsystems.*;
+>>>>>>> origin/master
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -64,11 +72,10 @@ public class Robot extends IterativeRobot {
 
         OpenGrabber openGrabber = new OpenGrabber();
         CloseGrabber closeGrabber = new CloseGrabber();
+        TiltUp tiltUp = new TiltUp();
+        TiltDown tiltDown = new TiltDown();
 
         SmartDashboardInit();
-        
-        oi.trigger.whenPressed(openGrabber);
-        oi.trigger.whenReleased(closeGrabber);
         
         //generate a list of autonomous programs based on all the .txt files in the local directory
         //TODO make some sort of tag at start of scripts required, so that auto scripts, constant files, etc. dont get confused
@@ -83,6 +90,9 @@ public class Robot extends IterativeRobot {
         for(AutoProgram a: autoPrograms){
         	autoChooser.addObject(a.title, a);
         }
+
+        oi.tiltUp.whenActive(tiltUp);
+        oi.tiltDown.whenActive(tiltDown);
     }
 
     /**
@@ -111,10 +121,6 @@ public class Robot extends IterativeRobot {
     }
 
     public void teleopInit() {
-        // This makes sure that the autonomous stops running when
-        // teleop starts running. If you want the autonomous to 
-        // continue until interrupted by another command, remove
-        // this line or comment it out.
         if (autonomousCommand != null) autonomousCommand.cancel();
     }
 
@@ -123,8 +129,10 @@ public class Robot extends IterativeRobot {
      */
     public void teleopPeriodic() {
         Scheduler.getInstance().run();
-        drivey.drive(oi.stick.getY(), oi.stick.getX());
-        grabby.setSpeed(oi.operatorStick.getY());
+        drivey.drive(oi.stick.getRawAxis(OI.GO) * RandomConstants.MAX_TRANS_SPEED, -oi.stick.getRawAxis(OI.STRAFE) * RandomConstants.MAX_TRANS_SPEED, oi.stick.getRawAxis(OI.TURN) * RandomConstants.MAX_ROT_SPEED);
+        stacky.setWinchMotor(oi.stick.getRawAxis(3)-oi.stick.getRawAxis(2));
+        SmartDashboard.putString("thing", "" + oi.stick.getPOV());
+        SmartDashboard.putData(Scheduler.getInstance());
     }
 
     /**
@@ -133,8 +141,8 @@ public class Robot extends IterativeRobot {
     public void testPeriodic() {
         LiveWindow.run();
     }
-    
-    public void SmartDashboardInit(){
+
+    public void SmartDashboardInit() {
         SmartDashboard.putString("test", "This is a test!");
         SmartDashboard.putData(Scheduler.getInstance());
         //SmartDashboard.putNumber("Speed", drivey.getSpeed());

@@ -1,7 +1,7 @@
 package org.bitbuckets.frc2015.control;
 
 import org.bitbuckets.frc2015.RandomConstants;
-import org.bitbuckets.frc2015.lib.MotionController;
+import org.bitbuckets.frc2015.util.MotionController;
 
 public class ExampleMotionController implements MotionController{
 	/** The sensor value the last time <code>update()</code> was called. **/

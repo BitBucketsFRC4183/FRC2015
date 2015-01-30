@@ -1,6 +1,6 @@
 package org.bitbuckets.frc2015.control;
 
-import org.bitbuckets.frc2015.lib.MotionProfiler;
+import org.bitbuckets.frc2015.util.MotionProfiler;
 
 public class ExampleMotionProfiler implements MotionProfiler {
 	private double maxPos;
@@ -9,7 +9,7 @@ public class ExampleMotionProfiler implements MotionProfiler {
 	private double currVel;
 	
 	@Override
-	public void init(int pos, int maxVel) {
+	public void init(double pos, double maxVel) {
 		maxPos = pos;
 		this.maxVel = maxVel;
 	}
@@ -24,6 +24,11 @@ public class ExampleMotionProfiler implements MotionProfiler {
 		
 		
 		return currVel;
+	}
+
+	@Override
+	public void setSetpoint(double pos) {
+
 	}
 
 }

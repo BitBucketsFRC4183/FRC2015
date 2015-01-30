@@ -1,4 +1,4 @@
-package org.bitbuckets.frc2015.lib;
+package org.bitbuckets.frc2015.util;
 
 public interface MotionProfiler {
 	/**
@@ -7,7 +7,7 @@ public interface MotionProfiler {
 	 * @param pos The target position for the <code>MotionProfiler</code>.
 	 * @param maxVel The max velocity at which the motor should run.
 	 */
-	public void init(int pos, int maxVel);
+	public void init(double pos, double maxVel);
 	
 	/**
 	 * Gets the current speed at which the motor should be running.
@@ -22,4 +22,11 @@ public interface MotionProfiler {
 	 * @return The current speed to set the motor to.
 	 */
 	public double update();
+
+	/**
+	 * Sets the target position for the MotionProfiler.
+	 *
+	 * @param pos The new tarrget position.
+	 */
+	public void setSetpoint(double pos);
 }
