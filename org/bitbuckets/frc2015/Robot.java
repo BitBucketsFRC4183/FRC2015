@@ -75,8 +75,8 @@ public class Robot extends IterativeRobot {
         try {
 			autoPrograms = AutoProgramGenerator.generateAutoPrograms();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			SmartDashboard.putString("Auto IO Error", "Error detected: " + e.getMessage());
 		}
         
         autoChooser = new SendableChooser();

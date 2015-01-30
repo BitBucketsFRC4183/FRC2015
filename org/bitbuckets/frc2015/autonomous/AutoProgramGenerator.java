@@ -3,6 +3,7 @@ package org.bitbuckets.frc2015.autonomous;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
@@ -23,10 +24,11 @@ public class AutoProgramGenerator {
         }
     };
     
+    //TODO check for script type
     /**
+     * generateAutoPrograms() reads the files in the current directory and returns them in an ArrayList of AutoPrograms
      * 
-     * @param scripts
-     * @return
+     * @return ArrayList<AutoProgram> of AutoProgram objects
      * @throws IOException
      */
     public static ArrayList<AutoProgram> generateAutoPrograms() throws IOException{
@@ -39,6 +41,7 @@ public class AutoProgramGenerator {
     }
     
     /**
+     * Returns an array of File objects containing all files matching textFilter in the current directory.
      * 
      * @return
      * @throws IOException
@@ -50,6 +53,12 @@ public class AutoProgramGenerator {
 	    }
 	    return autoScripts;
     }
+    
+/*    public static boolean changeDir(String directoryPathName){
+    	
+    	dir = new File(directoryPathName);
+    	return true;
+    }*/
     
 
 }
