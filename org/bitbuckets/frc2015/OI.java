@@ -12,6 +12,7 @@ import org.bitbuckets.frc2015.util.POVHat;
 public class OI {
     public Joystick stick = new Joystick(1);
     public Button trigger = new JoystickButton(stick, 1);
+//    public Button trigger = new JoystickButton(stick, 1);
     public POVHat tiltUp = new POVHat(stick, POVHat.HatDir.UP);
     public POVHat tiltDown = new POVHat(stick, POVHat.HatDir.DOWN);
 

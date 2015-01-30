@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  */
 public class Stacky extends Subsystem {
     private SpeedController winch;
+    
     private DigitalInput hallMulti;
     private DigitalInput hallSing;
 
