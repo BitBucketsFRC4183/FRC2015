@@ -75,7 +75,7 @@ public class RobotMap {
     /**
      * The port that the hall effect sensor with the singular magnet is connected to.
      */
-    public static final int HALL_SING = 1;
+    public static final int HALL_SING = 3;
     /**
      * The port that the hall effect sensor with the multiple magnets is connected to.
      */
@@ -83,11 +83,11 @@ public class RobotMap {
     /**
      * The right side sensor to detect collision with a tote
      */
-    public static final int BUMP_SENSE_RIGHT = 5;
+    public static final int BUMP_SENSE_RIGHT = 0;
     /**
      * The left side sensor to detect collision with a tote
      */
-    public static final int BUMP_SENSE_LEFT = 6;
+    public static final int BUMP_SENSE_LEFT = 1;
     /**
      * The switch that tells the compressor the max pressure
      */

@@ -23,11 +23,15 @@ public class Stacky extends Subsystem {
     
     private DigitalInput hallMulti;
     private DigitalInput hallSing;
+    private DigitalInput bumperLeft;
+    private DigitalInput bumperRight;
 
     public Stacky(){
         winch = new Talon(RobotMap.WINCH_MOTOR);
         hallMulti = new DigitalInput(RobotMap.HALL_MULTI);
         hallSing = new DigitalInput(RobotMap.HALL_SING);
+        bumperLeft = new DigitalInput(RobotMap.BUMP_SENSE_LEFT);
+        bumperRight = new DigitalInput(RobotMap.BUMP_SENSE_RIGHT);
     }
 
     public void initDefaultCommand() {
@@ -44,6 +48,10 @@ public class Stacky extends Subsystem {
 
     public boolean getHallSingActive() {
         return hallSing.get();
+    }
+
+    public boolean getButtonsActive(){
+        return bumperLeft.get() && bumperRight.get();
     }
 }
 

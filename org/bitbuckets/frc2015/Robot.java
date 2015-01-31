@@ -6,10 +6,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import org.bitbuckets.frc2015.command.CloseGrabber;
-import org.bitbuckets.frc2015.command.OpenGrabber;
-import org.bitbuckets.frc2015.command.TiltDown;
-import org.bitbuckets.frc2015.command.TiltUp;
+import org.bitbuckets.frc2015.command.*;
 import org.bitbuckets.frc2015.subsystems.*;
 
 /**
@@ -52,6 +49,7 @@ public class Robot extends IterativeRobot {
         CloseGrabber closeGrabber = new CloseGrabber();
         TiltUp tiltUp = new TiltUp();
         TiltDown tiltDown = new TiltDown();
+        IncreaseStack increaseStack = new IncreaseStack();
 
         SmartDashboardInit();
 
