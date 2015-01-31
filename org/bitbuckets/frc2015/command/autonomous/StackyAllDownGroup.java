@@ -1,18 +1,13 @@
-package org.bitbuckets.frc2015.autonomous;
-
-import org.bitbuckets.frc2015.command.DriveTestCommand;
+package org.bitbuckets.frc2015.command.autonomous;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
 /**
  *
  */
-public class DriveTestAutoMode extends CommandGroup {
+public class StackyAllDownGroup extends CommandGroup {
     
-    public  DriveTestAutoMode() {
-    	
-    	addSequential(new DriveTestCommand());
-    	
+    public  StackyAllDownGroup() {
         // Add Commands here:
         // e.g. addSequential(new Command1());
         //      addSequential(new Command2());

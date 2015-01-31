@@ -137,8 +137,6 @@ public class AutoProgram extends CommandGroup {
     	switch(parsedName.get(1)){
     		case "CloseGrabber":
     			return new CloseGrabber();
-    		case "DriveTestCommand":
-    			return new DriveTestCommand();
     		case "OpenGrabber":
     			return new OpenGrabber();
     			
