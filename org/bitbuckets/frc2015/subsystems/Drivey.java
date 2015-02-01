@@ -2,6 +2,7 @@ package org.bitbuckets.frc2015.subsystems;
 
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.bitbuckets.frc2015.RandomConstants;
 import org.bitbuckets.frc2015.RobotMap;
 
@@ -53,15 +54,46 @@ public class Drivey extends Subsystem {
         rlContr = new CANTalon(RobotMap.WHEEL_RL_MOTOR);
         rrContr = new CANTalon(RobotMap.WHEEL_RR_MOTOR);
 
-//        flContr.setPID(RandomConstants.DRIVE_KP, RandomConstants.DRIVE_KI, RandomConstants.DRIVE_KD);
-//        frContr.setPID(RandomConstants.DRIVE_KP, RandomConstants.DRIVE_KI, RandomConstants.DRIVE_KD);
-//        rlContr.setPID(RandomConstants.DRIVE_KP, RandomConstants.DRIVE_KI, RandomConstants.DRIVE_KD);
-//        rrContr.setPID(RandomConstants.DRIVE_KP, RandomConstants.DRIVE_KI, RandomConstants.DRIVE_KD);
+        resetEncoders();
+
+        flContr.changeControlMode(CANTalon.ControlMode.Speed);
+        frContr.changeControlMode(CANTalon.ControlMode.Speed);
+        rlContr.changeControlMode(CANTalon.ControlMode.Speed);
+        rrContr.changeControlMode(CANTalon.ControlMode.Speed);
+
+        flContr.setPID(RandomConstants.DRIVE_KP, RandomConstants.DRIVE_KI, RandomConstants.DRIVE_KD);
+        frContr.setPID(RandomConstants.DRIVE_KP, RandomConstants.DRIVE_KI, RandomConstants.DRIVE_KD);
+        rlContr.setPID(RandomConstants.DRIVE_KP, RandomConstants.DRIVE_KI, RandomConstants.DRIVE_KD);
+        rrContr.setPID(RandomConstants.DRIVE_KP, RandomConstants.DRIVE_KI, RandomConstants.DRIVE_KD);
+
+        flContr.reverseSensor(true);
+        frContr.reverseSensor(true);
+        rlContr.reverseSensor(true);
+        rrContr.reverseSensor(true);
+
+        SmartDashboard.putNumber("KP", RandomConstants.DRIVE_KP);
+        SmartDashboard.putNumber("KI", RandomConstants.DRIVE_KI);
+        SmartDashboard.putNumber("KD", RandomConstants.DRIVE_KD);
+        SmartDashboard.putNumber("KF", RandomConstants.DRIVE_KF);
     }
 
     public void initDefaultCommand() {
         // Set the default command for a subsystem here.
         //setDefaultCommand(new MySpecialCommand());
+    }
+
+    public void resetEncoders() {
+        flContr.setPosition(0);
+        frContr.setPosition(0);
+        rlContr.setPosition(0);
+        rrContr.setPosition(0);
+    }
+
+    public void resetPIDs(){
+        flContr.setPID(SmartDashboard.getNumber("KP"), SmartDashboard.getNumber("KI"), SmartDashboard.getNumber("KD"));
+        frContr.setPID(SmartDashboard.getNumber("KP"), SmartDashboard.getNumber("KI"), SmartDashboard.getNumber("KD"));
+        rlContr.setPID(SmartDashboard.getNumber("KP"), SmartDashboard.getNumber("KI"), SmartDashboard.getNumber("KD"));
+        rrContr.setPID(SmartDashboard.getNumber("KP"), SmartDashboard.getNumber("KI"), SmartDashboard.getNumber("KD"));
     }
 
     /**
@@ -99,10 +131,20 @@ public class Drivey extends Subsystem {
 //            RR = RR * kLimit;
 //        }
 
-        flContr.set(FL);
-        frContr.set(FR);
-        rlContr.set(RL);
-        rrContr.set(RR);
+        flContr.set(FL * RandomConstants.ENC_TICK_PER_REV / RandomConstants.WHEEL_CIRCUMFERENCE);
+        frContr.set(FR * RandomConstants.ENC_TICK_PER_REV / RandomConstants.WHEEL_CIRCUMFERENCE);
+        rlContr.set(RL * RandomConstants.ENC_TICK_PER_REV / RandomConstants.WHEEL_CIRCUMFERENCE);
+        rrContr.set(RR * RandomConstants.ENC_TICK_PER_REV / RandomConstants.WHEEL_CIRCUMFERENCE);
+
+        SmartDashboard.putNumber("FLEnc", flContr.getEncPosition());
+        SmartDashboard.putNumber("FREnc", frContr.getEncPosition());
+        SmartDashboard.putNumber("RLEnc", rlContr.getEncPosition());
+        SmartDashboard.putNumber("RREnc", rrContr.getEncPosition());
+
+        SmartDashboard.putNumber("FL", FL * RandomConstants.ENC_TICK_PER_REV / RandomConstants.WHEEL_CIRCUMFERENCE);
+        SmartDashboard.putNumber("FR", FR * RandomConstants.ENC_TICK_PER_REV / RandomConstants.WHEEL_CIRCUMFERENCE);
+        SmartDashboard.putNumber("RL", RL * RandomConstants.ENC_TICK_PER_REV / RandomConstants.WHEEL_CIRCUMFERENCE);
+        SmartDashboard.putNumber("RR", RR * RandomConstants.ENC_TICK_PER_REV / RandomConstants.WHEEL_CIRCUMFERENCE);
     }
 
     /**
