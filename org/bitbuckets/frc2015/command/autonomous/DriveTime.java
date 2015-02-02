@@ -1,37 +1,33 @@
-package org.bitbuckets.frc2015.command;
+package org.bitbuckets.frc2015.command.autonomous;
 
-import edu.wpi.first.wpilibj.Timer;
+import org.bitbuckets.frc2015.Robot;
+
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
  *
  */
-public class Wait extends Command {
+public class DriveTime extends Command {
+	private long timeInit;
 	
-	Timer timer;
-
-    public Wait() {
-        // Use requires() here to declare subsystem dependencies
-        // eg. requires(chassis);
-    	timer = new Timer();
+	
+    public DriveTime() {
+        requires(Robot.drivey);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
+    	timeInit = System.currentTimeMillis();
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+    	Robot.drivey.drive(1, 0, 0);
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        if(timer.get() >= 1){
-        	timer.stop();
-        	timer.reset();
-        	return true;
-        }
-        return false;
+        return (System.currentTimeMillis() - timeInit) >= 1000;
     }
 
     // Called once after isFinished returns true

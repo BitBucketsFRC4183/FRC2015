@@ -1,31 +1,20 @@
 package org.bitbuckets.frc2015;
 
-import java.io.IOException;
-import java.util.ArrayList;
-
-import org.bitbuckets.frc2015.autonomous.AutoProgram;
-import org.bitbuckets.frc2015.autonomous.AutoProgramGenerator;
-import org.bitbuckets.frc2015.command.CloseGrabber;
-import org.bitbuckets.frc2015.command.OpenGrabber;
-import org.bitbuckets.frc2015.subsystems.Drivey;
-import org.bitbuckets.frc2015.subsystems.Esteemy;
-import org.bitbuckets.frc2015.subsystems.Grabby;
-import org.bitbuckets.frc2015.subsystems.Stacky;
-import org.bitbuckets.frc2015.subsystems.Tilty;
-
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.bitbuckets.frc2015.autonomous.AutoProgram;
 import org.bitbuckets.frc2015.command.CloseGrabber;
 import org.bitbuckets.frc2015.command.OpenGrabber;
 import org.bitbuckets.frc2015.command.TiltDown;
 import org.bitbuckets.frc2015.command.TiltUp;
+import org.bitbuckets.frc2015.command.autonomous.AutoDriveTest;
 import org.bitbuckets.frc2015.subsystems.*;
+
+import java.util.ArrayList;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -44,11 +33,11 @@ public class Robot extends IterativeRobot {
     public static Tilty tilty;
 
     public static Compressor compressor;
-    
-    Command autonomousCommand;
 
     SendableChooser autoChooser;
-    
+
+    AutoDriveTest driveTest;
+
     ArrayList<AutoProgram> autoPrograms;
 
     /**
@@ -73,20 +62,22 @@ public class Robot extends IterativeRobot {
         TiltDown tiltDown = new TiltDown();
 
         SmartDashboardInit();
-        
+
+
         //generate a list of autonomous programs based on all the .txt files in the local directory
         //TODO make some sort of tag at start of scripts required, so that auto scripts, constant files, etc. dont get confused
-        try {
-			autoPrograms = AutoProgramGenerator.generateAutoPrograms();
-		} catch (IOException e) {
-			e.printStackTrace();
-			SmartDashboard.putString("Auto IO Error", "Error detected: " + e.getMessage());
-		}
-        
-        autoChooser = new SendableChooser();
-        for(AutoProgram a: autoPrograms){
-        	autoChooser.addObject(a.title, a);
-        }
+//        try {
+//			autoPrograms = AutoProgramGenerator.generateAutoPrograms();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//			SmartDashboard.putString("Auto IO Error", "Error detected: " + e.getMessage());
+//		}
+//
+//        autoChooser = new SendableChooser();
+//        for(AutoProgram a: autoPrograms){
+//        	autoChooser.addObject(a.title, a);
+//        }
+
 
         oi.tiltUp.whenActive(tiltUp);
         oi.tiltDown.whenActive(tiltDown);
@@ -106,8 +97,8 @@ public class Robot extends IterativeRobot {
 
     public void autonomousInit() {
         // schedule the autonomous command (example)
-        autonomousCommand = (Command) autoChooser.getSelected();
-        autonomousCommand.start();
+        driveTest = new AutoDriveTest();
+        driveTest.start();
     }
 
     /**
@@ -118,7 +109,7 @@ public class Robot extends IterativeRobot {
     }
 
     public void teleopInit() {
-        if (autonomousCommand != null) autonomousCommand.cancel();
+        driveTest.cancel();
     }
 
     /**
@@ -127,7 +118,7 @@ public class Robot extends IterativeRobot {
     public void teleopPeriodic() {
         Scheduler.getInstance().run();
         drivey.drive(oi.stick.getRawAxis(OI.GO) * RandomConstants.MAX_TRANS_SPEED, -oi.stick.getRawAxis(OI.STRAFE) * RandomConstants.MAX_TRANS_SPEED, oi.stick.getRawAxis(OI.TURN) * RandomConstants.MAX_ROT_SPEED);
-        stacky.setWinchMotor(oi.stick.getRawAxis(3)-oi.stick.getRawAxis(2));
+        stacky.setWinchMotor(oi.stick.getRawAxis(3) - oi.stick.getRawAxis(2));
         SmartDashboard.putString("thing", "" + oi.stick.getPOV());
         SmartDashboard.putData(Scheduler.getInstance());
     }

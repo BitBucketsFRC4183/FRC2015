@@ -12,7 +12,7 @@ public class RandomConstants {
     /**
      * Maximum translational acceleration in ft/s^2.(needs to be converted to ft/s^2)
      */
-    public static final double MAX_TRANS_ACCEL = .2;
+    public static final double MAX_TRANS_ACCEL = .5;
     /**
      * Maximum rotational speed in rad/s.
      */

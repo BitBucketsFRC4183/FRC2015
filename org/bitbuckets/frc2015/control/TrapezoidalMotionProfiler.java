@@ -1,5 +1,7 @@
 package org.bitbuckets.frc2015.control;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 /**
  * Created by James on 1/30/2015.
  */
@@ -19,7 +21,7 @@ public class TrapezoidalMotionProfiler {
      * @param acc  The acceleration for this profiler.
      */
     public TrapezoidalMotionProfiler(double pos, double maxV, double acc) {
-        state = 0;
+        state = 1;
         dist = pos;
         maxVel = maxV;
         speed = 0;
@@ -50,9 +52,10 @@ public class TrapezoidalMotionProfiler {
                 }
                 if (pos * 2 >= dist) {
                     state = 3;
-                    maxVel = speed;
+                    speed = maxVel;
                     timeInit = System.currentTimeMillis();
                 }
+                SmartDashboard.putString("a", "state is 1");
                 break;
             case 2:
                 speed = maxVel;
@@ -61,9 +64,11 @@ public class TrapezoidalMotionProfiler {
                     state = 3;
                     timeInit = System.currentTimeMillis();
                 }
+                SmartDashboard.putString("a", "state is 2");
                 break;
             case 3:
                 speed = maxVel - accel * (System.currentTimeMillis() - timeInit) / 1000;
+                SmartDashboard.putNumber("SpeedStuff", speed);
                 if (speed <= 0) {
                     state = 4;
                 }
@@ -74,6 +79,10 @@ public class TrapezoidalMotionProfiler {
                 break;
         }
         return speed;
+    }
+
+    public boolean getFinished() {
+        return state == 5;
     }
 
     /**
