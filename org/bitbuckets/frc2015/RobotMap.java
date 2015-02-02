@@ -100,7 +100,7 @@ public class RobotMap {
     /**
      * The X coordinate of the front left wheel from the center of the robot in inches.
      */
-    public static final double WHEEL_FL_X = -11 / 12.0;
+    public static final double WHEEL_FL_X = -10 / 12.0;
     /**
      * The Y coordinate of the front left wheel from the center of the robot in inches.
      */
@@ -113,7 +113,7 @@ public class RobotMap {
     /**
      * The X coordinate of the front right wheel from the center of the robot in inches.
      */
-    public static final double WHEEL_FR_X = 11 / 12.0;
+    public static final double WHEEL_FR_X = 10 / 12.0;
     /**
      * The Y coordinate of the front right wheel from the center of the robot in inches.
      */
@@ -126,7 +126,7 @@ public class RobotMap {
     /**
      * The X coordinate of the rear left wheel from the center of the robot in inches.
      */
-    public static final double WHEEL_RL_X = -11 / 12.0;
+    public static final double WHEEL_RL_X = -18 / 12.0;
     /**
      * The Y coordinate of the rear left wheel from the center of the robot in inches.
      */
@@ -139,7 +139,7 @@ public class RobotMap {
     /**
      * The X coordinate of the rear right wheel from the center of the robot in inches.
      */
-    public static final double WHEEL_RR_X = 11 / 12.0;
+    public static final double WHEEL_RR_X = 18 / 12.0;
     /**
      * The Y coordinate of the rear right wheel from the center of the robot in inches.
      */
