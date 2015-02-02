@@ -109,7 +109,9 @@ public class Robot extends IterativeRobot {
     }
 
     public void teleopInit() {
-        driveTest.cancel();
+    	if(driveTest != null){
+    		driveTest.cancel();
+    	}
     }
 
     /**
