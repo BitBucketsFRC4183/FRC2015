@@ -12,12 +12,24 @@ import org.bitbuckets.frc2015.util.POVHat;
 public class OI {
     public Joystick stick = new Joystick(1);
     public Button trigger = new JoystickButton(stick, 1);
-//    public Button trigger = new JoystickButton(stick, 1);
+    //    public Button trigger = new JoystickButton(stick, 1);
     public POVHat tiltUp = new POVHat(stick, POVHat.HatDir.UP);
     public POVHat tiltDown = new POVHat(stick, POVHat.HatDir.DOWN);
 
-    public static final int GO = 0;
-    public static final int STRAFE = 1;
-    public static final int TURN = 4;
+    public static int GO = 0;
+    public static int STRAFE = 1;
+    public static int TURN = 4;
+
+    public static void changeControls() {
+        if (GO == 0) {
+            GO = 5;
+            STRAFE = 4;
+            TURN = 1;
+        } else {
+            GO = 0;
+            STRAFE = 1;
+            TURN = 4;
+        }
+    }
 }
 
