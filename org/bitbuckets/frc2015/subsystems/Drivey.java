@@ -89,7 +89,7 @@ public class Drivey extends Subsystem {
         rrContr.setPosition(0);
     }
 
-    public void resetPIDs(){
+    public void resetPIDs() {
         flContr.setPID(SmartDashboard.getNumber("KP"), SmartDashboard.getNumber("KI"), SmartDashboard.getNumber("KD"));
         frContr.setPID(SmartDashboard.getNumber("KP"), SmartDashboard.getNumber("KI"), SmartDashboard.getNumber("KD"));
         rlContr.setPID(SmartDashboard.getNumber("KP"), SmartDashboard.getNumber("KI"), SmartDashboard.getNumber("KD"));
@@ -136,15 +136,15 @@ public class Drivey extends Subsystem {
         rlContr.set(RL * RandomConstants.ENC_TICK_PER_REV / RandomConstants.WHEEL_CIRCUMFERENCE);
         rrContr.set(RR * RandomConstants.ENC_TICK_PER_REV / RandomConstants.WHEEL_CIRCUMFERENCE);
 
-        SmartDashboard.putNumber("FLEnc", flContr.getEncPosition());
-        SmartDashboard.putNumber("FREnc", frContr.getEncPosition());
-        SmartDashboard.putNumber("RLEnc", rlContr.getEncPosition());
-        SmartDashboard.putNumber("RREnc", rrContr.getEncPosition());
+        SmartDashboard.putNumber("FLEnc", flContr.getEncPosition() * RandomConstants.WHEEL_CIRCUMFERENCE / RandomConstants.ENC_TICK_PER_REV);
+        SmartDashboard.putNumber("FREnc", frContr.getEncPosition() * RandomConstants.WHEEL_CIRCUMFERENCE / RandomConstants.ENC_TICK_PER_REV);
+        SmartDashboard.putNumber("RLEnc", rlContr.getEncPosition() * RandomConstants.WHEEL_CIRCUMFERENCE / RandomConstants.ENC_TICK_PER_REV);
+        SmartDashboard.putNumber("RREnc", rrContr.getEncPosition() * RandomConstants.WHEEL_CIRCUMFERENCE / RandomConstants.ENC_TICK_PER_REV);
 
-        SmartDashboard.putNumber("FL", FL * RandomConstants.ENC_TICK_PER_REV / RandomConstants.WHEEL_CIRCUMFERENCE);
-        SmartDashboard.putNumber("FR", FR * RandomConstants.ENC_TICK_PER_REV / RandomConstants.WHEEL_CIRCUMFERENCE);
-        SmartDashboard.putNumber("RL", RL * RandomConstants.ENC_TICK_PER_REV / RandomConstants.WHEEL_CIRCUMFERENCE);
-        SmartDashboard.putNumber("RR", RR * RandomConstants.ENC_TICK_PER_REV / RandomConstants.WHEEL_CIRCUMFERENCE);
+        SmartDashboard.putNumber("FL Speed", FL);
+        SmartDashboard.putNumber("FR Speed", FR);
+        SmartDashboard.putNumber("RL Speed", RL);
+        SmartDashboard.putNumber("RR Speed", RR);
     }
 
     /**

@@ -55,7 +55,7 @@ public class TrapezoidalMotionProfiler {
                     speed = maxVel;
                     timeInit = System.currentTimeMillis();
                 }
-                SmartDashboard.putString("a", "state is 1");
+                SmartDashboard.putNumber("State", 1);
                 break;
             case 2:
                 speed = maxVel;
@@ -64,14 +64,14 @@ public class TrapezoidalMotionProfiler {
                     state = 3;
                     timeInit = System.currentTimeMillis();
                 }
-                SmartDashboard.putString("a", "state is 2");
+                SmartDashboard.putNumber("State", 2);
                 break;
             case 3:
                 speed = maxVel - accel * (System.currentTimeMillis() - timeInit) / 1000;
-                SmartDashboard.putNumber("SpeedStuff", speed);
                 if (speed <= 0) {
                     state = 4;
                 }
+                SmartDashboard.putNumber("State", 3);
                 break;
             case 4:
                 speed = 0;

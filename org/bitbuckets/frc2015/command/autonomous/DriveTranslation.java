@@ -1,6 +1,7 @@
 package org.bitbuckets.frc2015.command.autonomous;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.bitbuckets.frc2015.RandomConstants;
 import org.bitbuckets.frc2015.Robot;
 import org.bitbuckets.frc2015.control.TrapezoidalMotionProfiler;
@@ -35,8 +36,13 @@ public class DriveTranslation extends Command {
         double xVel = xProf.update(xDist);
         double yVel = yProf.update(yDist);
 
-        xDist += xVel * (System.currentTimeMillis() - time)/1000;
-        yDist += yVel * (System.currentTimeMillis() - time)/1000;
+        xDist += xVel * (System.currentTimeMillis() - time) / 1000;
+        yDist += yVel * (System.currentTimeMillis() - time) / 1000;
+
+        SmartDashboard.putNumber("X Velocity", xVel);
+        SmartDashboard.putNumber("Y Velocity", yVel);
+        SmartDashboard.putNumber("X Distance", xDist);
+        SmartDashboard.putNumber("Y Distance", yDist);
 
         Robot.drivey.drive(xVel, yVel, 0);
 
