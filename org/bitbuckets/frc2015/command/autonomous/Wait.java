@@ -7,9 +7,9 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class Wait extends Command {
     private long timeInit;
-    private int length;
+    private double length;
 
-    public Wait(int waitTime) {
+    public Wait(double waitTime) {
         length = waitTime;
     }
 
