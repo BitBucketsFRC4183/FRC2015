@@ -12,6 +12,7 @@ public class TrapezoidalMotionProfiler {
     private double maxVel;
     private double speed;
     private double accel;
+    private int sign;
 
     /**
      * Initializes the <code>MotionProfiler</code>.
@@ -22,7 +23,8 @@ public class TrapezoidalMotionProfiler {
      */
     public TrapezoidalMotionProfiler(double pos, double maxV, double acc) {
         state = 1;
-        dist = pos;
+        sign = (int) Math.signum(dist);
+        dist = Math.abs(pos);
         maxVel = maxV;
         speed = 0;
         accel = acc;
@@ -41,7 +43,7 @@ public class TrapezoidalMotionProfiler {
      * @return The current speed of this profiler.
      */
     public double getSpeed() {
-        return speed;
+        return speed*sign;
     }
 
     /**
@@ -85,7 +87,7 @@ public class TrapezoidalMotionProfiler {
                 state = 5;
                 break;
         }
-        return speed;
+        return speed*sign;
     }
 
     public boolean getFinished() {
@@ -98,6 +100,7 @@ public class TrapezoidalMotionProfiler {
      * @param pos The new tarrget position.
      */
     public void setSetpoint(double pos) {
-        dist = pos;
+        dist = Math.abs(pos);
+        sign = (int) Math.signum(dist);
     }
 }
