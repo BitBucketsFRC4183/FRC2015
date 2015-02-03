@@ -27,6 +27,13 @@ public class TrapezoidalMotionProfiler {
         speed = 0;
         accel = acc;
     }
+    
+    /**
+     * 
+     */
+    public void start(){
+    	timeInit = System.currentTimeMillis();
+    }
 
     /**
      * Gets the current speed at which the motor should be running.
@@ -52,7 +59,7 @@ public class TrapezoidalMotionProfiler {
                 }
                 if (pos * 2 >= dist) {
                     state = 3;
-                    speed = maxVel;
+                    maxVel = speed;
                     timeInit = System.currentTimeMillis();
                 }
                 SmartDashboard.putNumber("State", 1);

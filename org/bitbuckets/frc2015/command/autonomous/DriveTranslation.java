@@ -28,6 +28,8 @@ public class DriveTranslation extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
+    	xProf.start();
+    	yProf.start();
         time = System.currentTimeMillis();
     }
 
