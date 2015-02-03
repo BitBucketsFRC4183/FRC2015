@@ -101,6 +101,6 @@ public class TrapezoidalMotionProfiler {
      */
     public void setSetpoint(double pos) {
         dist = Math.abs(pos);
-        sign = (int) Math.signum(dist);
+        sign = (int) Math.signum(pos);
     }
 }
