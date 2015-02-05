@@ -10,12 +10,13 @@ public class AutoDriveTest extends CommandGroup {
     public AutoDriveTest() {
     	
     	
-        addSequential(new DriveTranslation(0., 1.));
-        addSequential(new Wait(5));
-        addSequential(new DriveTranslation(1., 0.));
-        addSequential(new DriveTranslation(0., -1.));
-        addSequential(new Wait(3));
-        addSequential(new DriveTranslation(-1., 0.));
+        addSequential(new DriveTranslation(0., 5.));
+        addSequential(new Wait(10));
+        addSequential(new DriveTranslation(5., 0.));
+        addSequential(new Wait(10));
+        addSequential(new DriveTranslation(0., -5.));
+        addSequential(new Wait(10));
+        addSequential(new DriveTranslation(-5., 0.));
 
         // Add Commands here:
         // e.g. addSequential(new Command1());

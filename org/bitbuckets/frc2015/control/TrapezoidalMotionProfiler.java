@@ -23,18 +23,19 @@ public class TrapezoidalMotionProfiler {
      */
     public TrapezoidalMotionProfiler(double pos, double maxV, double acc) {
         state = 1;
-        sign = (int) Math.signum(dist);
         dist = Math.abs(pos);
+        sign = (int) (dist / pos);
+//        dist = pos;
         maxVel = maxV;
         speed = 0;
         accel = acc;
     }
-    
+
     /**
-     * 
+     *
      */
-    public void start(){
-    	timeInit = System.currentTimeMillis();
+    public void start() {
+        timeInit = System.currentTimeMillis();
     }
 
     /**
@@ -43,7 +44,7 @@ public class TrapezoidalMotionProfiler {
      * @return The current speed of this profiler.
      */
     public double getSpeed() {
-        return speed*sign;
+        return speed * sign;
     }
 
     /**
@@ -53,6 +54,7 @@ public class TrapezoidalMotionProfiler {
      * @return The current speed to set the motor to.
      */
     public double update(double pos) {
+        pos = Math.abs(pos);
         switch (state) {
             case 1:
                 speed = accel * (System.currentTimeMillis() - timeInit) / 1000;
@@ -63,15 +65,17 @@ public class TrapezoidalMotionProfiler {
                     state = 3;
                     maxVel = speed;
                     timeInit = System.currentTimeMillis();
+                    SmartDashboard.putNumber("State2time", timeInit);
                 }
                 SmartDashboard.putNumber("State", 1);
                 break;
             case 2:
                 speed = maxVel;
                 //the distance under the last trapezoid of the curve
-                if (dist - pos <= (maxVel * maxVel) / accel) {
+                if (dist - pos <= (maxVel * maxVel) / (accel * 2)) {
                     state = 3;
                     timeInit = System.currentTimeMillis();
+                    SmartDashboard.putNumber("State3time", timeInit);
                 }
                 SmartDashboard.putNumber("State", 2);
                 break;
@@ -87,7 +91,7 @@ public class TrapezoidalMotionProfiler {
                 state = 5;
                 break;
         }
-        return speed*sign;
+        return speed * sign;
     }
 
     public boolean getFinished() {
@@ -101,6 +105,7 @@ public class TrapezoidalMotionProfiler {
      */
     public void setSetpoint(double pos) {
         dist = Math.abs(pos);
-        sign = (int) Math.signum(pos);
+        sign = (int) (dist / pos);
+//        dist = pos;
     }
 }
