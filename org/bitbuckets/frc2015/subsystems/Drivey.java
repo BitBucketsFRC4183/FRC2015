@@ -66,6 +66,11 @@ public class Drivey extends Subsystem {
         rlContr.setPID(RandomConstants.DRIVE_KP, RandomConstants.DRIVE_KI, RandomConstants.DRIVE_KD);
         rrContr.setPID(RandomConstants.DRIVE_KP, RandomConstants.DRIVE_KI, RandomConstants.DRIVE_KD);
 
+        flContr.setF(RandomConstants.DRIVE_KF);
+        frContr.setF(RandomConstants.DRIVE_KF);
+        rlContr.setF(RandomConstants.DRIVE_KF);
+        rrContr.setF(RandomConstants.DRIVE_KF);
+
         flContr.reverseSensor(true);
         frContr.reverseSensor(true);
         rlContr.reverseSensor(true);
@@ -94,6 +99,11 @@ public class Drivey extends Subsystem {
         frContr.setPID(SmartDashboard.getNumber("KP"), SmartDashboard.getNumber("KI"), SmartDashboard.getNumber("KD"));
         rlContr.setPID(SmartDashboard.getNumber("KP"), SmartDashboard.getNumber("KI"), SmartDashboard.getNumber("KD"));
         rrContr.setPID(SmartDashboard.getNumber("KP"), SmartDashboard.getNumber("KI"), SmartDashboard.getNumber("KD"));
+
+        flContr.setF(SmartDashboard.getNumber("KF"));
+        frContr.setF(SmartDashboard.getNumber("KF"));
+        rlContr.setF(SmartDashboard.getNumber("KF"));
+        rrContr.setF(SmartDashboard.getNumber("KF"));
     }
 
     /**
