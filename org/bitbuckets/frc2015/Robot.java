@@ -80,6 +80,11 @@ public class Robot extends IterativeRobot {
         oi.tiltUp.whenActive(tiltUp);
         oi.tiltDown.whenActive(tiltDown);
         oi.changeControl.whenPressed(driveMode);
+
+        oi.xBut.whenPressed(new DrivePower(.25));
+        oi.circBut.whenPressed(new DrivePower(.50));
+        oi.squareBut.whenPressed(new DrivePower(.75));
+        oi.triangBut.whenPressed(new DrivePower(1.0));
     }
 
     /**
@@ -111,6 +116,7 @@ public class Robot extends IterativeRobot {
     	if(driveTest != null){
     		driveTest.cancel();
     	}
+        drivey.resetEncoders();
     }
 
     /**

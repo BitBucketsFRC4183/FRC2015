@@ -56,25 +56,25 @@ public class Drivey extends Subsystem {
 
         resetEncoders();
 
-        flContr.changeControlMode(CANTalon.ControlMode.Speed);
-        frContr.changeControlMode(CANTalon.ControlMode.Speed);
-        rlContr.changeControlMode(CANTalon.ControlMode.Speed);
-        rrContr.changeControlMode(CANTalon.ControlMode.Speed);
+//        flContr.changeControlMode(CANTalon.ControlMode.Speed);
+//        frContr.changeControlMode(CANTalon.ControlMode.Speed);
+//        rlContr.changeControlMode(CANTalon.ControlMode.Speed);
+//        rrContr.changeControlMode(CANTalon.ControlMode.Speed);
 
-        flContr.setPID(RandomConstants.DRIVE_KP, RandomConstants.DRIVE_KI, RandomConstants.DRIVE_KD);
-        frContr.setPID(RandomConstants.DRIVE_KP, RandomConstants.DRIVE_KI, RandomConstants.DRIVE_KD);
-        rlContr.setPID(RandomConstants.DRIVE_KP, RandomConstants.DRIVE_KI, RandomConstants.DRIVE_KD);
-        rrContr.setPID(RandomConstants.DRIVE_KP, RandomConstants.DRIVE_KI, RandomConstants.DRIVE_KD);
+//        flContr.setPID(RandomConstants.DRIVE_KP, RandomConstants.DRIVE_KI, RandomConstants.DRIVE_KD);
+//        frContr.setPID(RandomConstants.DRIVE_KP, RandomConstants.DRIVE_KI, RandomConstants.DRIVE_KD);
+//        rlContr.setPID(RandomConstants.DRIVE_KP, RandomConstants.DRIVE_KI, RandomConstants.DRIVE_KD);
+//        rrContr.setPID(RandomConstants.DRIVE_KP, RandomConstants.DRIVE_KI, RandomConstants.DRIVE_KD);
+//
+//        flContr.setF(RandomConstants.DRIVE_KF);
+//        frContr.setF(RandomConstants.DRIVE_KF);
+//        rlContr.setF(RandomConstants.DRIVE_KF);
+//        rrContr.setF(RandomConstants.DRIVE_KF);
 
-        flContr.setF(RandomConstants.DRIVE_KF);
-        frContr.setF(RandomConstants.DRIVE_KF);
-        rlContr.setF(RandomConstants.DRIVE_KF);
-        rrContr.setF(RandomConstants.DRIVE_KF);
-
-        flContr.reverseSensor(true);
-        frContr.reverseSensor(true);
-        rlContr.reverseSensor(true);
-        rrContr.reverseSensor(true);
+//        flContr.reverseSensor(true);
+//        frContr.reverseSensor(true);
+//        rlContr.reverseSensor(true);
+//        rrContr.reverseSensor(true);
 
         SmartDashboard.putNumber("KP", RandomConstants.DRIVE_KP);
         SmartDashboard.putNumber("KI", RandomConstants.DRIVE_KI);
@@ -95,15 +95,15 @@ public class Drivey extends Subsystem {
     }
 
     public void resetPIDs() {
-        flContr.setPID(SmartDashboard.getNumber("KP"), SmartDashboard.getNumber("KI"), SmartDashboard.getNumber("KD"));
-        frContr.setPID(SmartDashboard.getNumber("KP"), SmartDashboard.getNumber("KI"), SmartDashboard.getNumber("KD"));
-        rlContr.setPID(SmartDashboard.getNumber("KP"), SmartDashboard.getNumber("KI"), SmartDashboard.getNumber("KD"));
-        rrContr.setPID(SmartDashboard.getNumber("KP"), SmartDashboard.getNumber("KI"), SmartDashboard.getNumber("KD"));
-
-        flContr.setF(SmartDashboard.getNumber("KF"));
-        frContr.setF(SmartDashboard.getNumber("KF"));
-        rlContr.setF(SmartDashboard.getNumber("KF"));
-        rrContr.setF(SmartDashboard.getNumber("KF"));
+//        flContr.setPID(SmartDashboard.getNumber("KP"), SmartDashboard.getNumber("KI"), SmartDashboard.getNumber("KD"));
+//        frContr.setPID(SmartDashboard.getNumber("KP"), SmartDashboard.getNumber("KI"), SmartDashboard.getNumber("KD"));
+//        rlContr.setPID(SmartDashboard.getNumber("KP"), SmartDashboard.getNumber("KI"), SmartDashboard.getNumber("KD"));
+//        rrContr.setPID(SmartDashboard.getNumber("KP"), SmartDashboard.getNumber("KI"), SmartDashboard.getNumber("KD"));
+//
+//        flContr.setF(SmartDashboard.getNumber("KF"));
+//        frContr.setF(SmartDashboard.getNumber("KF"));
+//        rlContr.setF(SmartDashboard.getNumber("KF"));
+//        rrContr.setF(SmartDashboard.getNumber("KF"));
     }
 
     /**
@@ -141,10 +141,15 @@ public class Drivey extends Subsystem {
 //            RR = RR * kLimit;
 //        }
 
-        flContr.set(FL * RandomConstants.ENC_TICK_PER_REV / RandomConstants.WHEEL_CIRCUMFERENCE);
-        frContr.set(FR * RandomConstants.ENC_TICK_PER_REV / RandomConstants.WHEEL_CIRCUMFERENCE);
-        rlContr.set(RL * RandomConstants.ENC_TICK_PER_REV / RandomConstants.WHEEL_CIRCUMFERENCE);
-        rrContr.set(RR * RandomConstants.ENC_TICK_PER_REV / RandomConstants.WHEEL_CIRCUMFERENCE);
+//        flContr.set(FL * RandomConstants.ENC_TICK_PER_REV / RandomConstants.WHEEL_CIRCUMFERENCE);
+//        frContr.set(FR * RandomConstants.ENC_TICK_PER_REV / RandomConstants.WHEEL_CIRCUMFERENCE);
+//        rlContr.set(RL * RandomConstants.ENC_TICK_PER_REV / RandomConstants.WHEEL_CIRCUMFERENCE);
+//        rrContr.set(RR * RandomConstants.ENC_TICK_PER_REV / RandomConstants.WHEEL_CIRCUMFERENCE);
+
+//        flContr.set(FL);
+//        frContr.set(FR);
+//        rlContr.set(RL);
+//        rrContr.set(RR);
 
         SmartDashboard.putNumber("FLEnc", flContr.getEncPosition() * RandomConstants.WHEEL_CIRCUMFERENCE / RandomConstants.ENC_TICK_PER_REV);
         SmartDashboard.putNumber("FREnc", frContr.getEncPosition() * RandomConstants.WHEEL_CIRCUMFERENCE / RandomConstants.ENC_TICK_PER_REV);
@@ -155,6 +160,19 @@ public class Drivey extends Subsystem {
         SmartDashboard.putNumber("FR Speed", FR);
         SmartDashboard.putNumber("RL Speed", RL);
         SmartDashboard.putNumber("RR Speed", RR);
+    }
+
+    public void driveRaw(double motSpeed){
+        flContr.set(motSpeed);
+        frContr.set(motSpeed);
+        rlContr.set(motSpeed);
+        rrContr.set(motSpeed);
+
+        SmartDashboard.putNumber("raw speed", motSpeed);
+    }
+
+    public void putEncStuff(){
+        SmartDashboard.putNumber("EncVelThingy", flContr.getEncVelocity());
     }
 
     /**
