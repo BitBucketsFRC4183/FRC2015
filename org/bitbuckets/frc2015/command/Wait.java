@@ -1,4 +1,4 @@
-package org.bitbuckets.frc2015.command.autonomous;
+package org.bitbuckets.frc2015.command;
 
 import edu.wpi.first.wpilibj.command.Command;
 

@@ -15,29 +15,10 @@ public class Drivey extends Subsystem {
     private double RL;
     private double RR;
 
-    private CANTalon flContr;
-    private CANTalon frContr;
-    private CANTalon rlContr;
-    private CANTalon rrContr;
-
-//    private enum Wheels {
-//        FRONT_LEFT(RobotMap.WHEEL_FL_X, RobotMap.WHEEL_FL_Y, RobotMap.WHEEL_FL_THETA, RobotMap.WHEEL_FL_MOTOR),
-//        FRONT_RIGHT(RobotMap.WHEEL_FR_X, RobotMap.WHEEL_FR_Y, RobotMap.WHEEL_FR_THETA, RobotMap.WHEEL_FR_MOTOR),
-//        REAR_LEFT(RobotMap.WHEEL_RL_X, RobotMap.WHEEL_RL_Y, RobotMap.WHEEL_RL_THETA, RobotMap.WHEEL_RL_MOTOR),
-//        REAR_RIGHT(RobotMap.WHEEL_RR_X, RobotMap.WHEEL_RR_Y, RobotMap.WHEEL_RR_THETA, RobotMap.WHEEL_RR_MOTOR);
-//
-//        double x;
-//        double y;
-//        double theta;
-//        int canIndex;
-//
-//        Wheels(double xi, double yi, double thetai, int canIndexi) {
-//            x = xi;
-//            y = yi;
-//            theta = thetai;
-//            canIndex = canIndexi;
-//        }
-//    }
+    private CANTalon flController;
+    private CANTalon frController;
+    private CANTalon rlController;
+    private CANTalon rrController;
 
     /**
      * The constructor. Sets up the speeds and talons with k values for the internal PID controller.
@@ -49,32 +30,32 @@ public class Drivey extends Subsystem {
         RL = 0;
         RR = 0;
 
-        flContr = new CANTalon(RobotMap.WHEEL_FL_MOTOR);
-        frContr = new CANTalon(RobotMap.WHEEL_FR_MOTOR);
-        rlContr = new CANTalon(RobotMap.WHEEL_RL_MOTOR);
-        rrContr = new CANTalon(RobotMap.WHEEL_RR_MOTOR);
+        flController = new CANTalon(RobotMap.WHEEL_FL_MOTOR);
+        frController = new CANTalon(RobotMap.WHEEL_FR_MOTOR);
+        rlController = new CANTalon(RobotMap.WHEEL_RL_MOTOR);
+        rrController = new CANTalon(RobotMap.WHEEL_RR_MOTOR);
 
         resetEncoders();
 
-        flContr.changeControlMode(CANTalon.ControlMode.Speed);
-        frContr.changeControlMode(CANTalon.ControlMode.Speed);
-        rlContr.changeControlMode(CANTalon.ControlMode.Speed);
-        rrContr.changeControlMode(CANTalon.ControlMode.Speed);
+        flController.changeControlMode(CANTalon.ControlMode.Speed);
+        frController.changeControlMode(CANTalon.ControlMode.Speed);
+        rlController.changeControlMode(CANTalon.ControlMode.Speed);
+        rrController.changeControlMode(CANTalon.ControlMode.Speed);
 
-        flContr.setPID(RandomConstants.DRIVE_KP, RandomConstants.DRIVE_KI, RandomConstants.DRIVE_KD);
-        frContr.setPID(RandomConstants.DRIVE_KP, RandomConstants.DRIVE_KI, RandomConstants.DRIVE_KD);
-        rlContr.setPID(RandomConstants.DRIVE_KP, RandomConstants.DRIVE_KI, RandomConstants.DRIVE_KD);
-        rrContr.setPID(RandomConstants.DRIVE_KP, RandomConstants.DRIVE_KI, RandomConstants.DRIVE_KD);
+        flController.setPID(RandomConstants.DRIVE_KP, RandomConstants.DRIVE_KI, RandomConstants.DRIVE_KD);
+        frController.setPID(RandomConstants.DRIVE_KP, RandomConstants.DRIVE_KI, RandomConstants.DRIVE_KD);
+        rlController.setPID(RandomConstants.DRIVE_KP, RandomConstants.DRIVE_KI, RandomConstants.DRIVE_KD);
+        rrController.setPID(RandomConstants.DRIVE_KP, RandomConstants.DRIVE_KI, RandomConstants.DRIVE_KD);
 
-        flContr.setF(RandomConstants.DRIVE_KF);
-        frContr.setF(RandomConstants.DRIVE_KF);
-        rlContr.setF(RandomConstants.DRIVE_KF);
-        rrContr.setF(RandomConstants.DRIVE_KF);
+        flController.setF(RandomConstants.DRIVE_KF);
+        frController.setF(RandomConstants.DRIVE_KF);
+        rlController.setF(RandomConstants.DRIVE_KF);
+        rrController.setF(RandomConstants.DRIVE_KF);
 
-        flContr.reverseSensor(true);
-        frContr.reverseSensor(true);
-        rlContr.reverseSensor(true);
-        rrContr.reverseSensor(true);
+        flController.reverseSensor(true);
+        frController.reverseSensor(true);
+        rlController.reverseSensor(true);
+        rrController.reverseSensor(true);
 
         SmartDashboard.putNumber("KP", RandomConstants.DRIVE_KP);
         SmartDashboard.putNumber("KI", RandomConstants.DRIVE_KI);
@@ -88,22 +69,22 @@ public class Drivey extends Subsystem {
     }
 
     public void resetEncoders() {
-        flContr.setPosition(0);
-        frContr.setPosition(0);
-        rlContr.setPosition(0);
-        rrContr.setPosition(0);
+        flController.setPosition(0);
+        frController.setPosition(0);
+        rlController.setPosition(0);
+        rrController.setPosition(0);
     }
 
     public void resetPIDs() {
-        flContr.setPID(SmartDashboard.getNumber("KP"), SmartDashboard.getNumber("KI"), SmartDashboard.getNumber("KD"));
-        frContr.setPID(SmartDashboard.getNumber("KP"), SmartDashboard.getNumber("KI"), SmartDashboard.getNumber("KD"));
-        rlContr.setPID(SmartDashboard.getNumber("KP"), SmartDashboard.getNumber("KI"), SmartDashboard.getNumber("KD"));
-        rrContr.setPID(SmartDashboard.getNumber("KP"), SmartDashboard.getNumber("KI"), SmartDashboard.getNumber("KD"));
+        flController.setPID(SmartDashboard.getNumber("KP"), SmartDashboard.getNumber("KI"), SmartDashboard.getNumber("KD"));
+        frController.setPID(SmartDashboard.getNumber("KP"), SmartDashboard.getNumber("KI"), SmartDashboard.getNumber("KD"));
+        rlController.setPID(SmartDashboard.getNumber("KP"), SmartDashboard.getNumber("KI"), SmartDashboard.getNumber("KD"));
+        rrController.setPID(SmartDashboard.getNumber("KP"), SmartDashboard.getNumber("KI"), SmartDashboard.getNumber("KD"));
 
-        flContr.setF(SmartDashboard.getNumber("KF"));
-        frContr.setF(SmartDashboard.getNumber("KF"));
-        rlContr.setF(SmartDashboard.getNumber("KF"));
-        rrContr.setF(SmartDashboard.getNumber("KF"));
+        flController.setF(SmartDashboard.getNumber("KF"));
+        frController.setF(SmartDashboard.getNumber("KF"));
+        rlController.setF(SmartDashboard.getNumber("KF"));
+        rrController.setF(SmartDashboard.getNumber("KF"));
     }
 
     /**
@@ -121,7 +102,7 @@ public class Drivey extends Subsystem {
         RL = getWheelSpeed(RobotMap.CENTER_X, RobotMap.CENTER_Y, RobotMap.WHEEL_RL_X, RobotMap.WHEEL_RL_Y, RobotMap.WHEEL_RL_THETA, vx, vy, omega);
         RR = getWheelSpeed(RobotMap.CENTER_X, RobotMap.CENTER_Y, RobotMap.WHEEL_RR_X, RobotMap.WHEEL_RR_Y, RobotMap.WHEEL_RR_THETA, vx, vy, omega);
 
-        //Speed limiiter
+        //Speed limiter
 //        double kLimit = FL;
 //        if (FR > kLimit) {
 //            kLimit = FR;
@@ -141,15 +122,15 @@ public class Drivey extends Subsystem {
 //            RR = RR * kLimit;
 //        }
 
-        flContr.set(FL * RandomConstants.ENC_TICK_PER_REV / RandomConstants.WHEEL_CIRCUMFERENCE);
-        frContr.set(FR * RandomConstants.ENC_TICK_PER_REV / RandomConstants.WHEEL_CIRCUMFERENCE);
-        rlContr.set(RL * RandomConstants.ENC_TICK_PER_REV / RandomConstants.WHEEL_CIRCUMFERENCE);
-        rrContr.set(RR * RandomConstants.ENC_TICK_PER_REV / RandomConstants.WHEEL_CIRCUMFERENCE);
+        flController.set(FL * RandomConstants.ENC_TICK_PER_REV / RandomConstants.WHEEL_CIRCUMFERENCE);
+        frController.set(FR * RandomConstants.ENC_TICK_PER_REV / RandomConstants.WHEEL_CIRCUMFERENCE);
+        rlController.set(RL * RandomConstants.ENC_TICK_PER_REV / RandomConstants.WHEEL_CIRCUMFERENCE);
+        rrController.set(RR * RandomConstants.ENC_TICK_PER_REV / RandomConstants.WHEEL_CIRCUMFERENCE);
 
-        SmartDashboard.putNumber("FLEnc", flContr.getEncPosition() * RandomConstants.WHEEL_CIRCUMFERENCE / RandomConstants.ENC_TICK_PER_REV);
-        SmartDashboard.putNumber("FREnc", frContr.getEncPosition() * RandomConstants.WHEEL_CIRCUMFERENCE / RandomConstants.ENC_TICK_PER_REV);
-        SmartDashboard.putNumber("RLEnc", rlContr.getEncPosition() * RandomConstants.WHEEL_CIRCUMFERENCE / RandomConstants.ENC_TICK_PER_REV);
-        SmartDashboard.putNumber("RREnc", rrContr.getEncPosition() * RandomConstants.WHEEL_CIRCUMFERENCE / RandomConstants.ENC_TICK_PER_REV);
+        SmartDashboard.putNumber("FLEnc", flController.getEncPosition() * RandomConstants.WHEEL_CIRCUMFERENCE / RandomConstants.ENC_TICK_PER_REV);
+        SmartDashboard.putNumber("FREnc", frController.getEncPosition() * RandomConstants.WHEEL_CIRCUMFERENCE / RandomConstants.ENC_TICK_PER_REV);
+        SmartDashboard.putNumber("RLEnc", rlController.getEncPosition() * RandomConstants.WHEEL_CIRCUMFERENCE / RandomConstants.ENC_TICK_PER_REV);
+        SmartDashboard.putNumber("RREnc", rrController.getEncPosition() * RandomConstants.WHEEL_CIRCUMFERENCE / RandomConstants.ENC_TICK_PER_REV);
 
         SmartDashboard.putNumber("FL Speed", FL);
         SmartDashboard.putNumber("FR Speed", FR);
@@ -171,13 +152,12 @@ public class Drivey extends Subsystem {
      * @param vxc   The intended x velocity of the robot.
      * @param vyc   The intended y velocity of the robot.
      * @param rotc  The intended rotational velocity of the robot around the intended center of rotation.
-     * @return
+     * @return The speed that the wheel should be set to based on the inputs.
      */
     public double getWheelSpeed(double xc, double yc, double xw, double yw, double theta, double vxc, double vyc, double rotc) {
-        double vtan = Math.sqrt(Math.pow((xc - xw), 2) + Math.pow((yc - yw), 2)) * rotc;
+        double vTan = Math.sqrt(Math.pow((xc - xw), 2) + Math.pow((yc - yw), 2)) * rotc;
         double thetaR = Math.atan2((yw - yc), (xw - xc));
-        double speed = vtan * Math.abs(Math.cos(theta - (thetaR + Math.PI / 2))) + vxc * Math.cos(theta) + vyc * Math.sin(theta);
-        return speed;
+        return vTan * Math.abs(Math.cos(theta - (thetaR + Math.PI / 2))) + vxc * Math.cos(theta) + vyc * Math.sin(theta);
     }
 }
 

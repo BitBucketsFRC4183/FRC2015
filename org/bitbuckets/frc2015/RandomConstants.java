@@ -1,11 +1,7 @@
 package org.bitbuckets.frc2015;
 
 public class RandomConstants {
-    public static final double SPEED_K_EXSPMA = .01;
-
-    public static final double ENC_TICK_TO_IN = 8;
-
-    public static final double ENC_TICK_PER_REV = 256.*70./24.;
+    public static final double ENC_TICK_PER_REV = 256. * 70. / 24.;
 
     public static final double WHEEL_CIRCUMFERENCE = Math.PI / 3;
 

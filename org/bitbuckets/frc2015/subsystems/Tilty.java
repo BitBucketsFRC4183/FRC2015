@@ -13,7 +13,7 @@ public class Tilty extends Subsystem {
     /**
      * Sets up the solenoid.
      */
-    public Tilty(){
+    public Tilty() {
         tilty = new DoubleSolenoid(RobotMap.TILTY_SOLENOID_1, RobotMap.TILTY_SOLENOID_2);
     }
 
@@ -23,12 +23,12 @@ public class Tilty extends Subsystem {
     }
 
     /**
-     * Sets whether the tilting mechanism elavator thing is up or not.
+     * Sets whether the tilting mechanism elevator thing is up or not.
      *
-     * @param up Whether to set the tilter as up or not.
+     * @param up Whether to set the tilty as up or not.
      */
-    public void setTiltyUp(boolean up){
-        tilty.set(up? DoubleSolenoid.Value.kReverse: DoubleSolenoid.Value.kForward);
+    public void setTiltyUp(boolean up) {
+        tilty.set(up ? DoubleSolenoid.Value.kReverse : DoubleSolenoid.Value.kForward);
     }
 }
 

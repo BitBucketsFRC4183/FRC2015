@@ -1,8 +1,7 @@
 package org.bitbuckets.frc2015.command;
 
-import org.bitbuckets.frc2015.Robot;
-
 import edu.wpi.first.wpilibj.command.Command;
+import org.bitbuckets.frc2015.Robot;
 
 /**
  *
@@ -21,10 +20,10 @@ public class StackyDownAll extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	// Set the entire stack down
-    	Robot.stacky.setWinchMotor(-5.0);
-    	// Set tilty down
-    	Robot.tilty.setTiltyUp(false);
+        // Set the entire stack down
+        Robot.stacky.setWinchMotor(-5.0);
+        // Set tilty down
+        Robot.tilty.setTiltyUp(false);
     }
 
     // Make this return true when this Command no longer needs to run execute()
@@ -35,7 +34,7 @@ public class StackyDownAll extends Command {
     // Called once after isFinished returns true
     protected void end() {
 //    	 Stop winch
-    	Robot.stacky.setWinchMotor(0.0);
+        Robot.stacky.setWinchMotor(0.0);
     }
 
     // Called when another command which requires one or more of the same

@@ -88,10 +88,6 @@ public class RobotMap {
      * The left side sensor to detect collision with a tote
      */
     public static final int BUMP_SENSE_LEFT = 6;
-    /**
-     * The switch that tells the compressor the max pressure
-     */
-    public static final int PRESSURE_SWITCH = 14;
 
     /////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////----WHEELS----//////////////////////////////
@@ -152,9 +148,9 @@ public class RobotMap {
     /**
      * The X coordinate of the center of rotation.
      */
-    public static final double CENTER_X = 0/12;
+    public static final double CENTER_X = 0 / 12;
     /**
      * The Y coordinate of the center of rotation.
      */
-    public static final double CENTER_Y = 0/12;
+    public static final double CENTER_Y = 0 / 12;
 }

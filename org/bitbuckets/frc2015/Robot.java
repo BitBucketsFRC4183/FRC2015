@@ -6,10 +6,13 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.bitbuckets.frc2015.autonomous.AutoDriveTest;
 import org.bitbuckets.frc2015.autonomous.AutoProgram;
 import org.bitbuckets.frc2015.command.*;
-import org.bitbuckets.frc2015.command.autonomous.AutoDriveTest;
-import org.bitbuckets.frc2015.subsystems.*;
+import org.bitbuckets.frc2015.subsystems.Drivey;
+import org.bitbuckets.frc2015.subsystems.Grabby;
+import org.bitbuckets.frc2015.subsystems.Stacky;
+import org.bitbuckets.frc2015.subsystems.Tilty;
 
 import java.util.ArrayList;
 
@@ -24,18 +27,17 @@ public class Robot extends IterativeRobot {
 
     public static OI oi;
     public static Drivey drivey;
-    public static Esteemy esteemy;
     public static Grabby grabby;
     public static Stacky stacky;
     public static Tilty tilty;
 
-    public static Compressor compressor;
+    private static Compressor compressor;
 
-    SendableChooser autoChooser;
+    private SendableChooser autoChooser;
 
-    AutoDriveTest driveTest;
+    private AutoDriveTest driveTest;
 
-    ArrayList<AutoProgram> autoPrograms;
+    private ArrayList<AutoProgram> autoPrograms;
 
     /**
      * This function is run when the robot is first started up and should be
@@ -44,7 +46,6 @@ public class Robot extends IterativeRobot {
     public void robotInit() {
         oi = new OI();
         drivey = new Drivey();
-        esteemy = new Esteemy();
         grabby = new Grabby();
         stacky = new Stacky();
         tilty = new Tilty();
@@ -63,7 +64,7 @@ public class Robot extends IterativeRobot {
 
 
         //generate a list of autonomous programs based on all the .txt files in the local directory
-        //TODO make some sort of tag at start of scripts required, so that auto scripts, constant files, etc. dont get confused
+        //TODO make some sort of tag at start of scripts required, so that auto scripts, constant files, etc. don't get confused
 //        try {
 //			autoPrograms = AutoProgramGenerator.generateAutoPrograms();
 //		} catch (IOException e) {
@@ -108,9 +109,9 @@ public class Robot extends IterativeRobot {
     }
 
     public void teleopInit() {
-    	if(driveTest != null){
-    		driveTest.cancel();
-    	}
+        if (driveTest != null) {
+            driveTest.cancel();
+        }
     }
 
     /**

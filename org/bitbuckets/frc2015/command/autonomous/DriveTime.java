@@ -1,28 +1,27 @@
 package org.bitbuckets.frc2015.command.autonomous;
 
-import org.bitbuckets.frc2015.Robot;
-
 import edu.wpi.first.wpilibj.command.Command;
+import org.bitbuckets.frc2015.Robot;
 
 /**
  *
  */
 public class DriveTime extends Command {
-	private long timeInit;
-	
-	
+    private long timeInit;
+
+
     public DriveTime() {
         requires(Robot.drivey);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	timeInit = System.currentTimeMillis();
+        timeInit = System.currentTimeMillis();
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.drivey.drive(1, 0, 0);
+        Robot.drivey.drive(1, 0, 0);
     }
 
     // Make this return true when this Command no longer needs to run execute()

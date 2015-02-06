@@ -6,9 +6,9 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
  *
  */
 public class ThreeTotePickupAutoMode extends CommandGroup {
-    
-    public  ThreeTotePickupAutoMode() {
-    	
+
+    public ThreeTotePickupAutoMode() {
+
     	/*
     	 * Things that need to happen during this autonomous:
     	 * 1: Movement between the three tote set ups. The totes are placed X meters apart, and the we need X meters
@@ -16,9 +16,8 @@ public class ThreeTotePickupAutoMode extends CommandGroup {
     	 * 2: Pickup totes reliably and quickly; as much as possible of this action should happen while driving to/away
     	 * 3: Drive into the auto-zone;
     	 */
-    	
-    	
-    	
+
+
         // Add Commands here:
         // e.g. addSequential(new Command1());
         //      addSequential(new Command2());

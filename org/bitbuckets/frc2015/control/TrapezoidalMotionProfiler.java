@@ -3,6 +3,8 @@ package org.bitbuckets.frc2015.control;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
+ * A motion profiler that creates a trapezoidal profile and updates the speed accordingly.
+ * <p/>
  * Created by James on 1/30/2015.
  */
 public class TrapezoidalMotionProfiler {
@@ -15,7 +17,7 @@ public class TrapezoidalMotionProfiler {
     private int sign;
 
     /**
-     * Initializes the <code>MotionProfiler</code>.
+     * Initializes the MotionProfiler.
      *
      * @param pos  The target position for the profiler.
      * @param maxV The max velocity at which the motor should run.
@@ -101,7 +103,7 @@ public class TrapezoidalMotionProfiler {
     /**
      * Sets the target position for the MotionProfiler.
      *
-     * @param pos The new tarrget position.
+     * @param pos The new target position.
      */
     public void setSetpoint(double pos) {
         dist = Math.abs(pos);

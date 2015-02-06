@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.SpeedController;
 
 /**
- * This class is a {@link org.bitbuckets.frc2015.util.MotionController} that is designed for Encoder control of a motor.
+ * This class is a MotionController that is designed for Encoder control of a motor.
  */
 public class EncoderMotionController {
     private PIDController pidController;

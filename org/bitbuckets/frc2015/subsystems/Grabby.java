@@ -2,7 +2,6 @@ package org.bitbuckets.frc2015.subsystems;
 
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.bitbuckets.frc2015.RobotMap;
 
