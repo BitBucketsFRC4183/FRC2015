@@ -73,25 +73,31 @@ public class RobotMap {
     /////////////////////////////////////////////////////////////////////////////
 
     /**
-     * The port that the hall effect sensor with the singular magnet is connected to.
+     * The reed switch below the tote pickup point.
      */
-    public static final int HALL_SING = 3;
+    public static final int HALL_BELOW = 2;
     /**
-     * The port that the hall effect sensor with the multiple magnets is connected to.
+     * The reed switch above the tote pickup point.
      */
-    public static final int HALL_MULTI = 2;
+    public static final int HALL_ABOVE = 3;
+
+    /**
+     * The limit switch at the top of stacky.
+     */
+    public static final int SWITCH_TOP = 0;
+    /**
+     * The limit switch at the bottom of stacky.
+     */
+    public static final int SWITCH_BOTTOM = 1;
+
     /**
      * The right side sensor to detect collision with a tote
      */
-    public static final int BUMP_SENSE_RIGHT = 0;
+    public static final int BUMP_SENSE_RIGHT = 4;
     /**
      * The left side sensor to detect collision with a tote
      */
-    public static final int BUMP_SENSE_LEFT = 1;
-    /**
-     * The switch that tells the compressor the max pressure
-     */
-    public static final int PRESSURE_SWITCH = 14;
+    public static final int BUMP_SENSE_LEFT = 5;
 
     /////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////----WHEELS----//////////////////////////////

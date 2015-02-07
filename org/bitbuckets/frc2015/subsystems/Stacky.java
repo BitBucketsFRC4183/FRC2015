@@ -1,9 +1,7 @@
 package org.bitbuckets.frc2015.subsystems;
 
-import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.SpeedController;
 import org.bitbuckets.frc2015.RobotMap;
-import org.bitbuckets.frc2015.Robot;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Talon;
@@ -21,17 +19,30 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 public class Stacky extends Subsystem {
     private SpeedController winch;
     
-    private DigitalInput hallMulti;
-    private DigitalInput hallSing;
+    private DigitalInput reedAbove;
+    private DigitalInput reedBelow;
+
+    private DigitalInput limitTop;
+    private DigitalInput limitBottom;
+
     private DigitalInput bumperLeft;
     private DigitalInput bumperRight;
 
+    private int numUp;
+
     public Stacky(){
         winch = new Talon(RobotMap.WINCH_MOTOR);
-        hallMulti = new DigitalInput(RobotMap.HALL_MULTI);
-        hallSing = new DigitalInput(RobotMap.HALL_SING);
+
+        reedAbove = new DigitalInput(RobotMap.HALL_ABOVE);
+        reedBelow = new DigitalInput(RobotMap.HALL_BELOW);
+
+        limitTop = new DigitalInput(RobotMap.SWITCH_TOP);
+        limitBottom = new DigitalInput(RobotMap.SWITCH_BOTTOM);
+
         bumperLeft = new DigitalInput(RobotMap.BUMP_SENSE_LEFT);
         bumperRight = new DigitalInput(RobotMap.BUMP_SENSE_RIGHT);
+
+        numUp = 0;
     }
 
     public void initDefaultCommand() {
@@ -42,12 +53,32 @@ public class Stacky extends Subsystem {
     	winch.set(speed);
     }
 
-    public boolean getHallMultiActive() {
-        return hallMulti.get();
+    public boolean getReedAbove() {
+        return reedAbove.get();
     }
 
-    public boolean getHallSingActive() {
-        return hallSing.get();
+    public boolean getReedBelow() {
+        return reedBelow.get();
+    }
+
+    public boolean getLimitTop() {
+        return limitTop.get();
+    }
+
+    public boolean getLimitBottom() {
+        return limitBottom.get();
+    }
+
+    public void upOne(){
+        numUp++;
+    }
+
+    public void downOne(){
+        numUp--;
+    }
+
+    public int getNumUp() {
+        return numUp;
     }
 
     public boolean getButtonsActive(){

@@ -15,6 +15,15 @@ public class RandomConstants {
     public static final double MAX_ROT_SPEED = .67;
 
     /**
+     * The speed for the carriage while it is going fast.
+     */
+    public static final double CARRIAGE_FAST_SPEED = 1;
+    /**
+     * The speed for the carriage while it is going slowly.
+     */
+    public static final double CARRIAGE_SLOW_SPEED = .3;
+
+    /**
      *
      */
     public static final double DRIVE_KP = 1;
