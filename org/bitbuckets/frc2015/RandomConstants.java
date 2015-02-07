@@ -28,5 +28,5 @@ public class RandomConstants {
     public static final double DRIVE_KP = .1;
     public static final double DRIVE_KI = 0;
     public static final double DRIVE_KD = 0;
-    public static final double DRIVE_KF = 0;
+    public static final double DRIVE_KF = 5.976;
 }
