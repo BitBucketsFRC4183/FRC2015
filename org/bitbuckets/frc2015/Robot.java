@@ -55,6 +55,8 @@ public class Robot extends IterativeRobot {
 
         oi.tiltUp.whenActive(tiltUp);
         oi.tiltDown.whenActive(tiltDown);
+        oi.triangBut.whenPressed(new StackyUp());
+        oi.xBut.whenPressed(new StackyDown());
     }
 
     /**
