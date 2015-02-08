@@ -2,6 +2,9 @@ package org.bitbuckets.frc2015.autonomous;
 
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.CommandGroup;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+import org.bitbuckets.frc2015.command.*;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -19,6 +22,12 @@ public class AutoProgram extends CommandGroup {
 
     //Title of autonomous program
     public String title;
+
+    private enum commandType {
+        DrivePolar, DriveTime, DriveTranslation, ChangeDriveMode, CloseGrabber, OpenGrabber, StackyDownAll, StackyUp,
+        TiltDown, TiltUp, Wait
+    }
+
 
     /**
      * <h1>AutoProgram reads and executes a script to create an autonomous program </h1><p>
@@ -104,6 +113,10 @@ public class AutoProgram extends CommandGroup {
      * @return true if successful, false if not
      */
     private boolean addSeqOrPar(ArrayList<String> parsedName) {
+    	
+    	SmartDashboard.putString("Adding command of name:", parsedName.get(1));
+
+    	
         if (parsedName.size() < 2) {
             return false;
         } else if (parsedName.get(0).equals("Seq")) {
@@ -126,14 +139,24 @@ public class AutoProgram extends CommandGroup {
      * @return the proper command.
      */
     private Command getCommandFromString(ArrayList<String> parsedName) {
+    	
 
-//        switch (parsedName.get(1)) {
-//            case "CloseGrabber":
-//                return new CloseGrabber();
-//            case "OpenGrabber":
-//                return new OpenGrabber();
-//
-//        }
-        return null;
+        switch (commandType.valueOf(parsedName.get(1))) {
+            case ChangeDriveMode:
+                return new ChangeDriveMode();
+            case CloseGrabber:
+                return new CloseGrabber();
+            case OpenGrabber:
+                return new OpenGrabber();
+            case Wait:
+                return new Wait(Double.parseDouble(parsedName.get(2)));
+            case TiltUp:
+            	return new TiltUp();
+            case TiltDown:
+            	return new TiltDown();
+            default:
+            	return new Wait(0.1);
+
+        }
     }
 }

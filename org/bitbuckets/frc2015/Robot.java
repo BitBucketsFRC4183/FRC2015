@@ -2,18 +2,21 @@ package org.bitbuckets.frc2015;
 
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.bitbuckets.frc2015.autonomous.AutoDriveTest;
 import org.bitbuckets.frc2015.autonomous.AutoProgram;
+import org.bitbuckets.frc2015.autonomous.AutoProgramGenerator;
 import org.bitbuckets.frc2015.command.*;
 import org.bitbuckets.frc2015.subsystems.Drivey;
 import org.bitbuckets.frc2015.subsystems.Grabby;
 import org.bitbuckets.frc2015.subsystems.Stacky;
 import org.bitbuckets.frc2015.subsystems.Tilty;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -36,6 +39,8 @@ public class Robot extends IterativeRobot {
     private SendableChooser autoChooser;
 
     private AutoDriveTest driveTest;
+
+    private Command autonomousCommand;
 
     private ArrayList<AutoProgram> autoPrograms;
 
@@ -65,17 +70,18 @@ public class Robot extends IterativeRobot {
 
         //generate a list of autonomous programs based on all the .txt files in the local directory
         //TODO make some sort of tag at start of scripts required, so that auto scripts, constant files, etc. don't get confused
-//        try {
-//			autoPrograms = AutoProgramGenerator.generateAutoPrograms();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//			SmartDashboard.putString("Auto IO Error", "Error detected: " + e.getMessage());
-//		}
-//
-//        autoChooser = new SendableChooser();
-//        for(AutoProgram a: autoPrograms){
-//        	autoChooser.addObject(a.title, a);
-//        }
+        try {
+            autoPrograms = AutoProgramGenerator.generateAutoPrograms();
+        } catch (IOException e) {
+            e.printStackTrace();
+            SmartDashboard.putString("Auto IO Error", "Error detected: " + e.getMessage());
+        }
+
+        autoChooser = new SendableChooser();
+        for (AutoProgram a : autoPrograms) {
+            autoChooser.addObject(a.title, a);
+        }
+        SmartDashboard.putData("Autonomous code chooser", autoChooser);
 
 
         oi.tiltUp.whenActive(tiltUp);
@@ -97,8 +103,8 @@ public class Robot extends IterativeRobot {
 
     public void autonomousInit() {
         // schedule the autonomous command (example)
-        driveTest = new AutoDriveTest();
-        driveTest.start();
+        autonomousCommand = (Command) autoChooser.getSelected();
+        autonomousCommand.start();
     }
 
     /**

@@ -5,21 +5,23 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 public class AutoProgramGenerator {
 
     /**
      * Gets the current directory
      */
-    static File dir = new File(".");
+    static File dir = new File("///TextFiles");
 
     /**
      * Sets up a textFilter so we can grab only the .txt files
      */
-    static FilenameFilter textFilter = new FilenameFilter() {
-        public boolean accept(File dir, String name) {
-            return name.toLowerCase().endsWith(".txt");
-        }
-    };
+//    static FilenameFilter textFilter = new FilenameFilter() {
+//        public boolean accept(File dir, String name) {
+//            return name.toLowerCase().endsWith(".txt");
+//        }
+//    };
 
     //TODO check for script type
 
@@ -45,7 +47,10 @@ public class AutoProgramGenerator {
      * @throws IOException
      */
     public static File[] getFiles() throws IOException {
-        File[] autoScripts = dir.listFiles(textFilter);
+        File[] autoScripts = dir.listFiles(/*textFilter*/);
+        if (autoScripts.length == 0){
+        	SmartDashboard.putString("Is autoScripts empty?", "true");
+        }
         for (File script : autoScripts) {
             System.out.println("file: " + script.getCanonicalPath());
         }
