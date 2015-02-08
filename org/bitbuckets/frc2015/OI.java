@@ -16,6 +16,11 @@ public class OI {
     public POVHat tiltUp = new POVHat(stick, POVHat.HatDir.UP);
     public POVHat tiltDown = new POVHat(stick, POVHat.HatDir.DOWN);
 
+    public Button xBut = new JoystickButton(stick, 1);
+    public Button circBut = new JoystickButton(stick, 2);
+    public Button squareBut = new JoystickButton(stick, 3);
+    public Button triangBut = new JoystickButton(stick, 4);
+
     public static final int GO = 0;
     public static final int STRAFE = 1;
     public static final int TURN = 4;
