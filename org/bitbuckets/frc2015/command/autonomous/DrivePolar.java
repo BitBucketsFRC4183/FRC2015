@@ -1,7 +1,5 @@
 package org.bitbuckets.frc2015.command.autonomous;
 
-//TODO Fix Javadocs
-
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.bitbuckets.frc2015.RandomConstants;
@@ -9,8 +7,7 @@ import org.bitbuckets.frc2015.Robot;
 import org.bitbuckets.frc2015.control.TrapezoidalMotionProfiler;
 
 /**
- * This is a wrapper class for {@link org.bitbuckets.frc2015.command.autonomous.DriveTranslation} so that you can use
- * polar coordinates to control the autonomous translational driving of the robot.
+ * This {@link edu.wpi.first.wpilibj.command.Command} tells the robot to move a radius at angle theta.
  * <p/>
  * Created by James on 2/6/2015.
  */
@@ -21,7 +18,7 @@ public class DrivePolar extends Command {
     private long time;
 
     /**
-     * Converts polar coordinates to rectangular coordinates and passes it into the superclass constructor.
+     * Initializes all the variables except time.
      */
     public DrivePolar(double radius, double angle) {
         requires(Robot.drivey);
@@ -32,7 +29,7 @@ public class DrivePolar extends Command {
     }
 
     /**
-     * Called just before this Command runs the first time. Calls the superclasses <code>initialize()</code> method.
+     * Initializes the time and starts the profiler.
      */
     protected void initialize() {
         profiler.start();
@@ -40,7 +37,8 @@ public class DrivePolar extends Command {
     }
 
     /**
-     * Called repeatedly when this Command is scheduled to run. Calls the superclasses <code>execute()</code> method.
+     * Called repeatedly when this Command is scheduled to run. Calculates the velocity from the profiler, updates the
+     * position, and calls the robots <code>drive()</code> method.
      */
     protected void execute() {
         double velocity = profiler.update(distance);
@@ -57,22 +55,24 @@ public class DrivePolar extends Command {
 
     /**
      * Make this return true when this Command no longer needs to run <code>execute()</code>.
+     *
+     * @return Whether the profiler is finished.
      */
     protected boolean isFinished() {
         return profiler.getFinished();
     }
 
     /**
-     * Called once after <code>isFinished()</code> returns true.
+     * Called once after <code>isFinished()</code> returns true. Stops the robot.
      */
     protected void end() {
         Robot.drivey.drive(0, 0, 0);
     }
 
     /**
-     * Called when another command which requires one or more of the same subsystems is scheduled to run.
+     * Called when another command which requires one or more of the same subsystems is scheduled to run. Stops the robot.
      */
     protected void interrupted() {
-
+        Robot.drivey.drive(0, 0, 0);
     }
 }
