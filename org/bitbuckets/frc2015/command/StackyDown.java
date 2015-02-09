@@ -9,7 +9,9 @@ import org.bitbuckets.frc2015.Robot;
  * Created by James on 2/7/2015.
  */
 public class StackyDown extends Command {
-    int state = 0;
+    private int state = 0;
+    private long timeInit;
+    private boolean timeout = false;
 
     /**
      * The constructor for this {@link edu.wpi.first.wpilibj.command.Command}. It should use <code>requires()</code> to tell the compiler which subsystem it uses.
@@ -22,6 +24,7 @@ public class StackyDown extends Command {
      */
     protected void initialize() {
         state = 1;
+        timeInit = System.currentTimeMillis();
     }
 
     /**
@@ -39,11 +42,17 @@ public class StackyDown extends Command {
                         Robot.stacky.downOne();
                     }
                 }
+                if((System.currentTimeMillis() - timeInit) / 1000 < RandomConstants.STACK_TIMEOUT){
+                    timeout = true;
+                }
                 break;
             case 2:
                 Robot.stacky.setWinchMotor(-1 * RandomConstants.CARRIAGE_FAST_SPEED);
                 if (Robot.stacky.getReedBelow()) {
                     state = 3;
+                }
+                if((System.currentTimeMillis() - timeInit) / 1000 < RandomConstants.STACK_TIMEOUT){
+                    timeout = true;
                 }
                 break;
             case 3:
@@ -51,6 +60,10 @@ public class StackyDown extends Command {
                 if(!Robot.stacky.getReedAbove()){
                     state = 1;
                     Robot.stacky.downOne();
+                    timeInit = System.currentTimeMillis();
+                }
+                if((System.currentTimeMillis() - timeInit) / 1000 < RandomConstants.STACK_TIMEOUT){
+                    timeout = true;
                 }
                 break;
             case 4:
@@ -65,7 +78,7 @@ public class StackyDown extends Command {
      * Make this return true when this Command no longer needs to run <code>execute()</code>.
      */
     protected boolean isFinished() {
-        return Robot.stacky.getLimitBottom();
+        return Robot.stacky.getLimitBottom() || timeout;
     }
 
     /**
