@@ -27,6 +27,9 @@ public class Robot extends IterativeRobot {
 
     public static Compressor compressor;
 
+    private StackyUp upOne;
+    private StackyDown downAll;
+
     Command autonomousCommand;
 
     /**
@@ -51,12 +54,15 @@ public class Robot extends IterativeRobot {
         TiltDown tiltDown = new TiltDown();
         IncreaseStack increaseStack = new IncreaseStack();
 
+        upOne = new StackyUp();
+        downAll = new StackyDown();
+
         SmartDashboardInit();
 
         oi.tiltUp.whenActive(tiltUp);
         oi.tiltDown.whenActive(tiltDown);
-        oi.triangBut.whenPressed(new StackyUp());
-        oi.xBut.whenPressed(new StackyDown());
+        oi.triangBut.whenPressed(upOne);
+        oi.xBut.whenPressed(downAll);
     }
 
     /**
@@ -93,9 +99,22 @@ public class Robot extends IterativeRobot {
     public void teleopPeriodic() {
         Scheduler.getInstance().run();
         drivey.drive(oi.stick.getRawAxis(OI.GO) * RandomConstants.MAX_TRANS_SPEED, -oi.stick.getRawAxis(OI.STRAFE) * RandomConstants.MAX_TRANS_SPEED, oi.stick.getRawAxis(OI.TURN) * RandomConstants.MAX_ROT_SPEED);
-        stacky.setWinchMotor(oi.stick.getRawAxis(3)-oi.stick.getRawAxis(2));
-        SmartDashboard.putString("thing", "" + oi.stick.getPOV());
+
+        if (!(downAll.isRunning() || upOne.isRunning())) {
+            if (stacky.getLimitBottom()) {
+                stacky.setWinchMotor(oi.stick.getRawAxis(3));
+            } else if (stacky.getLimitTop()) {
+                stacky.setWinchMotor(0 - oi.stick.getRawAxis(2));
+            } else {
+                stacky.setWinchMotor(oi.stick.getRawAxis(3) - oi.stick.getRawAxis(2));
+            }
+        }
+
         SmartDashboard.putData(Scheduler.getInstance());
+        SmartDashboard.putBoolean("Limit Top", stacky.getLimitTop());
+        SmartDashboard.putBoolean("Limit Bottom", stacky.getLimitBottom());
+        SmartDashboard.putBoolean("Reed Above", stacky.getReedAbove());
+        SmartDashboard.putBoolean("Reed Below", stacky.getReedBelow());
     }
 
     /**

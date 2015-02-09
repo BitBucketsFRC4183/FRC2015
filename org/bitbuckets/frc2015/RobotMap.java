@@ -45,7 +45,7 @@ public class RobotMap {
     /**
      * Motors driving the winch for the elevator on {@link org.bitbuckets.frc2015.subsystems.Stacky}.
      */
-    public static final int WINCH_MOTOR = 7;
+    public static final int WINCH_MOTOR = 4;
 
     /////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////----CAN----/////////////////////////////////

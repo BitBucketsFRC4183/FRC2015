@@ -54,19 +54,19 @@ public class Stacky extends Subsystem {
     }
 
     public boolean getReedAbove() {
-        return reedAbove.get();
+        return !reedAbove.get();
     }
 
     public boolean getReedBelow() {
-        return reedBelow.get();
+        return !reedBelow.get();
     }
 
     public boolean getLimitTop() {
-        return limitTop.get();
+        return !limitTop.get();
     }
 
     public boolean getLimitBottom() {
-        return limitBottom.get();
+        return !limitBottom.get();
     }
 
     public void upOne(){

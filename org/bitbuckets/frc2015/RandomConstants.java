@@ -21,7 +21,7 @@ public class RandomConstants {
     /**
      * The speed for the carriage while it is going slowly.
      */
-    public static final double CARRIAGE_SLOW_SPEED = .3;
+    public static final double CARRIAGE_SLOW_SPEED = .5;
 
     /**
      *

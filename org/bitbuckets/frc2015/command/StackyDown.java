@@ -28,27 +28,33 @@ public class StackyDown extends Command {
      * Called repeatedly when this Command is scheduled to run.
      */
     protected void execute() {
-        switch (state){
+        switch (state) {
             case 1:
-                Robot.stacky.setWinchMotor(-1* RandomConstants.CARRIAGE_FAST_SPEED);
-                if(Robot.stacky.getReedAbove()){
-                    if(Robot.stacky.getNumUp() > 1) {
+                Robot.stacky.setWinchMotor(-1 * RandomConstants.CARRIAGE_FAST_SPEED);
+                if (Robot.stacky.getReedAbove()) {
+                    if (Robot.stacky.getNumUp() > 1) {
                         state = 2;
-                    }
-                    else {
-                        state = 3;
+                    } else {
+                        state = 4;
+                        Robot.stacky.downOne();
                     }
                 }
                 break;
             case 2:
-                Robot.stacky.setWinchMotor(-1* RandomConstants.CARRIAGE_FAST_SPEED);
-                if(Robot.stacky.getReedBelow()){
+                Robot.stacky.setWinchMotor(-1 * RandomConstants.CARRIAGE_FAST_SPEED);
+                if (Robot.stacky.getReedBelow()) {
+                    state = 3;
+                }
+                break;
+            case 3:
+                Robot.stacky.setWinchMotor(-1*RandomConstants.CARRIAGE_FAST_SPEED);
+                if(!Robot.stacky.getReedAbove()){
                     state = 1;
                     Robot.stacky.downOne();
                 }
                 break;
-            case 3:
-                Robot.stacky.setWinchMotor(-1*RandomConstants.CARRIAGE_SLOW_SPEED);
+            case 4:
+                Robot.stacky.setWinchMotor(-1 * RandomConstants.CARRIAGE_SLOW_SPEED);
                 break;
             default:
                 break;
@@ -59,7 +65,7 @@ public class StackyDown extends Command {
      * Make this return true when this Command no longer needs to run <code>execute()</code>.
      */
     protected boolean isFinished() {
-        return Robot.stacky.getLimitBottom() && Robot.stacky.getNumUp() == 0;
+        return Robot.stacky.getLimitBottom();
     }
 
     /**
