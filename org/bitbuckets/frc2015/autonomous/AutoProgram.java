@@ -57,6 +57,10 @@ public class AutoProgram extends CommandGroup {
             if (line.startsWith("//")) {
                 continue;
             }
+            //check that the line has something other than whitespace
+            if(!line.contains("\\s+")){
+            	continue;
+            }
             commandStr.add(line);
         }
         //closes the buffered reader
@@ -118,18 +122,24 @@ public class AutoProgram extends CommandGroup {
     	
     	SmartDashboard.putString("Adding command of name:", parsedName.get(1));
 
-    	
-        if (parsedName.size() < 2) {
-            return false;
-        } else if (parsedName.get(0).equals("Seq")) {
-            addSequential(getCommandFromString(parsedName));
-            return true;
-        } else if (parsedName.get(0).equals("Par")) {
-            addParallel(getCommandFromString(parsedName));
-            return true;
-        } else {
-            return false;
-        }
+        try {
+	        if (parsedName.size() < 2) {
+	            return false;
+	        } else if (parsedName.get(0).equals("Seq")) {
+	            addSequential(getCommandFromString(parsedName));
+	            return true;
+	        } else if (parsedName.get(0).equals("Par")) {
+	            addParallel(getCommandFromString(parsedName));
+	            return true;
+	        } else {
+	            return false;
+	        }
+		} catch (IllegalAccessException | InvocationTargetException
+				| InstantiationException | ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
     }
 
     /**
@@ -140,9 +150,9 @@ public class AutoProgram extends CommandGroup {
      *
      * @return the proper command.
      */
-    private Object getCommandFromString(ArrayList<String> parsedName) throws IllegalAccessException, InvocationTargetException, InstantiationException, ClassNotFoundException {
+    private Command getCommandFromString(ArrayList<String> parsedName) throws IllegalAccessException, InvocationTargetException, InstantiationException, ClassNotFoundException {
 
-        Constructor<?>[] constructors;
+        Constructor<Command>[] constructors;
         Object[] wrappedParams = new Object[parsedName.size()-2];
 
         for(int i = 2; i < parsedName.size(); i++){
@@ -151,7 +161,7 @@ public class AutoProgram extends CommandGroup {
         }
 
 
-        constructors = Class.forName(parsedName.get(1)).getConstructors();
+        constructors = (Constructor<Command>[]) Class.forName(parsedName.get(1)).getConstructors();
 
 
         return constructors[constructors.length-1].newInstance(wrappedParams);
