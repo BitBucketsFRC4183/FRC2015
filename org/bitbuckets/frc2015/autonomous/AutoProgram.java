@@ -7,6 +7,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.bitbuckets.frc2015.command.*;
 
 import java.io.*;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 /**
@@ -138,25 +140,39 @@ public class AutoProgram extends CommandGroup {
      *
      * @return the proper command.
      */
-    private Command getCommandFromString(ArrayList<String> parsedName) {
-    	
+    private Object getCommandFromString(ArrayList<String> parsedName) throws IllegalAccessException, InvocationTargetException, InstantiationException, ClassNotFoundException {
 
-        switch (commandType.valueOf(parsedName.get(1))) {
-            case ChangeDriveMode:
-                return new ChangeDriveMode();
-            case CloseGrabber:
-                return new CloseGrabber();
-            case OpenGrabber:
-                return new OpenGrabber();
-            case Wait:
-                return new Wait(Double.parseDouble(parsedName.get(2)));
-            case TiltUp:
-            	return new TiltUp();
-            case TiltDown:
-            	return new TiltDown();
-            default:
-            	return new Wait(0.1);
+        Constructor<?>[] constructors;
+        Object[] wrappedParams = new Object[parsedName.size()-2];
 
+        for(int i = 2; i < parsedName.size(); i++){
+            //somehow turn string parameters into whatever value it should be
+            //make parse requires a declaration like String='blah' or int=blah
         }
+
+
+        constructors = Class.forName(parsedName.get(1)).getConstructors();
+
+
+        return constructors[constructors.length-1].newInstance(wrappedParams);
+
+
+//        switch (commandType.valueOf(parsedName.get(1))) {
+//            case ChangeDriveMode:
+//                return new ChangeDriveMode();
+//            case CloseGrabber:
+//                return new CloseGrabber();
+//            case OpenGrabber:
+//                return new OpenGrabber();
+//            case Wait:
+//                return new Wait(Double.parseDouble(parsedName.get(2)));
+//            case TiltUp:
+//            	return new TiltUp();
+//            case TiltDown:
+//            	return new TiltDown();
+//            default:
+//            	return new Wait(0.1);
+//
+//        }
     }
 }

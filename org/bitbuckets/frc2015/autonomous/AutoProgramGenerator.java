@@ -56,12 +56,15 @@ public class AutoProgramGenerator {
         }
         return autoScripts;
     }
-    
-/*    public static boolean changeDir(String directoryPathName){
 
-    	dir = new File(directoryPathName);
-    	return true;
-    }*/
+
+
+
+//    public static boolean changeDir(String directoryPathName){
+//
+//    	dir = new File(directoryPathName);
+//    	return true;
+//    }
 
 
 }
