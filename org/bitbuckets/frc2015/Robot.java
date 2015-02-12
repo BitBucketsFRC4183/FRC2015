@@ -97,6 +97,7 @@ public class Robot extends IterativeRobot {
 
     public void autonomousInit() {
         // schedule the autonomous command (example)
+        drivey.resetEncoders();
         driveTest = new AutoDriveTest();
         driveTest.start();
     }
@@ -112,6 +113,7 @@ public class Robot extends IterativeRobot {
         if (driveTest != null) {
             driveTest.cancel();
         }
+        drivey.resetEncoders();
     }
 
     /**
