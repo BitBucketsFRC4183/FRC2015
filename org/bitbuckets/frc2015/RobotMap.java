@@ -45,7 +45,7 @@ public class RobotMap {
     /**
      * Motors driving the winch for the elevator on {@link org.bitbuckets.frc2015.subsystems.Stacky}.
      */
-    public static final int WINCH_MOTOR = 7;
+    public static final int WINCH_MOTOR = 4;
 
     /////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////----CAN----/////////////////////////////////
@@ -73,21 +73,31 @@ public class RobotMap {
     /////////////////////////////////////////////////////////////////////////////
 
     /**
-     * The port that the hall effect sensor with the singular magnet is connected to.
+     * The reed switch below the tote pickup point.
      */
-    public static final int HALL_SING = 1;
+    public static final int HALL_BELOW = 2;
     /**
-     * The port that the hall effect sensor with the multiple magnets is connected to.
+     * The reed switch above the tote pickup point.
      */
-    public static final int HALL_MULTI = 2;
+    public static final int HALL_ABOVE = 3;
+
+    /**
+     * The limit switch at the top of stacky.
+     */
+    public static final int SWITCH_TOP = 0;
+    /**
+     * The limit switch at the bottom of stacky.
+     */
+    public static final int SWITCH_BOTTOM = 1;
+
     /**
      * The right side sensor to detect collision with a tote
      */
-    public static final int BUMP_SENSE_RIGHT = 5;
+    public static final int BUMP_SENSE_RIGHT = 4;
     /**
      * The left side sensor to detect collision with a tote
      */
-    public static final int BUMP_SENSE_LEFT = 6;
+    public static final int BUMP_SENSE_LEFT = 5;
 
     /////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////----WHEELS----//////////////////////////////

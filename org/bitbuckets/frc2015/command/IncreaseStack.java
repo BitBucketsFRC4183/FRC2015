@@ -6,12 +6,13 @@ import org.bitbuckets.frc2015.Robot;
 /**
  *
  */
-public class StackyDownAll extends Command {
+public class IncreaseStack extends Command {
+    private long timeInit;
 
-    public StackyDownAll() {
+    public IncreaseStack() {
         // Use requires() here to declare subsystem dependencies
         requires(Robot.stacky);
-        requires(Robot.tilty);
+        timeInit = System.currentTimeMillis();
     }
 
     // Called just before this Command runs the first time
@@ -24,11 +25,12 @@ public class StackyDownAll extends Command {
         Robot.stacky.setWinchMotor(-5.0);
         // Set tilty down
         Robot.tilty.setTiltyUp(false);
+        Robot.stacky.setWinchMotor(1);
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return false;
+        return System.currentTimeMillis()-timeInit >= 1000;
     }
 
     // Called once after isFinished returns true

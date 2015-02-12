@@ -30,5 +30,10 @@ public class OI {
             TURN = 4;
         }
     }
+
+    public Button xBut = new JoystickButton(stick, 1);
+    public Button circBut = new JoystickButton(stick, 2);
+    public Button squareBut = new JoystickButton(stick, 3);
+    public Button triangBut = new JoystickButton(stick, 4);
 }
 

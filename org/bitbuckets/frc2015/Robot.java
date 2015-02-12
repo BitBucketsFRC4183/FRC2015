@@ -9,12 +9,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.bitbuckets.frc2015.autonomous.AutoDriveTest;
 import org.bitbuckets.frc2015.autonomous.AutoProgram;
 import org.bitbuckets.frc2015.command.*;
-import org.bitbuckets.frc2015.subsystems.Drivey;
-import org.bitbuckets.frc2015.subsystems.Grabby;
-import org.bitbuckets.frc2015.subsystems.Stacky;
-import org.bitbuckets.frc2015.subsystems.Tilty;
+import org.bitbuckets.frc2015.subsystems.*;
 
 import java.util.ArrayList;
+
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -39,6 +37,10 @@ public class Robot extends IterativeRobot {
 
     private ArrayList<AutoProgram> autoPrograms;
 
+    private StackyUp upOne;
+    private StackyDown downAll;
+
+
     /**
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
@@ -59,6 +61,10 @@ public class Robot extends IterativeRobot {
         TiltUp tiltUp = new TiltUp();
         TiltDown tiltDown = new TiltDown();
         ChangeDriveMode driveMode = new ChangeDriveMode();
+        IncreaseStack increaseStack = new IncreaseStack();
+
+        upOne = new StackyUp();
+        downAll = new StackyDown();
 
         SmartDashboardInit();
 
@@ -81,6 +87,8 @@ public class Robot extends IterativeRobot {
         oi.tiltUp.whenActive(tiltUp);
         oi.tiltDown.whenActive(tiltDown);
         oi.changeControl.whenPressed(driveMode);
+        oi.triangBut.whenPressed(upOne);
+        oi.xBut.whenPressed(downAll);
     }
 
     /**
@@ -123,9 +131,22 @@ public class Robot extends IterativeRobot {
         Scheduler.getInstance().run();
         drivey.resetPIDs();
         drivey.drive(oi.stick.getRawAxis(OI.GO) * RandomConstants.MAX_TRANS_SPEED, -oi.stick.getRawAxis(OI.STRAFE) * RandomConstants.MAX_TRANS_SPEED, oi.stick.getRawAxis(OI.TURN) * RandomConstants.MAX_ROT_SPEED);
-        stacky.setWinchMotor(oi.stick.getRawAxis(3) - oi.stick.getRawAxis(2));
-        SmartDashboard.putString("thing", "" + oi.stick.getPOV());
+
+        if (!(downAll.isRunning() || upOne.isRunning())) {
+            if (stacky.getLimitBottom()) {
+                stacky.setWinchMotor(oi.stick.getRawAxis(3));
+            } else if (stacky.getLimitTop()) {
+                stacky.setWinchMotor(0 - oi.stick.getRawAxis(2));
+            } else {
+                stacky.setWinchMotor(oi.stick.getRawAxis(3) - oi.stick.getRawAxis(2));
+            }
+        }
+
         SmartDashboard.putData(Scheduler.getInstance());
+        SmartDashboard.putBoolean("Limit Top", stacky.getLimitTop());
+        SmartDashboard.putBoolean("Limit Bottom", stacky.getLimitBottom());
+        SmartDashboard.putBoolean("Reed Above", stacky.getReedAbove());
+        SmartDashboard.putBoolean("Reed Below", stacky.getReedBelow());
     }
 
     /**

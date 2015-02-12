@@ -23,6 +23,19 @@ public class RandomConstants {
     public static final double MAX_ROT_ACCEL = 3;
 
     /**
+     * The speed for the carriage while it is going fast.
+     */
+    public static final double CARRIAGE_FAST_SPEED = 1;
+    /**
+     * The speed for the carriage while it is going slowly.
+     */
+    public static final double CARRIAGE_SLOW_SPEED = .5;
+    /**
+     *
+     */
+    public static final double STACK_TIMEOUT = 2;
+
+    /**
      *
      */
     public static final double DRIVE_KP = .1;
