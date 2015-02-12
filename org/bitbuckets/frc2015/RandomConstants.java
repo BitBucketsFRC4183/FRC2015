@@ -1,14 +1,14 @@
 package org.bitbuckets.frc2015;
 
 public class RandomConstants {
-    public static final double ENC_TICK_PER_REV = 256. * 70. / 24.;
+    public static final double ENC_TICK_PER_REV = 1000. * 70. / 24.;
 
     public static final double WHEEL_CIRCUMFERENCE = Math.PI / 3;
 
     /**
      * Maximum translational speed in ft/s.(needs to be converted to ft/s)
      */
-    public static final double MAX_TRANS_SPEED = 12;
+    public static final double MAX_TRANS_SPEED = 10;
     /**
      * Maximum translational acceleration in ft/s^2.(needs to be converted to ft/s^2)
      */
@@ -16,7 +16,7 @@ public class RandomConstants {
     /**
      * Maximum rotational speed in rad/s.
      */
-    public static final double MAX_ROT_SPEED = 10;
+    public static final double MAX_ROT_SPEED = 6;
     /**
      * Maximum rotational acceleration in rad/s^2
      */
