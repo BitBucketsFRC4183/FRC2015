@@ -61,7 +61,6 @@ public class Robot extends IterativeRobot {
         TiltUp tiltUp = new TiltUp();
         TiltDown tiltDown = new TiltDown();
         ChangeDriveMode driveMode = new ChangeDriveMode();
-        IncreaseStack increaseStack = new IncreaseStack();
 
         upOne = new StackyUp();
         downAll = new StackyDown();
@@ -87,8 +86,10 @@ public class Robot extends IterativeRobot {
         oi.tiltUp.whenActive(tiltUp);
         oi.tiltDown.whenActive(tiltDown);
         oi.changeControl.whenPressed(driveMode);
-        oi.triangBut.whenPressed(upOne);
-        oi.xBut.whenPressed(downAll);
+        oi.driverTriangBut.whenPressed(upOne);
+        oi.driverXBut.whenPressed(downAll);
+        oi.operatorTriangBut.whenPressed(upOne);
+        oi.operatorXBut.whenPressed(downAll);
     }
 
     /**
@@ -130,15 +131,15 @@ public class Robot extends IterativeRobot {
     public void teleopPeriodic() {
         Scheduler.getInstance().run();
         drivey.resetPIDs();
-        drivey.drive(oi.stick.getRawAxis(OI.GO) * RandomConstants.MAX_TRANS_SPEED, -oi.stick.getRawAxis(OI.STRAFE) * RandomConstants.MAX_TRANS_SPEED, oi.stick.getRawAxis(OI.TURN) * RandomConstants.MAX_ROT_SPEED);
+        drivey.drive(oi.driver.getRawAxis(OI.GO) * RandomConstants.MAX_TRANS_SPEED, -oi.driver.getRawAxis(OI.STRAFE) * RandomConstants.MAX_TRANS_SPEED, oi.driver.getRawAxis(OI.TURN) * RandomConstants.MAX_ROT_SPEED);
 
         if (!(downAll.isRunning() || upOne.isRunning())) {
             if (stacky.getLimitBottom()) {
-                stacky.setWinchMotor(oi.stick.getRawAxis(3));
+                stacky.setWinchMotor(oi.driver.getRawAxis(3));
             } else if (stacky.getLimitTop()) {
-                stacky.setWinchMotor(0 - oi.stick.getRawAxis(2));
+                stacky.setWinchMotor(0 - oi.driver.getRawAxis(2));
             } else {
-                stacky.setWinchMotor(oi.stick.getRawAxis(3) - oi.stick.getRawAxis(2));
+                stacky.setWinchMotor(oi.driver.getRawAxis(3) - oi.driver.getRawAxis(2));
             }
         }
 

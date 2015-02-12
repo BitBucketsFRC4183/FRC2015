@@ -10,10 +10,12 @@ import org.bitbuckets.frc2015.util.POVHat;
  * interface to the commands and command groups that allow control of the robot.
  */
 public class OI {
-    public Joystick stick = new Joystick(1);
-    public POVHat tiltUp = new POVHat(stick, POVHat.HatDir.UP);
-    public POVHat tiltDown = new POVHat(stick, POVHat.HatDir.DOWN);
-    public Button changeControl = new JoystickButton(stick, 10);
+    public Joystick driver = new Joystick(1);
+    public Joystick operator = new Joystick(2);
+
+    public POVHat tiltUp = new POVHat(driver, POVHat.HatDir.UP);
+    public POVHat tiltDown = new POVHat(driver, POVHat.HatDir.DOWN);
+    public Button changeControl = new JoystickButton(driver, 10);
 
     public static int GO = 0;
     public static int STRAFE = 1;
@@ -31,9 +33,14 @@ public class OI {
         }
     }
 
-    public Button xBut = new JoystickButton(stick, 1);
-    public Button circBut = new JoystickButton(stick, 2);
-    public Button squareBut = new JoystickButton(stick, 3);
-    public Button triangBut = new JoystickButton(stick, 4);
+    public Button driverXBut = new JoystickButton(driver, 1);
+    public Button driverCircleBut = new JoystickButton(driver, 2);
+    public Button driverSquareBut = new JoystickButton(driver, 3);
+    public Button driverTriangBut = new JoystickButton(driver, 4);
+
+    public Button operatorXBut = new JoystickButton(driver, 1);
+    public Button operatorCircleBut = new JoystickButton(driver, 2);
+    public Button operatorSquareBut = new JoystickButton(driver, 3);
+    public Button operatorTriangBut = new JoystickButton(driver, 4);
 }
 
