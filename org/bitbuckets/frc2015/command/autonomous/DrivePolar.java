@@ -18,12 +18,33 @@ public class DrivePolar extends Command {
     private long time;
 
     /**
-     * Initializes all the variables except time.
+     * Calls the main constructor with the max velocity of the robot as the max velocity of this command.
+     *
+     * @param radius The distance to move the robot.
+     * @param angle  The angle at which the robot should move.
      */
     public DrivePolar(double radius, double angle) {
+        this(radius, angle, RandomConstants.MAX_TRANS_SPEED);
+    }
+
+    /**
+     * Initializes all the variables except time.
+     *
+     * @param radius The distance to move the robot.
+     * @param angle  The angle at which the robot should move.
+     * @param maxVel The maximum velocity for the robot to run.
+     */
+    public DrivePolar(double radius, double angle, double maxVel) {
         requires(Robot.drivey);
 
-        profiler = new TrapezoidalMotionProfiler(radius, RandomConstants.MAX_TRANS_SPEED, RandomConstants.MAX_TRANS_ACCEL);
+        maxVel = Math.abs(maxVel);
+
+        if(maxVel > RandomConstants.MAX_TRANS_SPEED){
+            maxVel = RandomConstants.MAX_TRANS_SPEED;
+            SmartDashboard.putString("Maximum tran speed", "is too high");
+        }
+
+        profiler = new TrapezoidalMotionProfiler(radius, maxVel, RandomConstants.MAX_TRANS_ACCEL);
         theta = angle;
         distance = 0;
     }

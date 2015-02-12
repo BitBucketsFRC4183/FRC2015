@@ -16,12 +16,31 @@ public class DriveRotate extends Command {
     private long time;
 
     /**
-     * The constructor for this {@link edu.wpi.first.wpilibj.command.Command}. It should use <code>requires()</code> to tell the compiler which subsystem it uses.
+     * Calls the main constructor with the max rotational velocity of the robot as the max velocity of this command.
+     *
+     * @param angle The angle to turn the robot.
      */
-    public DriveRotate(double angle) {
+    public DriveRotate(double angle){
+        this(angle, RandomConstants.MAX_ROT_SPEED);
+    }
+
+    /**
+     * Sets up the profiler and initializes stuff that can be initialized before <code>initialize()</code> is called.
+     *
+     * @param angle The angle to turn the robot.
+     * @param maxVel The maximum velocity at which the robot should turn.
+     */
+    public DriveRotate(double angle, double maxVel) {
         requires(Robot.drivey);
 
-        profiler = new TrapezoidalMotionProfiler(angle, RandomConstants.MAX_ROT_SPEED, RandomConstants.MAX_ROT_ACCEL);
+        maxVel = Math.abs(maxVel);
+
+        if(maxVel > RandomConstants.MAX_ROT_SPEED){
+            maxVel = RandomConstants.MAX_ROT_SPEED;
+            SmartDashboard.putString("Maximum rot speed", "is too high");
+        }
+
+        profiler = new TrapezoidalMotionProfiler(angle, maxVel, RandomConstants.MAX_ROT_ACCEL);
         theta = 0;
     }
 
