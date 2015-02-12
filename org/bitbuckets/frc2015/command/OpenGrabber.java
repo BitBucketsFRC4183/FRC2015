@@ -1,6 +1,7 @@
 package org.bitbuckets.frc2015.command;
 
 import edu.wpi.first.wpilibj.command.Command;
+import org.bitbuckets.frc2015.Robot;
 //TODO Fix Javadocs
 
 /**
@@ -11,12 +12,14 @@ public class OpenGrabber extends Command {
      * The constructor for this {@link edu.wpi.first.wpilibj.command.Command}. It should use <code>requires()</code> to tell the compiler which subsystem it uses.
      */
     public OpenGrabber() {
+        requires(Robot.grabby);
     }
 
     /**
      * Called just before this Command runs the first time.
      */
     protected void initialize() {
+        Robot.grabby.setGrabbed(false);
     }
 
     /**

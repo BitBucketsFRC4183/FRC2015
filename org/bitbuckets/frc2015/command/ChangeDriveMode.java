@@ -5,7 +5,9 @@ import org.bitbuckets.frc2015.OI;
 //TODO Fix Javadocs
 
 /**
- * Created by James on 2/12/2015.
+ * Changes the drive mode of the robot.
+ *
+ * Created by James on 2/2/2015.
  */
 public class ChangeDriveMode extends Command {
     /**
