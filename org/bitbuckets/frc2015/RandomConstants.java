@@ -36,6 +36,11 @@ public class RandomConstants {
     public static final double STACK_TIMEOUT = 2;
 
     /**
+     * The deadband after which the stick is seen as "pressed";
+     */
+    public static final double STICK_TO_BUTTON_DEADBAND = .5;
+
+    /**
      *
      */
     public static final double DRIVE_KP = .1;

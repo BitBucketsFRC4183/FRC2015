@@ -8,15 +8,11 @@ import edu.wpi.first.wpilibj.buttons.Trigger;
  * <p/>
  * Created by James on 1/25/2015.
  */
-public class POVHat extends Trigger {
-    private HatDir hatDir;
+public class POVHatDirButton extends Trigger {
+    private Direction hatDir;
     private Joystick stick;
 
-    public enum HatDir {
-        UP, UP_RIGHT, RIGHT, DOWN_RIGHT, DOWN, DOWN_LEFT, LEFT, UP_LEFT
-    }
-
-    public POVHat(Joystick joystick, HatDir dir) {
+    public POVHatDirButton(Joystick joystick, Direction dir) {
         hatDir = dir;
         stick = joystick;
     }

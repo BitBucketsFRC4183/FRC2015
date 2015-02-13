@@ -3,7 +3,9 @@ package org.bitbuckets.frc2015;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
-import org.bitbuckets.frc2015.util.POVHat;
+import org.bitbuckets.frc2015.util.Direction;
+import org.bitbuckets.frc2015.util.JoystickDirButton;
+import org.bitbuckets.frc2015.util.POVHatDirButton;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -13,22 +15,28 @@ public class OI {
     public Joystick driver = new Joystick(1);
     public Joystick operator = new Joystick(2);
 
-    public POVHat tiltUp = new POVHat(driver, POVHat.HatDir.UP);
-    public POVHat tiltDown = new POVHat(driver, POVHat.HatDir.DOWN);
-    public Button changeControl = new JoystickButton(driver, 10);
+    public POVHatDirButton tiltUp = new POVHatDirButton(driver, Direction.UP);
+    public POVHatDirButton tiltDown = new POVHatDirButton(driver, Direction.DOWN);
 
-    public static int GO = 0;
-    public static int STRAFE = 1;
+    public JoystickDirButton operatorToteUp = new JoystickDirButton(operator, Direction.UP, 0, 1);
+    public JoystickDirButton operatorToteDown = new JoystickDirButton(operator, Direction.DOWN, 0, 1);
+    public JoystickDirButton operatorGrabbyUp = new JoystickDirButton(operator, Direction.UP, 5, 4);
+    public JoystickDirButton operatorGrabbyDown = new JoystickDirButton(operator, Direction.DOWN, 5, 4);
+
+    public Button changeControl = new JoystickButton(driver, 8);
+
+    public static int GO = 1;
+    public static int STRAFE = 0;
     public static int TURN = 4;
 
     public static void changeControls() {
         if (GO == 0) {
-            GO = 5;
-            STRAFE = 4;
+            GO = 4;
+            STRAFE = 5;
             TURN = 1;
         } else {
-            GO = 0;
-            STRAFE = 1;
+            GO = 1;
+            STRAFE = 0;
             TURN = 4;
         }
     }

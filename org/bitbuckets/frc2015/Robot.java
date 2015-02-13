@@ -131,7 +131,7 @@ public class Robot extends IterativeRobot {
     public void teleopPeriodic() {
         Scheduler.getInstance().run();
         drivey.resetPIDs();
-        drivey.drive(oi.driver.getRawAxis(OI.GO) * RandomConstants.MAX_TRANS_SPEED, -oi.driver.getRawAxis(OI.STRAFE) * RandomConstants.MAX_TRANS_SPEED, oi.driver.getRawAxis(OI.TURN) * RandomConstants.MAX_ROT_SPEED);
+        drivey.drive(oi.driver.getRawAxis(OI.STRAFE) * RandomConstants.MAX_TRANS_SPEED, -oi.driver.getRawAxis(OI.GO) * RandomConstants.MAX_TRANS_SPEED, Math.pow(oi.driver.getRawAxis(OI.TURN), 2) * RandomConstants.MAX_ROT_SPEED);
 
         if (!(downAll.isRunning() || upOne.isRunning())) {
             if (stacky.getLimitBottom()) {
@@ -148,6 +148,9 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putBoolean("Limit Bottom", stacky.getLimitBottom());
         SmartDashboard.putBoolean("Reed Above", stacky.getReedAbove());
         SmartDashboard.putBoolean("Reed Below", stacky.getReedBelow());
+
+        SmartDashboard.putBoolean("LEFT STICk up", oi.operatorToteUp.get());
+        SmartDashboard.putNumber("LEFT STICk", oi.operator.getRawAxis(1));
     }
 
     /**
