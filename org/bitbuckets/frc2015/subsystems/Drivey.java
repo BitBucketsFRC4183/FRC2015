@@ -6,6 +6,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.bitbuckets.frc2015.RandomConstants;
 import org.bitbuckets.frc2015.RobotMap;
 
+import java.io.FileWriter;
+import java.io.IOException;
+
 /**
  *
  */
@@ -19,6 +22,9 @@ public class Drivey extends Subsystem {
     private CANTalon frContr;
     private CANTalon rlContr;
     private CANTalon rrContr;
+
+    private FileWriter csvWriterfrEnc;
+    private FileWriter csvWriterflEnc;
 
 //    private enum Wheels {
 //        FRONT_LEFT(RobotMap.WHEEL_FL_X, RobotMap.WHEEL_FL_Y, RobotMap.WHEEL_FL_THETA, RobotMap.WHEEL_FL_MOTOR),
@@ -44,6 +50,20 @@ public class Drivey extends Subsystem {
      */
     public Drivey() {
         super();
+
+        //Write to a csv file
+        try {
+            csvWriterfrEnc = new FileWriter("///TextFiles//XVelData.csv");
+            csvWriterfrEnc.append("frEnc");
+            csvWriterfrEnc.append(",");
+            csvWriterfrEnc.append("time");
+            csvWriterflEnc = new FileWriter("///TextFiles//YVelData.csv");
+            csvWriterflEnc.append("flEnc");
+            csvWriterflEnc.append(",");
+            csvWriterflEnc.append("time");
+        } catch (IOException e){
+        }
+
         FL = 0;
         FR = 0;
         RL = 0;
@@ -104,7 +124,10 @@ public class Drivey extends Subsystem {
      * @param vy    The intended Y velocity of the robot.
      * @param omega The intended rotation of the robot around the center of rotation.
      */
-    public void drive(double vx, double vy, double omega) {
+    public void drive(double vx, double vy, double omega){
+
+
+
         //Gets the wheel speed
         FL = getWheelSpeed(RobotMap.CENTER_X, RobotMap.CENTER_Y, RobotMap.WHEEL_FL_X, RobotMap.WHEEL_FL_Y, RobotMap.WHEEL_FL_THETA, vx, vy, omega);
         FR = getWheelSpeed(RobotMap.CENTER_X, RobotMap.CENTER_Y, RobotMap.WHEEL_FR_X, RobotMap.WHEEL_FR_Y, RobotMap.WHEEL_FR_THETA, vx, vy, omega);
@@ -135,6 +158,17 @@ public class Drivey extends Subsystem {
         frContr.set(FR * RandomConstants.ENC_TICK_PER_REV / RandomConstants.WHEEL_CIRCUMFERENCE);
         rlContr.set(RL * RandomConstants.ENC_TICK_PER_REV / RandomConstants.WHEEL_CIRCUMFERENCE);
         rrContr.set(RR * RandomConstants.ENC_TICK_PER_REV / RandomConstants.WHEEL_CIRCUMFERENCE);
+
+        try {
+            csvWriterfrEnc.append("" + frContr.getEncVelocity());
+            csvWriterfrEnc.append(",");
+            csvWriterfrEnc.append("" + System.currentTimeMillis());
+            csvWriterflEnc.append("" + flContr.getEncVelocity());
+            csvWriterflEnc.append(",");
+            csvWriterflEnc.append("" + System.currentTimeMillis());
+        } catch(IOException e){
+
+        }
 
         SmartDashboard.putNumber("FLEnc", flContr.getEncPosition());
         SmartDashboard.putNumber("FREnc", frContr.getEncPosition());
