@@ -68,6 +68,15 @@ public class RobotMap {
      */
     public static final int WHEEL_RL_MOTOR = 3;
 
+    /**
+     *
+     */
+    public static final int GRABBY_GRABBER = 6;
+    /**
+     *
+     */
+    public static final int GRABBY_LIFTER = 7;
+
     /////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////----DIO----/////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////
@@ -98,6 +107,11 @@ public class RobotMap {
      * The left side sensor to detect collision with a tote
      */
     public static final int BUMP_SENSE_LEFT = 5;
+
+    /**
+     * The limit switch that gets pressed when grabby is open
+     */
+    public static final int GRABBY_OPEN = 6;
 
     /////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////----WHEELS----//////////////////////////////

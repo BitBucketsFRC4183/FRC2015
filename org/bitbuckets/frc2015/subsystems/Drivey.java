@@ -6,6 +6,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.bitbuckets.frc2015.RandomConstants;
 import org.bitbuckets.frc2015.RobotMap;
 
+import java.io.FileWriter;
+import java.io.IOException;
+
 /**
  *
  */
@@ -20,11 +23,28 @@ public class Drivey extends Subsystem {
     private CANTalon rlController;
     private CANTalon rrController;
 
+    private FileWriter csvWriterfrEnc;
+    private FileWriter csvWriterflEnc;
+
     /**
      * The constructor. Sets up the speeds and talons with k values for the internal PID controller.
      */
     public Drivey() {
         super();
+
+        //Write to a csv file
+        try {
+            csvWriterfrEnc = new FileWriter("///TextFiles//XVelData.csv");
+            csvWriterfrEnc.append("frEnc");
+            csvWriterfrEnc.append(",");
+            csvWriterfrEnc.append("time");
+            csvWriterflEnc = new FileWriter("///TextFiles//YVelData.csv");
+            csvWriterflEnc.append("flEnc");
+            csvWriterflEnc.append(",");
+            csvWriterflEnc.append("time");
+        } catch (IOException e){
+        }
+
         FL = 0;
         FR = 0;
         RL = 0;
@@ -95,7 +115,10 @@ public class Drivey extends Subsystem {
      * @param vy    The intended Y velocity of the robot.
      * @param omega The intended rotation of the robot around the center of rotation.
      */
-    public void drive(double vx, double vy, double omega) {
+    public void drive(double vx, double vy, double omega){
+
+
+
         //Gets the wheel speed
         FL = getWheelSpeed(RobotMap.CENTER_X, RobotMap.CENTER_Y, RobotMap.WHEEL_FL_X, RobotMap.WHEEL_FL_Y, RobotMap.WHEEL_FL_THETA, vx, vy, omega);
         FR = getWheelSpeed(RobotMap.CENTER_X, RobotMap.CENTER_Y, RobotMap.WHEEL_FR_X, RobotMap.WHEEL_FR_Y, RobotMap.WHEEL_FR_THETA, vx, vy, omega);
@@ -127,10 +150,21 @@ public class Drivey extends Subsystem {
         rlController.set(RL * RandomConstants.ENC_TICK_PER_REV / RandomConstants.WHEEL_CIRCUMFERENCE);
         rrController.set(RR * RandomConstants.ENC_TICK_PER_REV / RandomConstants.WHEEL_CIRCUMFERENCE);
 
-        SmartDashboard.putNumber("FLEnc", flController.getEncPosition() * RandomConstants.WHEEL_CIRCUMFERENCE / RandomConstants.ENC_TICK_PER_REV);
-        SmartDashboard.putNumber("FREnc", frController.getEncPosition() * RandomConstants.WHEEL_CIRCUMFERENCE / RandomConstants.ENC_TICK_PER_REV);
-        SmartDashboard.putNumber("RLEnc", rlController.getEncPosition() * RandomConstants.WHEEL_CIRCUMFERENCE / RandomConstants.ENC_TICK_PER_REV);
-        SmartDashboard.putNumber("RREnc", rrController.getEncPosition() * RandomConstants.WHEEL_CIRCUMFERENCE / RandomConstants.ENC_TICK_PER_REV);
+        try {
+            csvWriterfrEnc.append("" + frController.getEncVelocity());
+            csvWriterfrEnc.append(",");
+            csvWriterfrEnc.append("" + System.currentTimeMillis());
+            csvWriterflEnc.append("" + flController.getEncVelocity());
+            csvWriterflEnc.append(",");
+            csvWriterflEnc.append("" + System.currentTimeMillis());
+        } catch(IOException e){
+
+        }
+
+        SmartDashboard.putNumber("FLEnc", flController.getEncPosition());
+        SmartDashboard.putNumber("FREnc", frController.getEncPosition());
+        SmartDashboard.putNumber("RLEnc", rlController.getEncPosition());
+        SmartDashboard.putNumber("RREnc", rrController.getEncPosition());
 
         SmartDashboard.putNumber("FL Speed", FL);
         SmartDashboard.putNumber("FR Speed", FR);

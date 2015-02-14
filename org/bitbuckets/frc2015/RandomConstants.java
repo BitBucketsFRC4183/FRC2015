@@ -35,6 +35,17 @@ public class RandomConstants {
      */
     public static final double STACK_TIMEOUT = 2;
 
+    //////////////////////////GRABBY/////////////////////////////
+    /**
+     *
+     */
+    public static final double GRABBY_CURRRENT_MAX = 3;
+    /**
+     *
+     */
+    public static final double GRAB_TIMEOUT = 2;
+    public static final double GRAB_SPEED = 1;
+
     /**
      * The deadband after which the stick is seen as "pressed";
      */

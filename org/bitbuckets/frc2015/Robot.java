@@ -38,7 +38,7 @@ public class Robot extends IterativeRobot {
     private ArrayList<AutoProgram> autoPrograms;
 
     private StackyUp upOne;
-    private StackyDown downAll;
+    private StackyDownAll downAll;
 
 
     /**
@@ -63,7 +63,7 @@ public class Robot extends IterativeRobot {
         ChangeDriveMode driveMode = new ChangeDriveMode();
 
         upOne = new StackyUp();
-        downAll = new StackyDown();
+        downAll = new StackyDownAll();
 
         SmartDashboardInit();
 
