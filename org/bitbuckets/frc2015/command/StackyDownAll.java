@@ -6,17 +6,17 @@ import org.bitbuckets.frc2015.Robot;
 //TODO Fix Javadocs
 
 /**
- * Created by James on 2/13/2015.
+ * Created by James on 2/7/2015.
  */
-public class StackyDown extends Command {
-    private int state;
+public class StackyDownAll extends Command {
+    private int state = 0;
     private long timeInit;
+    private boolean timeout = false;
 
     /**
      * The constructor for this {@link edu.wpi.first.wpilibj.command.Command}. It should use <code>requires()</code> to tell the compiler which subsystem it uses.
      */
-    public StackyDown() {
-        state = 0;
+    public StackyDownAll() {
     }
 
     /**
@@ -50,12 +50,15 @@ public class StackyDown extends Command {
                 }
                 break;
             case 3:
-                Robot.stacky.setWinchMotor(-1 * RandomConstants.CARRIAGE_FAST_SPEED);
-                if (!Robot.stacky.getReedAbove()) {
-                    state = 4;
+                Robot.stacky.setWinchMotor(-1*RandomConstants.CARRIAGE_FAST_SPEED);
+                if(!Robot.stacky.getReedAbove()){
+                    state = 1;
                     Robot.stacky.downOne();
                     timeInit = System.currentTimeMillis();
                 }
+                break;
+            case 4:
+                Robot.stacky.setWinchMotor(-1 * RandomConstants.CARRIAGE_SLOW_SPEED);
                 break;
             default:
                 break;
@@ -66,7 +69,7 @@ public class StackyDown extends Command {
      * Make this return true when this Command no longer needs to run <code>execute()</code>.
      */
     protected boolean isFinished() {
-        return state == 4 || (System.currentTimeMillis() - timeInit) / 1000 < RandomConstants.STACK_TIMEOUT;
+        return Robot.stacky.getLimitBottom() || (System.currentTimeMillis() - timeInit) / 1000 < RandomConstants.STACK_TIMEOUT;
     }
 
     /**

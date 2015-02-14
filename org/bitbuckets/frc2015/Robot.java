@@ -28,7 +28,7 @@ public class Robot extends IterativeRobot {
     public static Compressor compressor;
 
     private StackyUp upOne;
-    private StackyDown downAll;
+    private StackyDownAll downAll;
 
     Command autonomousCommand;
 
@@ -52,10 +52,9 @@ public class Robot extends IterativeRobot {
         CloseGrabber closeGrabber = new CloseGrabber();
         TiltUp tiltUp = new TiltUp();
         TiltDown tiltDown = new TiltDown();
-        IncreaseStack increaseStack = new IncreaseStack();
 
         upOne = new StackyUp();
-        downAll = new StackyDown();
+        downAll = new StackyDownAll();
 
         SmartDashboardInit();
 
