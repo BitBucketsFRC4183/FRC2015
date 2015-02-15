@@ -41,11 +41,9 @@ public class Robot extends IterativeRobot {
 
     private static Compressor compressor;
 
-    private AutoDriveTest driveTest;
-
     private Command autonomousCommand;
 
-    public static SendableChooser autoChooser;
+    public static SendableChooser autoChooser = new SendableChooser();
 
     /**
      * This function is run when the robot is first started up and should be
@@ -58,35 +56,29 @@ public class Robot extends IterativeRobot {
         stacky = new Stacky();
         tilty = new Tilty();
 
-        compressor = new Compressor(0);
-        compressor.setClosedLoopControl(true);
-        // instantiate the command used for the autonomous period
-
-        OpenGrabber openGrabber = new OpenGrabber();
-        CloseGrabber closeGrabber = new CloseGrabber();
-        TiltUp tiltUp = new TiltUp();
-        TiltDown tiltDown = new TiltDown();
-        ChangeDriveMode driveMode = new ChangeDriveMode();
+//        compressor = new Compressor(0);
+//        compressor.setClosedLoopControl(true);
+//        // instantiate the command used for the autonomous period
+//
+//        OpenGrabber openGrabber = new OpenGrabber();
+//        CloseGrabber closeGrabber = new CloseGrabber();
+//        TiltUp tiltUp = new TiltUp();
+//        TiltDown tiltDown = new TiltDown();
+//        ChangeDriveMode driveMode = new ChangeDriveMode();
 
         SmartDashboardInit();
 
         FileManager.fetchFiles();
         
-        ConstantsManager.fetchConstants();
+        //ConstantsManager.fetchConstants();
 
         //generate a list of autonomous programs based on all the .txt files in the local directory
         //TODO make some sort of tag at start of scripts required, so that auto scripts, constant files, etc. don't get confused
-        try {
-			AutoProgramGenerator.generateAutoPrograms();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+        AutoProgramGenerator.generateAutoPrograms();
 
-
-        oi.tiltUp.whenActive(tiltUp);
-        oi.tiltDown.whenActive(tiltDown);
-        oi.changeControl.whenPressed(driveMode);
+//        oi.tiltUp.whenActive(tiltUp);
+//        oi.tiltDown.whenActive(tiltDown);
+//        oi.changeControl.whenPressed(driveMode);
     }
 
     /**
@@ -115,9 +107,6 @@ public class Robot extends IterativeRobot {
     }
 
     public void teleopInit() {
-        if (driveTest != null) {
-            driveTest.cancel();
-        }
     }
 
     /**
@@ -125,9 +114,9 @@ public class Robot extends IterativeRobot {
      */
     public void teleopPeriodic() {
         Scheduler.getInstance().run();
-        drivey.resetPIDs();
-        drivey.drive(oi.stick.getRawAxis(OI.GO) * RandomConstants.MAX_TRANS_SPEED, -oi.stick.getRawAxis(OI.STRAFE) * RandomConstants.MAX_TRANS_SPEED, oi.stick.getRawAxis(OI.TURN) * RandomConstants.MAX_ROT_SPEED);
-        stacky.setWinchMotor(oi.stick.getRawAxis(3) - oi.stick.getRawAxis(2));
+//        drivey.resetPIDs();
+//        drivey.drive(oi.stick.getRawAxis(OI.GO) * RandomConstants.MAX_TRANS_SPEED, -oi.stick.getRawAxis(OI.STRAFE) * RandomConstants.MAX_TRANS_SPEED, oi.stick.getRawAxis(OI.TURN) * RandomConstants.MAX_ROT_SPEED);
+//        stacky.setWinchMotor(oi.stick.getRawAxis(3) - oi.stick.getRawAxis(2));
         SmartDashboard.putString("thing", "" + oi.stick.getPOV());
         SmartDashboard.putData(Scheduler.getInstance());
     }

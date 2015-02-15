@@ -53,6 +53,7 @@ public class AutoProgram extends CommandGroup {
         
         String line;
         
+        System.out.println("Getting name of file");
         //get the name of the file
     	name = FileManager.getFileName(brName);
     	
@@ -61,24 +62,34 @@ public class AutoProgram extends CommandGroup {
     	
     	BufferedReader br = FileManager.readFile(script);
     	
+    	//get type
+    	type = FileType.SCRIPT;
+    	
         while ((line = br.readLine()) != null) {
-        	//get type
-        	type = FileType.SCRIPT;
+
+        	System.out.println("Reading line: " + line);
         	
             //check for a character denoting a commented line
             if(line.startsWith("//")) {
                 continue;
             }
             //check that the line has something other than whitespace
-            if(!line.contains("^\\s+")){
+            if(line.matches("^\\s+")){
+            	System.out.println("Continuing because only whitespace was detected");
             	continue;
             }
+            if(!(line.toLowerCase().startsWith("seq") || line.toLowerCase().startsWith("par"))){
+            	System.out.println("Continuing because this line is not a command declaration line");
+            	continue;
+            }
+            System.out.println("Grab a line from the script");
             commandStr.add(line);
         }
         br.close();
 
         //iterates through the lines, parses them, and adds them either as sequential or parallel commands
         for (String commandName : commandStr) {
+        	System.out.println("Parsing and adding a command");
             addSeqOrPar(parse(commandName));
         }
     }
@@ -97,9 +108,10 @@ public class AutoProgram extends CommandGroup {
     private ArrayList<String> parse(String commandName) {
         ArrayList<String> parsed = new ArrayList<String>();
         
+    	commandName = FileManager.removeComments(commandName);
+        
         //split the line at whitespaces and toss out any //comments
         for (String s : commandName.split("\\s+")) {
-        	s = FileManager.removeComments(s);
             parsed.add(s);
         }
         return parsed;
@@ -118,15 +130,21 @@ public class AutoProgram extends CommandGroup {
      */
     private boolean addSeqOrPar(ArrayList<String> parsedName) {
     	
+    	for(String s: parsedName){
+    		System.out.print("parsedname: " + s + " ");
+    	}
+    	System.out.print("\n");
     	SmartDashboard.putString("Adding command of name:", parsedName.get(1));
 
         try {
 	        if (parsedName.size() < 2) {
 	            return false;
 	        } else if (parsedName.get(0).equals("Seq")) {
+	        	System.out.println("Adding " + parsedName.get(1) + " sequentially");
 	            addSequential(getCommandFromString(parsedName));
 	            return true;
 	        } else if (parsedName.get(0).equals("Par")) {
+	        	System.out.println("Adding " + parsedName.get(1) + " parallel");
 	            addParallel(getCommandFromString(parsedName));
 	            return true;
 	        } else {
@@ -134,6 +152,7 @@ public class AutoProgram extends CommandGroup {
 	        }
 		} catch (IllegalAccessException | InvocationTargetException
 				| InstantiationException | ClassNotFoundException e) {
+			System.out.println("Exception detected:" + e.toString());
 		}
 		return false;
     }
@@ -146,7 +165,8 @@ public class AutoProgram extends CommandGroup {
      *
      * @return the proper command.
      */
-    private Command getCommandFromString(ArrayList<String> parsedName) throws IllegalAccessException, InvocationTargetException, InstantiationException, ClassNotFoundException {
+    @SuppressWarnings("unchecked")
+	private Command getCommandFromString(ArrayList<String> parsedName) throws IllegalAccessException, InvocationTargetException, InstantiationException, ClassNotFoundException {
 
         Constructor<Command>[] constructors;
         Object[] wrappedParams = new Object[parsedName.size()-2];
@@ -156,7 +176,7 @@ public class AutoProgram extends CommandGroup {
         }
 
         //TODO what happens if it is not correct?
-        constructors = (Constructor<Command>[]) Class.forName(parsedName.get(1)).getConstructors();
+        constructors = (Constructor<Command>[]) Class.forName("org.bitbuckets.frc2015.command." + parsedName.get(1)).getConstructors();
 
         
         return constructors[constructors.length-1].newInstance(wrappedParams);

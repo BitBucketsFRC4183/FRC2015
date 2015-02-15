@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.ConcurrentModificationException;
 
 public class FileManager {
 	
@@ -27,7 +28,7 @@ public class FileManager {
      * 
      */
     public enum FileType{
-    	SCRIPT, CONSTANTS;
+    	SCRIPT, CONSTANTS;    	
     }
     
 	/**
@@ -35,10 +36,12 @@ public class FileManager {
 	 */
 	public static void fetchFiles(){
 		if(!isInitialized()){
+			System.out.println("files not initialized");
 			files = new ArrayList<File>();
 		}
 	    files.clear();
 	    try{
+	    	System.out.println("Fetching files from directory");
 		    files.addAll(new ArrayList<File>(Arrays.asList(dir.listFiles(new FileFilter() {
 		        @Override
 		        public boolean accept(File pathname) {
@@ -47,6 +50,12 @@ public class FileManager {
 		        }
 		    }))));
 	    } catch(NullPointerException e){
+	    	System.out.println("NullPointerException thrown");
+	    }
+	    
+	    //print out file names
+	    for(File f: files){
+	    	System.out.println(f.getAbsolutePath());
 	    }
 	}
 
@@ -57,18 +66,22 @@ public class FileManager {
 	 * @return an ArrayList<File> containing all files of a particular FileType from the current directory.
 	 */
 	public static ArrayList<File> getFilesOfType(FileType type){
-		ArrayList<File> files = new ArrayList<File>();
+		
+		System.out.println(type.toString());
+		
+		ArrayList<File> typedFiles = new ArrayList<File>();
+		
 		for(File f: files){
 			try{
 				BufferedReader br = readFile(f);
 		        if(getFileType(br) == type){
-		        	files.add(f);
+		        	typedFiles.add(f);
 		        }
 		        br.close();
 			} catch (IOException e){
 			}
 		}
-		return files;
+		return typedFiles;
 	}
 	
 	/**
@@ -98,7 +111,6 @@ public class FileManager {
      * 
      * @return a BufferedReader for a particular file. If the file is not found, is a directory, or is invalid for any
      * other reason, this function returns null.
-     * @throws IOException
      */
     public static BufferedReader readFile(File file){
 
@@ -109,6 +121,7 @@ public class FileManager {
 			return null;
 		}
 
+		System.out.println("New BufferedReader created for the file: " + file.getAbsolutePath());
         //Construct BufferedReader from InputStreamReader
         return new BufferedReader(new InputStreamReader(fis));
     }
@@ -157,6 +170,8 @@ public class FileManager {
 	public static String getFileName(BufferedReader br) {
 		String name = null;
 		String line = null;
+		
+		System.out.println("Grabbing file name");
 		
 		try {
 			while((line = br.readLine()) != null){

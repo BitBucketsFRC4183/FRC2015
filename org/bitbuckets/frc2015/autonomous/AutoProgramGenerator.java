@@ -12,7 +12,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class AutoProgramGenerator {
 
-
+	//TODO implement intelligent default programs
+	
     /**
      * generateAutoPrograms() reads the files in the current directory and returns them in an ArrayList of AutoPrograms
      * @return 
@@ -20,15 +21,22 @@ public class AutoProgramGenerator {
      * @return ArrayList<AutoProgram> of AutoProgram objects
      * @throws IOException
      */
-    public static void generateAutoPrograms() throws IOException {
+    public static void generateAutoPrograms(){
         ArrayList<File> scripts = FileManager.getFilesOfType(FileType.SCRIPT);
         ArrayList<AutoProgram> programs = new ArrayList<AutoProgram>();
         
         for (File script : scripts) {
-            programs.add(new AutoProgram(script));
+            try {
+            	System.out.println("Adding the script: " + script.getName());
+				programs.add(new AutoProgram(script));
+			} catch (IOException e) {
+			}
         }
         
+        Robot.autoChooser.addDefault("Dont Pick Me", new DefaultProgram());
+        
         for (AutoProgram a : programs) {
+        	System.out.println("Adding the script " + a.name + " to the autoChooser");
             Robot.autoChooser.addObject(a.name, a);
         }
         SmartDashboard.putData("Autonomous code chooser", Robot.autoChooser);
