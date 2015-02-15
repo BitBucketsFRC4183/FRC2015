@@ -38,6 +38,7 @@ public class Robot extends IterativeRobot {
     private ArrayList<AutoProgram> autoPrograms;
 
     private StackyUp upOne;
+    private StackyDown downOne;
     private StackyDownAll downAll;
 
 
@@ -63,6 +64,7 @@ public class Robot extends IterativeRobot {
         ChangeDriveMode driveMode = new ChangeDriveMode();
 
         upOne = new StackyUp();
+        downOne = new StackyDown();
         downAll = new StackyDownAll();
 
         SmartDashboardInit();
@@ -88,8 +90,13 @@ public class Robot extends IterativeRobot {
         oi.changeControl.whenPressed(driveMode);
         oi.driverTriangBut.whenPressed(upOne);
         oi.driverXBut.whenPressed(downAll);
-        oi.operatorTriangBut.whenPressed(upOne);
-        oi.operatorXBut.whenPressed(downAll);
+//        oi.operatorTriangBut.whenPressed(upOne);
+//        oi.operatorXBut.whenPressed(downAll);
+
+        oi.operatorToteDown.whenPressed(downOne);
+        oi.operatorToteDownAll.whenPressed(downAll);
+        oi.operatorTiltUp.whenPressed(tiltUp);
+        oi.operatorTiltDown.whenPressed(tiltDown);
     }
 
     /**
@@ -131,7 +138,7 @@ public class Robot extends IterativeRobot {
     public void teleopPeriodic() {
         Scheduler.getInstance().run();
         drivey.resetPIDs();
-        drivey.drive(oi.driver.getRawAxis(OI.STRAFE) * RandomConstants.MAX_TRANS_SPEED, -oi.driver.getRawAxis(OI.GO) * RandomConstants.MAX_TRANS_SPEED, Math.pow(oi.driver.getRawAxis(OI.TURN), 2) * RandomConstants.MAX_ROT_SPEED);
+        drivey.drive(oi.driver.getRawAxis(OI.STRAFE) * RandomConstants.MAX_TRANS_SPEED, -oi.driver.getRawAxis(OI.GO) * RandomConstants.MAX_TRANS_SPEED, oi.driver.getRawAxis(OI.TURN) * RandomConstants.MAX_ROT_SPEED);
 
         if (!(downAll.isRunning() || upOne.isRunning())) {
             if (stacky.getLimitBottom()) {
@@ -143,14 +150,17 @@ public class Robot extends IterativeRobot {
             }
         }
 
+        //***/*/*/*/*/*///*/*///HACK
+        if(oi.operatorToteUp.get() && stacky.getButtonsActive() && !upOne.isRunning() && !downAll.isRunning() && !downOne.isRunning()){
+            upOne.start();
+        }
+        //*/*////*/*/*///
+
         SmartDashboard.putData(Scheduler.getInstance());
         SmartDashboard.putBoolean("Limit Top", stacky.getLimitTop());
         SmartDashboard.putBoolean("Limit Bottom", stacky.getLimitBottom());
         SmartDashboard.putBoolean("Reed Above", stacky.getReedAbove());
         SmartDashboard.putBoolean("Reed Below", stacky.getReedBelow());
-
-        SmartDashboard.putBoolean("LEFT STICk up", oi.operatorToteUp.get());
-        SmartDashboard.putNumber("LEFT STICk", oi.operator.getRawAxis(1));
     }
 
     /**

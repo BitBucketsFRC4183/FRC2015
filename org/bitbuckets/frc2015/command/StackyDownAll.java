@@ -23,7 +23,9 @@ public class StackyDownAll extends Command {
      * Called just before this Command runs the first time.
      */
     protected void initialize() {
-        state = 1;
+        if(!Robot.stacky.getLimitBottom()) {
+            state = 1;
+        }
         timeInit = System.currentTimeMillis();
     }
 
@@ -69,7 +71,7 @@ public class StackyDownAll extends Command {
      * Make this return true when this Command no longer needs to run <code>execute()</code>.
      */
     protected boolean isFinished() {
-        return Robot.stacky.getLimitBottom() || (System.currentTimeMillis() - timeInit) / 1000 < RandomConstants.STACK_TIMEOUT;
+        return Robot.stacky.getLimitBottom() || (System.currentTimeMillis() - timeInit) / 1000 >= RandomConstants.STACK_TIMEOUT;
     }
 
     /**
@@ -77,6 +79,7 @@ public class StackyDownAll extends Command {
      */
     protected void end() {
         Robot.stacky.setWinchMotor(0);
+        state = 0;
     }
 
     /**
@@ -84,5 +87,6 @@ public class StackyDownAll extends Command {
      */
     protected void interrupted() {
         Robot.stacky.setWinchMotor(0);
+        state = 0;
     }
 }

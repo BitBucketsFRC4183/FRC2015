@@ -10,6 +10,7 @@ import org.bitbuckets.frc2015.Robot;
 public class StackyUp extends Command {
     private int state = 0;
     private long timeInit;
+    private long time;
 
     public StackyUp() {
         requires(Robot.stacky);
@@ -17,7 +18,9 @@ public class StackyUp extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-        state = 1;
+        if(!Robot.stacky.getLimitTop()) {
+            state = 1;
+        }
         timeInit = System.currentTimeMillis();
     }
 
@@ -56,11 +59,13 @@ public class StackyUp extends Command {
     // Called once after isFinished returns true
     protected void end() {
         Robot.stacky.setWinchMotor(0);
+        state = 0;
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
         Robot.stacky.setWinchMotor(0);
+        state = 0;
     }
 }

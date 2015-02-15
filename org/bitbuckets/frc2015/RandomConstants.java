@@ -16,7 +16,7 @@ public class RandomConstants {
     /**
      * Maximum rotational speed in rad/s.
      */
-    public static final double MAX_ROT_SPEED = 6;
+    public static final double MAX_ROT_SPEED = 3;
     /**
      * Maximum rotational acceleration in rad/s^2
      */
@@ -25,11 +25,11 @@ public class RandomConstants {
     /**
      * The speed for the carriage while it is going fast.
      */
-    public static final double CARRIAGE_FAST_SPEED = 1;
+    public static final double CARRIAGE_FAST_SPEED = .5;
     /**
      * The speed for the carriage while it is going slowly.
      */
-    public static final double CARRIAGE_SLOW_SPEED = .5;
+    public static final double CARRIAGE_SLOW_SPEED = .3;
     /**
      *
      */

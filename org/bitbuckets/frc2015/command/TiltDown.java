@@ -20,7 +20,7 @@ public class TiltDown extends Command {
      * Called just before this Command runs the first time.
      */
     protected void initialize() {
-        Robot.tilty.setTiltyUp(false);
+        Robot.tilty.setTiltyUp(true);
         SmartDashboard.putString("Tilty", "Down");
     }
 

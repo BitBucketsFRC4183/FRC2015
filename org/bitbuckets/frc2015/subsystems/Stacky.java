@@ -75,7 +75,7 @@ public class Stacky extends Subsystem {
     }
 
     public boolean getButtonsActive() {
-        return bumperLeft.get() && bumperRight.get();
+        return !bumperLeft.get() && !bumperRight.get();
     }
 
     public boolean getButtonLeft(){

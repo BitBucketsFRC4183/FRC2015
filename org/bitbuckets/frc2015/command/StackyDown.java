@@ -1,6 +1,7 @@
 package org.bitbuckets.frc2015.command;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.bitbuckets.frc2015.RandomConstants;
 import org.bitbuckets.frc2015.Robot;
 //TODO Fix Javadocs
@@ -23,7 +24,9 @@ public class StackyDown extends Command {
      * Called just before this Command runs the first time.
      */
     protected void initialize() {
-        state = 1;
+        if(!Robot.stacky.getLimitBottom()) {
+            state = 1;
+        }
         timeInit = System.currentTimeMillis();
     }
 
@@ -42,12 +45,14 @@ public class StackyDown extends Command {
                         Robot.stacky.downOne();
                     }
                 }
+                SmartDashboard.putNumber("Down State", 1);
                 break;
             case 2:
                 Robot.stacky.setWinchMotor(-1 * RandomConstants.CARRIAGE_FAST_SPEED);
                 if (Robot.stacky.getReedBelow()) {
                     state = 3;
                 }
+                SmartDashboard.putNumber("Down State", 2);
                 break;
             case 3:
                 Robot.stacky.setWinchMotor(-1 * RandomConstants.CARRIAGE_FAST_SPEED);
@@ -56,6 +61,7 @@ public class StackyDown extends Command {
                     Robot.stacky.downOne();
                     timeInit = System.currentTimeMillis();
                 }
+                SmartDashboard.putNumber("Down State", 3);
                 break;
             default:
                 break;
@@ -66,7 +72,7 @@ public class StackyDown extends Command {
      * Make this return true when this Command no longer needs to run <code>execute()</code>.
      */
     protected boolean isFinished() {
-        return state == 4 || (System.currentTimeMillis() - timeInit) / 1000 < RandomConstants.STACK_TIMEOUT;
+        return state == 4 || Robot.stacky.getLimitBottom() || (System.currentTimeMillis() - timeInit) / 1000 >= RandomConstants.STACK_TIMEOUT;
     }
 
     /**
@@ -74,6 +80,7 @@ public class StackyDown extends Command {
      */
     protected void end() {
         Robot.stacky.setWinchMotor(0);
+        state = 0;
     }
 
     /**
@@ -81,5 +88,6 @@ public class StackyDown extends Command {
      */
     protected void interrupted() {
         Robot.stacky.setWinchMotor(0);
+        state = 0;
     }
 }
