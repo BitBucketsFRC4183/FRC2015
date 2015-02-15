@@ -5,6 +5,8 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.bitbuckets.frc2015.command.*;
+import org.bitbuckets.frc2015.util.FileManager;
+import org.bitbuckets.frc2015.util.FileManager.FileType;
 
 import java.io.*;
 import java.lang.reflect.Constructor;
@@ -19,51 +21,60 @@ public class AutoProgram extends CommandGroup {
     //commandStr holds strings representing commands and their parameters, in the form "Seq/Par commandName
     ArrayList<String> commandStr = new ArrayList<String>();
 
-    //br reads the text from the file line by line
-    BufferedReader br;
-
-    //Title of autonomous program
-    public String title;
-
-    private enum commandType {
-        DrivePolar, DriveTime, DriveTranslation, ChangeDriveMode, CloseGrabber, OpenGrabber, StackyDownAll, StackyUp,
-        TiltDown, TiltUp, Wait
-    }
+    //Name of autonomous program
+    public String name;
+    
+    //Type of program
+    public FileType type;
 
 
     /**
      * <h1>AutoProgram reads and executes a script to create an autonomous program </h1><p>
-     * Acceptable scripts are as follows: <p>
+     * Acceptable scripts are as follows:
+     * <p>
      * Comments are allowed by //. <br>
-     * The name of the program is denoted by a line beginning with the String "Title=". <br>
+     * The name of the program is denoted by a line beginning with the String "Name=". <br>
      * Each command is denoted by the following notation:
      * <code>Type Name Param1 Param2 Param3 ...</code> <br>
      * Where type is either "Seq" or "Par", name is the name of the command, and parameters are separated by spaces.<br>
+     * <p>
+     * Parameters take the following forms:
+     * <p>
+     * <ul>
+     *   <li><strong>Strings</strong> must begin and end with either " or '. The two can be mixed, so "hello' is acceptable.</li>
+     * </ul>
      *
      * @throws IOException
      */
     public AutoProgram(File script) throws IOException {
-        //created BufferedReader from the file
-        br = readFile(script);
+    	
+        //br reads the text from the file line by line
+        BufferedReader brName = FileManager.readFile(script);
+        
         String line;
-        //adds each line to the ArrayList
+        
+        //get the name of the file
+    	name = FileManager.getFileName(brName);
+    	
+    	//this will move the buffer to the end of the file, so we want a new buffer
+    	brName.close();
+    	
+    	BufferedReader br = FileManager.readFile(script);
+    	
         while ((line = br.readLine()) != null) {
-            //check for a line denoting the title of the script
-            if (line.startsWith("Title=")) {
-                title = line.substring(line.indexOf("="));
-                continue;
-            }
+        	//get type
+        	type = FileType.SCRIPT;
+        	
             //check for a character denoting a commented line
-            if (line.startsWith("//")) {
+            if(line.startsWith("//")) {
                 continue;
             }
             //check that the line has something other than whitespace
-            if(!line.contains("\\s+")){
+            if(!line.contains("^\\s+")){
             	continue;
             }
             commandStr.add(line);
         }
-        //closes the buffered reader
         br.close();
 
         //iterates through the lines, parses them, and adds them either as sequential or parallel commands
@@ -72,19 +83,7 @@ public class AutoProgram extends CommandGroup {
         }
     }
 
-    /**
-     * Reads the file AutoProgram.txt
-     *
-     * @return a BufferedReader for AutoProgram.txt
-     * @throws IOException
-     */
-    private BufferedReader readFile(File script) throws IOException {
 
-        FileInputStream fis = new FileInputStream(script);
-
-        //Construct BufferedReader from InputStreamReader
-        return new BufferedReader(new InputStreamReader(fis));
-    }
 
     /**
      * Parses the commandName into:
@@ -97,11 +96,10 @@ public class AutoProgram extends CommandGroup {
      */
     private ArrayList<String> parse(String commandName) {
         ArrayList<String> parsed = new ArrayList<String>();
+        
+        //split the line at whitespaces and toss out any //comments
         for (String s : commandName.split("\\s+")) {
-            if (s.contains("//")) {
-                parsed.add(s.substring(0, s.indexOf("//")));
-                break;
-            }
+        	s = FileManager.removeComments(s);
             parsed.add(s);
         }
         return parsed;
@@ -136,8 +134,6 @@ public class AutoProgram extends CommandGroup {
 	        }
 		} catch (IllegalAccessException | InvocationTargetException
 				| InstantiationException | ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 		return false;
     }
@@ -156,17 +152,16 @@ public class AutoProgram extends CommandGroup {
         Object[] wrappedParams = new Object[parsedName.size()-2];
 
         for(int i = 2; i < parsedName.size(); i++){
-            //somehow turn string parameters into whatever value it should be
-            //make parse requires a declaration like String='blah' or int=blah
+        	wrappedParams[i] = wrapParam(parsedName.get(i));
         }
 
-
+        //TODO what happens if it is not correct?
         constructors = (Constructor<Command>[]) Class.forName(parsedName.get(1)).getConstructors();
 
-
+        
         return constructors[constructors.length-1].newInstance(wrappedParams);
 
-
+        //old code
 //        switch (commandType.valueOf(parsedName.get(1))) {
 //            case ChangeDriveMode:
 //                return new ChangeDriveMode();
@@ -184,5 +179,29 @@ public class AutoProgram extends CommandGroup {
 //            	return new Wait(0.1);
 //
 //        }
+    }
+    
+    
+    //TODO change to require a suffix letter indicator i d l s c b
+    /**
+     * Converts a string input into the correct wrapped primitive out of String, Double, Integer
+     * 
+     * @param param
+     * @return
+     */
+    private Object wrapParam(String param){
+    	Object wrapped = null;
+    	if(param.startsWith("\"") | param.startsWith("\'")){
+    		if(param.endsWith("\"") | param.endsWith("\'")){
+    			wrapped = param;
+    		}
+    	} else if(param.contains(".")){
+    		wrapped = Double.parseDouble(param);
+    	} else if(!param.contains("[^0-9]")){
+    		wrapped = Integer.parseInt(param);
+    	} else {
+    		wrapped = param;
+    	}    	
+    	return wrapped;
     }
 }
