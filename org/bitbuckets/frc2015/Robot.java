@@ -2,6 +2,7 @@ package org.bitbuckets.frc2015;
 
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -9,7 +10,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.bitbuckets.frc2015.autonomous.AutoDriveTest;
 import org.bitbuckets.frc2015.autonomous.AutoProgram;
 import org.bitbuckets.frc2015.command.*;
-import org.bitbuckets.frc2015.subsystems.*;
+import org.bitbuckets.frc2015.subsystems.Drivey;
+import org.bitbuckets.frc2015.subsystems.Grabby;
+import org.bitbuckets.frc2015.subsystems.Stacky;
+import org.bitbuckets.frc2015.subsystems.Tilty;
 
 import java.util.ArrayList;
 
@@ -29,6 +33,7 @@ public class Robot extends IterativeRobot {
     public static Stacky stacky;
     public static Tilty tilty;
 
+    public static PowerDistributionPanel pdp;
     private static Compressor compressor;
 
     private SendableChooser autoChooser;
@@ -53,6 +58,7 @@ public class Robot extends IterativeRobot {
         stacky = new Stacky();
         tilty = new Tilty();
 
+        pdp = new PowerDistributionPanel();
         compressor = new Compressor(0);
         compressor.setClosedLoopControl(true);
         // instantiate the command used for the autonomous period
@@ -138,20 +144,22 @@ public class Robot extends IterativeRobot {
     public void teleopPeriodic() {
         Scheduler.getInstance().run();
         drivey.resetPIDs();
-        drivey.drive(oi.driver.getRawAxis(OI.STRAFE) * RandomConstants.MAX_TRANS_SPEED, -oi.driver.getRawAxis(OI.GO) * RandomConstants.MAX_TRANS_SPEED, oi.driver.getRawAxis(OI.TURN) * RandomConstants.MAX_ROT_SPEED);
+        drivey.drive(deadband(oi.driver.getRawAxis(OI.STRAFE)) * RandomConstants.MAX_TRANS_SPEED, deadband(-oi.driver.getRawAxis(OI.GO)) * RandomConstants.MAX_TRANS_SPEED, deadband(oi.driver.getRawAxis(OI.TURN)) * RandomConstants.MAX_ROT_SPEED);
 
-        if (!(downAll.isRunning() || upOne.isRunning())) {
-            if (stacky.getLimitBottom()) {
-                stacky.setWinchMotor(oi.driver.getRawAxis(3));
-            } else if (stacky.getLimitTop()) {
-                stacky.setWinchMotor(0 - oi.driver.getRawAxis(2));
-            } else {
-                stacky.setWinchMotor(oi.driver.getRawAxis(3) - oi.driver.getRawAxis(2));
-            }
-        }
+//        if (!(downAll.isRunning() || upOne.isRunning())) {
+//            if (stacky.getLimitBottom()) {
+//                stacky.setWinchMotor(oi.driver.getRawAxis(3));
+//            } else if (stacky.getLimitTop()) {
+//                stacky.setWinchMotor(0 - oi.driver.getRawAxis(2));
+//            } else {
+//                stacky.setWinchMotor(oi.driver.getRawAxis(3) - oi.driver.getRawAxis(2));
+//            }
+//        }
+
+        stacky.setWinchMotor(oi.driver.getRawAxis(3) - oi.driver.getRawAxis(2));
 
         //***/*/*/*/*/*///*/*///HACK
-        if(oi.operatorToteUp.get() && stacky.getButtonsActive() && !upOne.isRunning() && !downAll.isRunning() && !downOne.isRunning()){
+        if (oi.operatorToteUp.get() && stacky.getButtonsActive() && !upOne.isRunning() && !downAll.isRunning() && !downOne.isRunning()) {
             upOne.start();
         }
         //*/*////*/*/*///
@@ -176,5 +184,9 @@ public class Robot extends IterativeRobot {
         //SmartDashboard.putNumber("Speed", drivey.getSpeed());
         //SmartDashboard.putNumber("Tilty Angle", tilty.getAngle());
         //SmartDashboard.put
+    }
+
+    public double deadband(double thing) {
+        return Math.abs(thing) < .1 ? 0 : thing;
     }
 }

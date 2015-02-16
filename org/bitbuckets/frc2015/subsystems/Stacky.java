@@ -1,22 +1,24 @@
 package org.bitbuckets.frc2015.subsystems;
 
+import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.bitbuckets.frc2015.RobotMap;
 
 /**
  *
  */
 public class Stacky extends Subsystem {
-    private SpeedController winch;
+    private CANTalon winch;
 
     private DigitalInput reedAbove;
     private DigitalInput reedBelow;
 
-    private DigitalInput limitTop;
-    private DigitalInput limitBottom;
+//    private DigitalInput limitTop;
+//    private DigitalInput limitBottom;
 
     private DigitalInput bumperLeft;
     private DigitalInput bumperRight;
@@ -24,13 +26,15 @@ public class Stacky extends Subsystem {
     private int numUp;
 
     public Stacky() {
-        winch = new Talon(RobotMap.WINCH_MOTOR);
+        winch = new CANTalon(RobotMap.WINCH_MOTOR);
+
+        winch.enableLimitSwitch(true, true);
 
         reedAbove = new DigitalInput(RobotMap.HALL_ABOVE);
         reedBelow = new DigitalInput(RobotMap.HALL_BELOW);
 
-        limitTop = new DigitalInput(RobotMap.SWITCH_TOP);
-        limitBottom = new DigitalInput(RobotMap.SWITCH_BOTTOM);
+//        limitTop = new DigitalInput(RobotMap.SWITCH_TOP);
+//        limitBottom = new DigitalInput(RobotMap.SWITCH_BOTTOM);
 
         bumperLeft = new DigitalInput(RobotMap.BUMP_SENSE_LEFT);
         bumperRight = new DigitalInput(RobotMap.BUMP_SENSE_RIGHT);
@@ -44,6 +48,7 @@ public class Stacky extends Subsystem {
 
     public void setWinchMotor(double speed) {
         winch.set(speed);
+        SmartDashboard.putNumber("winch encoder", winch.getEncPosition());
     }
 
     public boolean getReedAbove() {
@@ -55,11 +60,13 @@ public class Stacky extends Subsystem {
     }
 
     public boolean getLimitTop() {
-        return !limitTop.get();
+//        return !limitTop.get();
+        return winch.isFwdLimitSwitchClosed();
     }
 
     public boolean getLimitBottom() {
-        return !limitBottom.get();
+//        return !limitBottom.get();
+        return winch.isRevLimitSwitchClosed();
     }
 
     public void upOne() {

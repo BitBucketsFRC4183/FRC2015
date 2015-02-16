@@ -45,7 +45,14 @@ public class RobotMap {
     /**
      * Motors driving the winch for the elevator on {@link org.bitbuckets.frc2015.subsystems.Stacky}.
      */
-    public static final int WINCH_MOTOR = 4;
+    public static final int GRABBY_GRABBER = 4;
+
+
+    /////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////----PDP----///////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////
+
+    public static final int GRABBER_MOTOR_CHANNEL = 3;
 
     /////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////----CAN----/////////////////////////////////
@@ -69,13 +76,14 @@ public class RobotMap {
     public static final int WHEEL_RL_MOTOR = 3;
 
     /**
-     *
+     * The CAN index for the motor that lifts the carriages
      */
-    public static final int GRABBY_GRABBER = 6;
+    public static final int WINCH_MOTOR = 7;
+
     /**
-     *
+     * The CAN index for the motor that lifts grabby
      */
-    public static final int GRABBY_LIFTER = 7;
+    public static final int GRABBY_LIFTER = 10;
 
     /////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////----DIO----/////////////////////////////////

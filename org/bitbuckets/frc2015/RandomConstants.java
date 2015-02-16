@@ -39,7 +39,7 @@ public class RandomConstants {
     /**
      *
      */
-    public static final double GRABBY_CURRRENT_MAX = 3;
+    public static final double GRABBY_CURRRENT_MAX = 12;
     /**
      *
      */

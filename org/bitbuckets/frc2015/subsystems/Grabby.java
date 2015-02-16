@@ -3,6 +3,7 @@ package org.bitbuckets.frc2015.subsystems;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.bitbuckets.frc2015.RandomConstants;
+import org.bitbuckets.frc2015.Robot;
 import org.bitbuckets.frc2015.RobotMap;
 
 /**
@@ -12,7 +13,7 @@ public class Grabby extends Subsystem {
     /**
      * The motor to control the grabber *
      */
-    private CANTalon grabberController;
+    private Talon grabberController;
     private CANTalon lifterController;
 
     private DigitalInput open;
@@ -21,7 +22,7 @@ public class Grabby extends Subsystem {
      * Sets up all the solenoids and motors.
      */
     public Grabby() {
-        grabberController = new CANTalon(RobotMap.GRABBY_GRABBER);
+        grabberController = new Talon(RobotMap.GRABBY_GRABBER);
         lifterController = new CANTalon(RobotMap.GRABBY_LIFTER);
 
         open = new DigitalInput(RobotMap.GRABBY_OPEN);
@@ -37,7 +38,7 @@ public class Grabby extends Subsystem {
     }
 
     public boolean getCurrentFinised(){
-        return grabberController.getOutputCurrent() >= RandomConstants.GRABBY_CURRRENT_MAX;
+        return Robot.pdp.getCurrent(RobotMap.GRABBER_MOTOR_CHANNEL) >= RandomConstants.GRABBY_CURRRENT_MAX;
     }
 
     public boolean getOpen(){

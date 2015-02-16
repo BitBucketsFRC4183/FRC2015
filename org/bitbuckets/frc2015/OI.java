@@ -39,7 +39,7 @@ public class OI {
     public static int TURN = 0;
 
     public static void changeControls() {
-        if (GO == 0) {
+        if (GO == 1) {
             GO = 5;
             STRAFE = 4;
             TURN = 0;
