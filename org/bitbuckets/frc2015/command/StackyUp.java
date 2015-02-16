@@ -18,13 +18,21 @@ public class StackyUp extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
+        Robot.stacky.setClosedLoop(false);
         if(!Robot.stacky.getLimitTop()) {
             state = 1;
         }
         timeInit = System.currentTimeMillis();
     }
 
-    // Called repeatedly when this Command is scheduled to run
+    /**
+     * This runs a state machine which runs the carriages at different speeds to get the carriages to go up one position.
+     * <ul>
+     *     <li>State 1: Sets the winch to fast and waits until it's above the range of the upper switch</li>
+     *     <li>State 2: Sets the winch to fast and waits until the next carriage hits the lower switch</li>
+     *     <li>State 3: Sets the winch to slow and waits until the next carriage hits the upper switch</li>
+     * </ul>
+     */
     protected void execute() {
         switch (state) {
             case 1:
@@ -51,19 +59,26 @@ public class StackyUp extends Command {
         }
     }
 
-    // Make this return true when this Command no longer needs to run execute()
+    /**
+     * Stops the command if the command is finished, the top carriage hits the top limit, or the timeout is reached.
+     *
+     * @return Whether the command has finished executing.
+     */
     protected boolean isFinished() {
         return state == 4 || Robot.stacky.getLimitTop() || (System.currentTimeMillis() - timeInit) / 1000 >= RandomConstants.STACK_TIMEOUT;
     }
 
-    // Called once after isFinished returns true
+    /**
+     * Stops the winch and resets the state machine.
+     */
     protected void end() {
         Robot.stacky.setWinchMotor(0);
         state = 0;
     }
 
-    // Called when another command which requires one or more of the same
-    // subsystems is scheduled to run
+    /**
+     * Stops the winch and resets the state machine.
+     */
     protected void interrupted() {
         Robot.stacky.setWinchMotor(0);
         state = 0;
