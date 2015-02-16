@@ -3,19 +3,18 @@ package org.bitbuckets.frc2015;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import org.bitbuckets.frc2015.autonomous.AutoDriveTest;
-import org.bitbuckets.frc2015.autonomous.AutoProgram;
+import org.bitbuckets.frc2015.autonomous.AutoProgramGenerator;
 import org.bitbuckets.frc2015.command.*;
 import org.bitbuckets.frc2015.subsystems.Drivey;
 import org.bitbuckets.frc2015.subsystems.Grabby;
 import org.bitbuckets.frc2015.subsystems.Stacky;
 import org.bitbuckets.frc2015.subsystems.Tilty;
-
-import java.util.ArrayList;
+import org.bitbuckets.frc2015.util.FileManager;
 
 
 /**
@@ -36,11 +35,9 @@ public class Robot extends IterativeRobot {
     public static PowerDistributionPanel pdp;
     private static Compressor compressor;
 
-    private SendableChooser autoChooser;
+    private Command autonomousCommand;
 
-    private AutoDriveTest driveTest;
-
-    private ArrayList<AutoProgram> autoPrograms;
+    public static SendableChooser autoChooser = new SendableChooser();
 
     private StackyUp upOne;
     private StackyDown downOne;
@@ -75,21 +72,13 @@ public class Robot extends IterativeRobot {
 
         SmartDashboardInit();
 
+        FileManager.fetchFiles();
+
+        //ConstantsManager.fetchConstants();
 
         //generate a list of autonomous programs based on all the .txt files in the local directory
         //TODO make some sort of tag at start of scripts required, so that auto scripts, constant files, etc. don't get confused
-//        try {
-//			autoPrograms = AutoProgramGenerator.generateAutoPrograms();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//			SmartDashboard.putString("Auto IO Error", "Error detected: " + e.getMessage());
-//		}
-//
-//        autoChooser = new SendableChooser();
-//        for(AutoProgram a: autoPrograms){
-//        	autoChooser.addObject(a.title, a);
-//        }
-
+        AutoProgramGenerator.generateAutoPrograms();
 
         oi.tiltUp.whenActive(tiltUp);
         oi.tiltDown.whenActive(tiltDown);
@@ -120,8 +109,8 @@ public class Robot extends IterativeRobot {
     public void autonomousInit() {
         // schedule the autonomous command (example)
         drivey.resetEncoders();
-        driveTest = new AutoDriveTest();
-        driveTest.start();
+        autonomousCommand = (Command) autoChooser.getSelected();
+        autonomousCommand.start();
     }
 
     /**
@@ -132,9 +121,6 @@ public class Robot extends IterativeRobot {
     }
 
     public void teleopInit() {
-        if (driveTest != null) {
-            driveTest.cancel();
-        }
         drivey.resetEncoders();
     }
 
@@ -143,6 +129,7 @@ public class Robot extends IterativeRobot {
      */
     public void teleopPeriodic() {
         Scheduler.getInstance().run();
+
         drivey.resetPIDs();
         drivey.drive(deadband(oi.driver.getRawAxis(OI.STRAFE)) * RandomConstants.MAX_TRANS_SPEED, deadband(-oi.driver.getRawAxis(OI.GO)) * RandomConstants.MAX_TRANS_SPEED, deadband(oi.driver.getRawAxis(OI.TURN)) * RandomConstants.MAX_ROT_SPEED);
 
@@ -186,7 +173,9 @@ public class Robot extends IterativeRobot {
         //SmartDashboard.put
     }
 
+    //*/*//*/*//*/*/*/*/*//*/*/Hck
     public double deadband(double thing) {
         return Math.abs(thing) < .1 ? 0 : thing;
     }
+    //*///*/**/**/*/*/*/*/*/
 }

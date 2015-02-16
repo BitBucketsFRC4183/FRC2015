@@ -1,62 +1,55 @@
 package org.bitbuckets.frc2015.autonomous;
 
 import java.io.File;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import org.bitbuckets.frc2015.Robot;
+import org.bitbuckets.frc2015.util.FileManager;
+import org.bitbuckets.frc2015.util.FileManager.FileType;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 public class AutoProgramGenerator {
 
-    /**
-     * Gets the current directory
-     */
-    static File dir = new File(".");
-
-    /**
-     * Sets up a textFilter so we can grab only the .txt files
-     */
-    static FilenameFilter textFilter = new FilenameFilter() {
-        public boolean accept(File dir, String name) {
-            return name.toLowerCase().endsWith(".txt");
-        }
-    };
-
-    //TODO check for script type
-
+	//TODO implement intelligent default programs
+	
     /**
      * generateAutoPrograms() reads the files in the current directory and returns them in an ArrayList of AutoPrograms
+     * @return 
      *
      * @return ArrayList<AutoProgram> of AutoProgram objects
      * @throws IOException
      */
-    public static ArrayList<AutoProgram> generateAutoPrograms() throws IOException {
-        File[] scripts = getFiles();
+    public static void generateAutoPrograms(){
+        ArrayList<File> scripts = FileManager.getFilesOfType(FileType.SCRIPT);
         ArrayList<AutoProgram> programs = new ArrayList<AutoProgram>();
+        
         for (File script : scripts) {
-            programs.add(new AutoProgram(script));
+            try {
+            	System.out.println("Adding the script: " + script.getName());
+				programs.add(new AutoProgram(script));
+			} catch (IOException e) {
+			}
         }
-        return programs;
+        
+        Robot.autoChooser.addDefault("Dont Pick Me", new DefaultProgram());
+        
+        for (AutoProgram a : programs) {
+        	System.out.println("Adding the script " + a.name + " to the autoChooser");
+            Robot.autoChooser.addObject(a.name, a);
+        }
+        SmartDashboard.putData("Autonomous code chooser", Robot.autoChooser);
     }
 
-    /**
-     * Returns an array of File objects containing all files matching textFilter in the current directory.
-     *
-     * @return
-     * @throws IOException
-     */
-    public static File[] getFiles() throws IOException {
-        File[] autoScripts = dir.listFiles(textFilter);
-        for (File script : autoScripts) {
-            System.out.println("file: " + script.getCanonicalPath());
-        }
-        return autoScripts;
-    }
-    
-/*    public static boolean changeDir(String directoryPathName){
 
-    	dir = new File(directoryPathName);
-    	return true;
-    }*/
+
+
+//    public static boolean changeDir(String directoryPathName){
+//
+//    	dir = new File(directoryPathName);
+//    	return true;
+//    }
 
 
 }

@@ -2,8 +2,15 @@ package org.bitbuckets.frc2015.autonomous;
 
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.CommandGroup;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+import org.bitbuckets.frc2015.command.*;
+import org.bitbuckets.frc2015.util.FileManager;
+import org.bitbuckets.frc2015.util.FileManager.FileType;
 
 import java.io.*;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 /**
@@ -14,62 +21,80 @@ public class AutoProgram extends CommandGroup {
     //commandStr holds strings representing commands and their parameters, in the form "Seq/Par commandName
     ArrayList<String> commandStr = new ArrayList<String>();
 
-    //br reads the text from the file line by line
-    BufferedReader br;
+    //Name of autonomous program
+    public String name;
+    
+    //Type of program
+    public FileType type;
 
-    //Title of autonomous program
-    public String title;
 
     /**
      * <h1>AutoProgram reads and executes a script to create an autonomous program </h1><p>
-     * Acceptable scripts are as follows: <p>
+     * Acceptable scripts are as follows:
+     * <p>
      * Comments are allowed by //. <br>
-     * The name of the program is denoted by a line beginning with the String "Title=". <br>
+     * The name of the program is denoted by a line beginning with the String "Name=". <br>
      * Each command is denoted by the following notation:
      * <code>Type Name Param1 Param2 Param3 ...</code> <br>
      * Where type is either "Seq" or "Par", name is the name of the command, and parameters are separated by spaces.<br>
+     * <p>
+     * Parameters take the following forms:
+     * <p>
+     * <ul>
+     *   <li><strong>Strings</strong> must begin and end with either " or '. The two can be mixed, so "hello' is acceptable.</li>
+     * </ul>
      *
      * @throws IOException
      */
     public AutoProgram(File script) throws IOException {
-        //created BufferedReader from the file
-        br = readFile(script);
+    	
+        //br reads the text from the file line by line
+        BufferedReader brName = FileManager.readFile(script);
+        
         String line;
-        //adds each line to the ArrayList
+        
+        System.out.println("Getting name of file");
+        //get the name of the file
+    	name = FileManager.getFileName(brName);
+    	
+    	//this will move the buffer to the end of the file, so we want a new buffer
+    	brName.close();
+    	
+    	BufferedReader br = FileManager.readFile(script);
+    	
+    	//get type
+    	type = FileType.SCRIPT;
+    	
         while ((line = br.readLine()) != null) {
-            //check for a line denoting the title of the script
-            if (line.startsWith("Title=")) {
-                title = line.substring(line.indexOf("="));
-                continue;
-            }
+
+        	System.out.println("Reading line: " + line);
+        	
             //check for a character denoting a commented line
-            if (line.startsWith("//")) {
+            if(line.startsWith("//")) {
                 continue;
             }
+            //check that the line has something other than whitespace
+            if(line.matches("^\\s+")){
+            	System.out.println("Continuing because only whitespace was detected");
+            	continue;
+            }
+            if(!(line.toLowerCase().startsWith("seq") || line.toLowerCase().startsWith("par"))){
+            	System.out.println("Continuing because this line is not a command declaration line");
+            	continue;
+            }
+            System.out.println("Grab a line from the script");
             commandStr.add(line);
         }
-        //closes the buffered reader
         br.close();
 
         //iterates through the lines, parses them, and adds them either as sequential or parallel commands
         for (String commandName : commandStr) {
+        	System.out.println("Parsing and adding a command");
             addSeqOrPar(parse(commandName));
         }
     }
 
-    /**
-     * Reads the file AutoProgram.txt
-     *
-     * @return a BufferedReader for AutoProgram.txt
-     * @throws IOException
-     */
-    private BufferedReader readFile(File script) throws IOException {
 
-        FileInputStream fis = new FileInputStream(script);
-
-        //Construct BufferedReader from InputStreamReader
-        return new BufferedReader(new InputStreamReader(fis));
-    }
 
     /**
      * Parses the commandName into:
@@ -82,11 +107,11 @@ public class AutoProgram extends CommandGroup {
      */
     private ArrayList<String> parse(String commandName) {
         ArrayList<String> parsed = new ArrayList<String>();
+        
+    	commandName = FileManager.removeComments(commandName);
+        
+        //split the line at whitespaces and toss out any //comments
         for (String s : commandName.split("\\s+")) {
-            if (s.contains("//")) {
-                parsed.add(s.substring(0, s.indexOf("//")));
-                break;
-            }
             parsed.add(s);
         }
         return parsed;
@@ -104,17 +129,32 @@ public class AutoProgram extends CommandGroup {
      * @return true if successful, false if not
      */
     private boolean addSeqOrPar(ArrayList<String> parsedName) {
-        if (parsedName.size() < 2) {
-            return false;
-        } else if (parsedName.get(0).equals("Seq")) {
-            addSequential(getCommandFromString(parsedName));
-            return true;
-        } else if (parsedName.get(0).equals("Par")) {
-            addParallel(getCommandFromString(parsedName));
-            return true;
-        } else {
-            return false;
-        }
+    	
+    	for(String s: parsedName){
+    		System.out.print("parsedname: " + s + " ");
+    	}
+    	System.out.print("\n");
+    	SmartDashboard.putString("Adding command of name:", parsedName.get(1));
+
+        try {
+	        if (parsedName.size() < 2) {
+	            return false;
+	        } else if (parsedName.get(0).equals("Seq")) {
+	        	System.out.println("Adding " + parsedName.get(1) + " sequentially");
+	            addSequential(getCommandFromString(parsedName));
+	            return true;
+	        } else if (parsedName.get(0).equals("Par")) {
+	        	System.out.println("Adding " + parsedName.get(1) + " parallel");
+	            addParallel(getCommandFromString(parsedName));
+	            return true;
+	        } else {
+	            return false;
+	        }
+		} catch (IllegalAccessException | InvocationTargetException
+				| InstantiationException | ClassNotFoundException e) {
+			System.out.println("Exception detected:" + e.toString());
+		}
+		return false;
     }
 
     /**
@@ -125,15 +165,63 @@ public class AutoProgram extends CommandGroup {
      *
      * @return the proper command.
      */
-    private Command getCommandFromString(ArrayList<String> parsedName) {
+    @SuppressWarnings("unchecked")
+	private Command getCommandFromString(ArrayList<String> parsedName) throws IllegalAccessException, InvocationTargetException, InstantiationException, ClassNotFoundException {
 
-//        switch (parsedName.get(1)) {
-//            case "CloseGrabber":
+        Constructor<Command>[] constructors;
+        Object[] wrappedParams = new Object[parsedName.size()-2];
+
+        for(int i = 2; i < parsedName.size(); i++){
+        	wrappedParams[i] = wrapParam(parsedName.get(i));
+        }
+
+        //TODO what happens if it is not correct?
+        constructors = (Constructor<Command>[]) Class.forName("org.bitbuckets.frc2015.command." + parsedName.get(1)).getConstructors();
+
+        
+        return constructors[constructors.length-1].newInstance(wrappedParams);
+
+        //old code
+//        switch (commandType.valueOf(parsedName.get(1))) {
+//            case ChangeDriveMode:
+//                return new ChangeDriveMode();
+//            case CloseGrabber:
 //                return new CloseGrabber();
-//            case "OpenGrabber":
+//            case OpenGrabber:
 //                return new OpenGrabber();
+//            case Wait:
+//                return new Wait(Double.parseDouble(parsedName.get(2)));
+//            case TiltUp:
+//            	return new TiltUp();
+//            case TiltDown:
+//            	return new TiltDown();
+//            default:
+//            	return new Wait(0.1);
 //
 //        }
-        return null;
+    }
+    
+    
+    //TODO change to require a suffix letter indicator i d l s c b
+    /**
+     * Converts a string input into the correct wrapped primitive out of String, Double, Integer
+     * 
+     * @param param
+     * @return
+     */
+    private Object wrapParam(String param){
+    	Object wrapped = null;
+    	if(param.startsWith("\"") | param.startsWith("\'")){
+    		if(param.endsWith("\"") | param.endsWith("\'")){
+    			wrapped = param;
+    		}
+    	} else if(param.contains(".")){
+    		wrapped = Double.parseDouble(param);
+    	} else if(!param.contains("[^0-9]")){
+    		wrapped = Integer.parseInt(param);
+    	} else {
+    		wrapped = param;
+    	}    	
+    	return wrapped;
     }
 }

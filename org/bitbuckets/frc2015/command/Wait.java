@@ -16,6 +16,7 @@ public class Wait extends Command {
     // Called just before this Command runs the first time
     protected void initialize() {
         timeInit = System.currentTimeMillis();
+        System.out.println("Waiting for: " + length + " seconds.");
     }
 
     // Called repeatedly when this Command is scheduled to run
