@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import org.bitbuckets.frc2015.util.Direction;
-import org.bitbuckets.frc2015.util.JoystickDirButton;
 import org.bitbuckets.frc2015.util.POVHatDirButton;
 
 /**
@@ -29,30 +28,27 @@ public class OI {
     public Button operatorTiltUp = new JoystickButton(operator, 3);
     public Button operatorTiltDown = new JoystickButton(operator, 4);
 
-
-
-
-    public Button changeControl = new JoystickButton(driver, 8);
+    public Button changeControl = new JoystickButton(driver, 10);
 
     public static int GO = 5;
-    public static int STRAFE = 4;
+    public static int STRAFE = 2;
     public static int TURN = 0;
 
     public static void changeControls() {
         if (GO == 1) {
             GO = 5;
-            STRAFE = 4;
+            STRAFE = 2;
             TURN = 0;
         } else {
             GO = 1;
             STRAFE = 0;
-            TURN = 4;
+            TURN = 2;
         }
     }
 
-    public Button driverXBut = new JoystickButton(driver, 1);
-    public Button driverCircleBut = new JoystickButton(driver, 2);
-    public Button driverSquareBut = new JoystickButton(driver, 3);
+    public Button driverSquareBut = new JoystickButton(driver, 1);
+    public Button driverXBut = new JoystickButton(driver, 2);
+    public Button driverCircleBut = new JoystickButton(driver, 3);
     public Button driverTriangBut = new JoystickButton(driver, 4);
 
 //    public Button operatorXBut = new JoystickButton(operator, 1);
