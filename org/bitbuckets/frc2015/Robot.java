@@ -8,13 +8,11 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import org.bitbuckets.frc2015.autonomous.AutoProgramGenerator;
 import org.bitbuckets.frc2015.command.*;
 import org.bitbuckets.frc2015.subsystems.Drivey;
 import org.bitbuckets.frc2015.subsystems.Grabby;
 import org.bitbuckets.frc2015.subsystems.Stacky;
 import org.bitbuckets.frc2015.subsystems.Tilty;
-import org.bitbuckets.frc2015.util.FileManager;
 
 
 /**
@@ -72,13 +70,13 @@ public class Robot extends IterativeRobot {
 
         SmartDashboardInit();
 
-        FileManager.fetchFiles();
+        //FileManager.fetchFiles();
 
         //ConstantsManager.fetchConstants();
 
         //generate a list of autonomous programs based on all the .txt files in the local directory
         //TODO make some sort of tag at start of scripts required, so that auto scripts, constant files, etc. don't get confused
-        AutoProgramGenerator.generateAutoPrograms();
+        //AutoProgramGenerator.generateAutoPrograms();
 
         oi.tiltUp.whenActive(tiltUp);
         oi.tiltDown.whenActive(tiltDown);
@@ -143,7 +141,7 @@ public class Robot extends IterativeRobot {
 //            }
 //        }
 
-        stacky.setWinchMotor(oi.driver.getRawAxis(3) - oi.driver.getRawAxis(2));
+        stacky.setWinchMotor(oi.driver.getRawAxis(3) - oi.driver.getRawAxis(4));
 
         //***/*/*/*/*/*///*/*///HACK
         if (oi.operatorToteUp.get() && stacky.getButtonsActive() && !upOne.isRunning() && !downAll.isRunning() && !downOne.isRunning()) {
