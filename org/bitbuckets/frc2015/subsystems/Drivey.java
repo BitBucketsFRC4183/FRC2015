@@ -42,7 +42,7 @@ public class Drivey extends Subsystem {
             csvWriterflEnc.append("flEnc");
             csvWriterflEnc.append(",");
             csvWriterflEnc.append("time");
-        } catch (IOException e){
+        } catch (IOException e) {
         }
 
         FL = 0;
@@ -62,15 +62,10 @@ public class Drivey extends Subsystem {
         rlController.changeControlMode(CANTalon.ControlMode.Speed);
         rrController.changeControlMode(CANTalon.ControlMode.Speed);
 
-        flController.setPID(RandomConstants.DRIVE_KP, RandomConstants.DRIVE_KI, RandomConstants.DRIVE_KD);
-        frController.setPID(RandomConstants.DRIVE_KP, RandomConstants.DRIVE_KI, RandomConstants.DRIVE_KD);
-        rlController.setPID(RandomConstants.DRIVE_KP, RandomConstants.DRIVE_KI, RandomConstants.DRIVE_KD);
-        rrController.setPID(RandomConstants.DRIVE_KP, RandomConstants.DRIVE_KI, RandomConstants.DRIVE_KD);
-
-        flController.setF(RandomConstants.DRIVE_KF);
-        frController.setF(RandomConstants.DRIVE_KF);
-        rlController.setF(RandomConstants.DRIVE_KF);
-        rrController.setF(RandomConstants.DRIVE_KF);
+        flController.setPID(RandomConstants.DRIVE_KP, RandomConstants.DRIVE_KI, RandomConstants.DRIVE_KD, RandomConstants.DRIVE_KF, RandomConstants.DRIVE_IZONE, 0, 0);
+        frController.setPID(RandomConstants.DRIVE_KP, RandomConstants.DRIVE_KI, RandomConstants.DRIVE_KD, RandomConstants.DRIVE_KF, RandomConstants.DRIVE_IZONE, 0, 0);
+        rlController.setPID(RandomConstants.DRIVE_KP, RandomConstants.DRIVE_KI, RandomConstants.DRIVE_KD, RandomConstants.DRIVE_KF, RandomConstants.DRIVE_IZONE, 0, 0);
+        rrController.setPID(RandomConstants.DRIVE_KP, RandomConstants.DRIVE_KI, RandomConstants.DRIVE_KD, RandomConstants.DRIVE_KF, RandomConstants.DRIVE_IZONE, 0, 0);
 
         flController.reverseSensor(true);
         frController.reverseSensor(true);
@@ -96,15 +91,10 @@ public class Drivey extends Subsystem {
     }
 
     public void resetPIDs() {
-        flController.setPID(SmartDashboard.getNumber("KP"), SmartDashboard.getNumber("KI"), SmartDashboard.getNumber("KD"));
-        frController.setPID(SmartDashboard.getNumber("KP"), SmartDashboard.getNumber("KI"), SmartDashboard.getNumber("KD"));
-        rlController.setPID(SmartDashboard.getNumber("KP"), SmartDashboard.getNumber("KI"), SmartDashboard.getNumber("KD"));
-        rrController.setPID(SmartDashboard.getNumber("KP"), SmartDashboard.getNumber("KI"), SmartDashboard.getNumber("KD"));
-
-        flController.setF(SmartDashboard.getNumber("KF"));
-        frController.setF(SmartDashboard.getNumber("KF"));
-        rlController.setF(SmartDashboard.getNumber("KF"));
-        rrController.setF(SmartDashboard.getNumber("KF"));
+        flController.setPID(SmartDashboard.getNumber("KP"), SmartDashboard.getNumber("KI"), SmartDashboard.getNumber("KD"), SmartDashboard.getNumber("KF"), RandomConstants.DRIVE_IZONE, 0, 0);
+        frController.setPID(SmartDashboard.getNumber("KP"), SmartDashboard.getNumber("KI"), SmartDashboard.getNumber("KD"), SmartDashboard.getNumber("KF"), RandomConstants.DRIVE_IZONE, 0, 0);
+        rlController.setPID(SmartDashboard.getNumber("KP"), SmartDashboard.getNumber("KI"), SmartDashboard.getNumber("KD"), SmartDashboard.getNumber("KF"), RandomConstants.DRIVE_IZONE, 0, 0);
+        rrController.setPID(SmartDashboard.getNumber("KP"), SmartDashboard.getNumber("KI"), SmartDashboard.getNumber("KD"), SmartDashboard.getNumber("KF"), RandomConstants.DRIVE_IZONE, 0, 0);
     }
 
     /**
@@ -115,8 +105,7 @@ public class Drivey extends Subsystem {
      * @param vy    The intended Y velocity of the robot.
      * @param omega The intended rotation of the robot around the center of rotation.
      */
-    public void drive(double vx, double vy, double omega){
-
+    public void drive(double vx, double vy, double omega) {
 
 
         //Gets the wheel speed
@@ -145,10 +134,10 @@ public class Drivey extends Subsystem {
 //            RR = RR * kLimit;
 //        }
 
-        flController.set(FL * RandomConstants.ENC_TICK_PER_REV / RandomConstants.WHEEL_CIRCUMFERENCE);
-        frController.set(FR * RandomConstants.ENC_TICK_PER_REV / RandomConstants.WHEEL_CIRCUMFERENCE);
-        rlController.set(RL * RandomConstants.ENC_TICK_PER_REV / RandomConstants.WHEEL_CIRCUMFERENCE);
-        rrController.set(RR * RandomConstants.ENC_TICK_PER_REV / RandomConstants.WHEEL_CIRCUMFERENCE);
+        flController.set(FL * RandomConstants.ENC_TICK_PER_REV * RandomConstants.WHEEL_GEAR_RATIO / RandomConstants.WHEEL_CIRCUMFERENCE);
+        frController.set(FR * RandomConstants.ENC_TICK_PER_REV * RandomConstants.WHEEL_GEAR_RATIO / RandomConstants.WHEEL_CIRCUMFERENCE);
+        rlController.set(RL * RandomConstants.ENC_TICK_PER_REV * RandomConstants.WHEEL_GEAR_RATIO / RandomConstants.WHEEL_CIRCUMFERENCE);
+        rrController.set(RR * RandomConstants.ENC_TICK_PER_REV * RandomConstants.WHEEL_GEAR_RATIO / RandomConstants.WHEEL_CIRCUMFERENCE);
 
         try {
             csvWriterfrEnc.append("" + frController.getEncVelocity());
@@ -157,7 +146,7 @@ public class Drivey extends Subsystem {
             csvWriterflEnc.append("" + flController.getEncVelocity());
             csvWriterflEnc.append(",");
             csvWriterflEnc.append("" + System.currentTimeMillis());
-        } catch(IOException e){
+        } catch (IOException e) {
 
         }
 
