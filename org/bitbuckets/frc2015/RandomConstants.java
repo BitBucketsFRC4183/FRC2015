@@ -2,9 +2,19 @@ package org.bitbuckets.frc2015;
 
 
 public class RandomConstants {
-    public static final double ENC_TICK_PER_REV = 1000. * 70. / 24.;
+    /**
+     * Encoder ticks per revolution of a motor shaft
+     */
+    public static final double ENC_TICK_PER_REV = 1000.;
+
+    /**
+     * The gear ratio of the gearbox between the encoder and the wheel in a wheel module.
+     */
+    public static final double WHEEL_GEAR_RATIO = 70. / 24.;
 
     public static final double WHEEL_CIRCUMFERENCE = Math.PI / 3;
+
+    public static final double WINCH_DRUM_CIRCUMFERENCE = Math.PI / 6;
 
     /**
      * Maximum translational speed in ft/s.(needs to be converted to ft/s)
@@ -59,5 +69,5 @@ public class RandomConstants {
     public static final double DRIVE_KI = 0;
     public static final double DRIVE_KD = 0;
     public static final double DRIVE_KF = 5.976;
-
+    public static final int DRIVE_IZONE = 0;
 }
