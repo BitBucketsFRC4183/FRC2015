@@ -16,6 +16,8 @@ public class OI {
 
     public POVHatDirButton tiltUp = new POVHatDirButton(driver, Direction.UP);
     public POVHatDirButton tiltDown = new POVHatDirButton(driver, Direction.DOWN);
+    public POVHatDirButton grabOpen = new POVHatDirButton(driver, Direction.LEFT);
+    public POVHatDirButton grabClose = new POVHatDirButton(driver, Direction.RIGHT);
 
 //    public JoystickDirButton operatorToteUp = new JoystickDirButton(operator, Direction.UP, 0, 1);
 //    public JoystickDirButton operatorToteDown = new JoystickDirButton(operator, Direction.DOWN, 0, 1);
@@ -27,6 +29,9 @@ public class OI {
     public Button operatorToteDownAll = new JoystickButton(operator, 7);
     public Button operatorTiltUp = new JoystickButton(operator, 3);
     public Button operatorTiltDown = new JoystickButton(operator, 4);
+
+    public Button grabberUp = new JoystickButton(driver, 5);
+    public Button grabberDown = new JoystickButton(driver, 6);
 
     public Button changeControl = new JoystickButton(driver, 10);
 

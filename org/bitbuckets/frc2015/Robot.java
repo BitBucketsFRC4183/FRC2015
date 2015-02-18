@@ -81,7 +81,7 @@ public class Robot extends IterativeRobot {
         oi.tiltUp.whenActive(tiltUp);
         oi.tiltDown.whenActive(tiltDown);
         oi.changeControl.whenPressed(driveMode);
-        oi.driverTriangBut.whenPressed(upOne);
+//        oi.driverTriangBut.whenPressed(upOne);
         oi.driverXBut.whenPressed(downAll);
 //        oi.operatorTriangBut.whenPressed(upOne);
 //        oi.operatorXBut.whenPressed(downAll);
@@ -129,7 +129,10 @@ public class Robot extends IterativeRobot {
         Scheduler.getInstance().run();
 
         drivey.resetPIDs();
-        drivey.drive(deadband(oi.driver.getRawAxis(OI.STRAFE)) * RandomConstants.MAX_TRANS_SPEED, deadband(-oi.driver.getRawAxis(OI.GO)) * RandomConstants.MAX_TRANS_SPEED, deadband(oi.driver.getRawAxis(OI.TURN)) * RandomConstants.MAX_ROT_SPEED);
+        double theta = Math.atan2(oi.driver.getRawAxis(OI.GO), oi.driver.getRawAxis(OI.STRAFE));
+        double radius = Math.hypot(oi.driver.getRawAxis(OI.GO), oi.driver.getRawAxis(OI.STRAFE));
+        double sqrRadius = Math.pow(radius, 2);
+        drivey.drive(sqrRadius * Math.cos(theta) * RandomConstants.MAX_TRANS_SPEED, -1 * sqrRadius * Math.sin(theta) * RandomConstants.MAX_TRANS_SPEED, Math.pow(oi.driver.getRawAxis(OI.TURN), 2) * RandomConstants.MAX_ROT_SPEED);
 
 //        if (!(downAll.isRunning() || upOne.isRunning())) {
 //            if (stacky.getLimitBottom()) {
@@ -141,10 +144,32 @@ public class Robot extends IterativeRobot {
 //            }
 //        }
 
-        stacky.setWinchMotor(oi.driver.getRawAxis(3) - oi.driver.getRawAxis(4));
+        //***/*//*/*//*/*/*HACK
+        if(!upOne.isRunning() && !downAll.isRunning() && !downOne.isRunning()) {
+            stacky.setWinchMotor(oi.driver.getRawAxis(3) - oi.driver.getRawAxis(4));
+        }
+        //**/*/**///*/*//*/*/*/*/*/*/*//*/*/*
+
+        ///*/*/*///*/*/*/**/*/*/HACK
+        if(oi.grabberUp.get()){
+            grabby.setLifterMotor(.5);
+        }else if(oi.grabberDown.get()){
+            grabby.setLifterMotor(-.5);
+        }else{
+            grabby.setLifterMotor(0);
+        }
+
+        if(oi.grabOpen.get()){
+            grabby.setGrabMotor(.5);
+        }else if(oi.grabClose.get()){
+            grabby.setGrabMotor(-.5);
+        }else{
+            grabby.setGrabMotor(0);
+        }
+        //*/*/*/**//*/*/*///*/*//*/*/*/*
 
         //***/*/*/*/*/*///*/*///HACK
-        if (oi.operatorToteUp.get() && stacky.getButtonsActive() && !upOne.isRunning() && !downAll.isRunning() && !downOne.isRunning()) {
+        if (oi.driverTriangBut.get() && stacky.getButtonsActive() && !upOne.isRunning() && !downAll.isRunning() && !downOne.isRunning()) {
             upOne.start();
         }
         //*/*////*/*/*///
