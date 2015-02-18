@@ -23,6 +23,7 @@ public class StackyDownAll extends Command {
      * Called just before this Command runs the first time.
      */
     protected void initialize() {
+        Robot.stacky.setClosedLoop(false);
         if(!Robot.stacky.getLimitBottom()) {
             state = 1;
         }

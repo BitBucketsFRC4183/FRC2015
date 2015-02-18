@@ -24,6 +24,7 @@ public class StackyDown extends Command {
      * Called just before this Command runs the first time.
      */
     protected void initialize() {
+        Robot.stacky.setClosedLoop(false);
         if(!Robot.stacky.getLimitBottom()) {
             state = 1;
         }
@@ -79,7 +80,8 @@ public class StackyDown extends Command {
      * Called once after <code>isFinished()</code> returns true.
      */
     protected void end() {
-        Robot.stacky.setWinchMotor(0);
+        Robot.stacky.setClosedLoop(true);
+        Robot.stacky.setWinchMotor(Robot.stacky.getDistanceUp()* RandomConstants.ENC_TICK_PER_REV / RandomConstants.WINCH_DRUM_CIRCUMFERENCE);
         state = 0;
     }
 
