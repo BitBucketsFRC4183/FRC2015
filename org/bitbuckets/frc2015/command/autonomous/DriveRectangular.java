@@ -30,7 +30,7 @@ public class DriveRectangular extends DrivePolar {
      * @param maxVel  The maximum velocity at which to move the robot.
      */
     public DriveRectangular(double xTarget, double yTarget, double maxVel) {
-        super(Math.sqrt(Math.pow(xTarget, 2) + Math.pow(yTarget, 2)), Math.atan2(xTarget, yTarget), maxVel);
+        super(Math.sqrt(Math.pow(xTarget, 2) + Math.pow(yTarget, 2)), Math.atan2(yTarget, xTarget), maxVel);
     }
 
     /**
