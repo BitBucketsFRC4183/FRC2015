@@ -50,6 +50,8 @@ public class Stacky extends Subsystem {
 
         winch.enableLimitSwitch(true, true);
 
+        winch.setPID(RandomConstants.STACKY_KP, RandomConstants.STACKY_KI, RandomConstants.STACKY_KD);
+
         reedAbove = new DigitalInput(RobotMap.HALL_ABOVE);
         reedBelow = new DigitalInput(RobotMap.HALL_BELOW);
 
@@ -150,6 +152,13 @@ public class Stacky extends Subsystem {
         return numUp;
     }
 
+    public void setNumUp(int up){
+        numUp = up;
+        if(numUp < 0){
+            numUp = 0;
+        }
+    }
+
     /**
      * Gets whether there is a tote in the pickup position
      *
@@ -161,6 +170,13 @@ public class Stacky extends Subsystem {
 
     public double getDistanceUp() {
         return winch.getEncPosition() * RandomConstants.WINCH_DRUM_CIRCUMFERENCE / RandomConstants.ENC_TICK_PER_REV;
+    }
+
+    //*/*/*/*/*/*/*/*/*///*/****/HACK
+    public void printStuff(){
+        SmartDashboard.putNumber("Setpointwinch", winch.getSetpoint());
+        SmartDashboard.putBoolean("Buttons", getButtonsActive());
+        SmartDashboard.putNumber("PutNumUp", getNumUp());
     }
 }
 
