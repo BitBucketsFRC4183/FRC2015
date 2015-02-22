@@ -64,7 +64,7 @@ public class StackyUp extends Command {
      * @return Whether the command has finished executing.
      */
     protected boolean isFinished() {
-        return state == 4 || Robot.stacky.getLimitTop() || (System.currentTimeMillis() - timeInit) / 1000 >= RandomConstants.STACK_TIMEOUT;
+        return state == 4 || Robot.stacky.getLimitTop() || (System.currentTimeMillis() - timeInit) / 1000 >= RandomConstants.STACK_UP_TIMEOUT;
     }
 
     /**
@@ -72,7 +72,7 @@ public class StackyUp extends Command {
      */
     protected void end() {
         Robot.stacky.setClosedLoop(true);
-        Robot.stacky.setWinchMotor(Robot.stacky.getDistanceUp()* RandomConstants.ENC_TICK_PER_REV / RandomConstants.WINCH_DRUM_CIRCUMFERENCE);
+        Robot.stacky.setWinchPosition(Robot.stacky.getDistanceUp() * RandomConstants.ENC_TICK_PER_REV/ RandomConstants.WINCH_DRUM_CIRCUMFERENCE);
         state = 0;
     }
 
