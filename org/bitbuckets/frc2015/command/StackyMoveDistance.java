@@ -8,14 +8,14 @@ import org.bitbuckets.frc2015.Robot;
 /**
  * Created by James on 2/16/2015.
  */
-public class StackyDownDistance extends Command {
+public class StackyMoveDistance extends Command {
     private double set;
 
     /**
      * The constructor for this {@link edu.wpi.first.wpilibj.command.Command}. It should use <code>requires()</code> to tell the compiler which subsystem it uses.
      */
-    public StackyDownDistance(double distance) {
-        set = (Robot.stacky.getDistanceUp() - distance) * RandomConstants.ENC_TICK_PER_REV / RandomConstants.WINCH_DRUM_CIRCUMFERENCE;
+    public StackyMoveDistance(double distance) {
+        set = (Robot.stacky.getDistanceUp() - distance) * RandomConstants.ENC_TICK_PER_REV / RandomConstants.STACKY_WINCH_DRUM_CIRCUMFERENCE;
     }
 
     /**
