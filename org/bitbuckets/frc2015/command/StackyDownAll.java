@@ -24,7 +24,7 @@ public class StackyDownAll extends Command {
      */
     protected void initialize() {
         Robot.stacky.setClosedLoop(false);
-        if(!Robot.stacky.getLimitBottom()) {
+        if(!Robot.stacky.getLimitBottom() && Robot.tilty.getUp()) {
             state = 1;
         }
         timeInit = System.currentTimeMillis();
@@ -34,45 +34,46 @@ public class StackyDownAll extends Command {
      * Called repeatedly when this Command is scheduled to run.
      */
     protected void execute() {
-        switch (state) {
-            case 1:
-                Robot.stacky.setWinchMotor(-1 * RandomConstants.CARRIAGE_FAST_SPEED);
-                if (Robot.stacky.getReedAbove()) {
-                    if (Robot.stacky.getNumUp() > 1) {
-                        state = 2;
-                    } else {
-                        state = 4;
-                        Robot.stacky.downOne();
-                    }
-                }
-                break;
-            case 2:
-                Robot.stacky.setWinchMotor(-1 * RandomConstants.CARRIAGE_FAST_SPEED);
-                if (Robot.stacky.getReedBelow()) {
-                    state = 3;
-                }
-                break;
-            case 3:
-                Robot.stacky.setWinchMotor(-1*RandomConstants.CARRIAGE_FAST_SPEED);
-                if(!Robot.stacky.getReedAbove()){
-                    state = 1;
-                    Robot.stacky.downOne();
-                    timeInit = System.currentTimeMillis();
-                }
-                break;
-            case 4:
-                Robot.stacky.setWinchMotor(-1 * RandomConstants.CARRIAGE_SLOW_SPEED);
-                break;
-            default:
-                break;
-        }
+        Robot.stacky.setWinchMotor(-1 * RandomConstants.CARRIAGE_FAST_SPEED);
+//        switch (state) {
+//            case 1:
+//                Robot.stacky.setWinchMotor(-1 * RandomConstants.CARRIAGE_FAST_SPEED);
+//                if (Robot.stacky.getReedAbove()) {
+//                    if (Robot.stacky.getNumUp() > 1) {
+//                        state = 2;
+//                    } else {
+//                        state = 4;
+//                        Robot.stacky.downOne();
+//                    }
+//                }
+//                break;
+//            case 2:
+//                Robot.stacky.setWinchMotor(-1 * RandomConstants.CARRIAGE_FAST_SPEED);
+//                if (Robot.stacky.getReedBelow()) {
+//                    state = 3;
+//                }
+//                break;
+//            case 3:
+//                Robot.stacky.setWinchMotor(-1*RandomConstants.CARRIAGE_FAST_SPEED);
+//                if(!Robot.stacky.getReedAbove()){
+//                    state = 1;
+//                    Robot.stacky.downOne();
+//                    timeInit = System.currentTimeMillis();
+//                }
+//                break;
+//            case 4:
+//                Robot.stacky.setWinchMotor(-1 * RandomConstants.CARRIAGE_SLOW_SPEED);
+//                break;
+//            default:
+//                break;
+//        }
     }
 
     /**
      * Make this return true when this Command no longer needs to run <code>execute()</code>.
      */
     protected boolean isFinished() {
-        return Robot.stacky.getLimitBottom() || (System.currentTimeMillis() - timeInit) / 1000 >= RandomConstants.STACK_TIMEOUT;
+        return Robot.stacky.getLimitBottom() || (System.currentTimeMillis() - timeInit) / 1000 >= RandomConstants.STACK_DOWN_TIMEOUT;
     }
 
     /**
@@ -80,6 +81,7 @@ public class StackyDownAll extends Command {
      */
     protected void end() {
         Robot.stacky.setWinchMotor(0);
+        Robot.stacky.setNumUp(0);
         state = 0;
     }
 
