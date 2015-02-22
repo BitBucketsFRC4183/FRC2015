@@ -25,7 +25,7 @@ public class StackyDown extends Command {
      */
     protected void initialize() {
         Robot.stacky.setClosedLoop(false);
-        if(!Robot.stacky.getLimitBottom()) {
+        if (!Robot.stacky.getLimitBottom()) {
             state = 1;
         }
         timeInit = System.currentTimeMillis();
@@ -35,16 +35,14 @@ public class StackyDown extends Command {
      * Called repeatedly when this Command is scheduled to run.
      */
     protected void execute() {
+        System.out.println("Current down state: " + state);
+        System.out.println("\tNum up: " + Robot.stacky.getNumUp());
+        System.out.println("\t\tReed Above: " + Robot.stacky.getReedAbove());
         switch (state) {
             case 1:
                 Robot.stacky.setWinchMotor(-1 * RandomConstants.CARRIAGE_FAST_SPEED);
                 if (Robot.stacky.getReedAbove()) {
-                    if (Robot.stacky.getNumUp() > 1) {
-                        state = 2;
-                    } else {
-                        state = 4;
-                        Robot.stacky.downOne();
-                    }
+                    state = 2;
                 }
                 SmartDashboard.putNumber("Down State", 1);
                 break;
@@ -73,7 +71,7 @@ public class StackyDown extends Command {
      * Make this return true when this Command no longer needs to run <code>execute()</code>.
      */
     protected boolean isFinished() {
-        return state == 4 || Robot.stacky.getLimitBottom() || (System.currentTimeMillis() - timeInit) / 1000 >= RandomConstants.STACK_TIMEOUT;
+        return state == 4 || Robot.stacky.getLimitBottom() || (System.currentTimeMillis() - timeInit) / 1000 >= RandomConstants.STACK_UP_TIMEOUT;
     }
 
     /**
@@ -81,7 +79,7 @@ public class StackyDown extends Command {
      */
     protected void end() {
         Robot.stacky.setClosedLoop(true);
-        Robot.stacky.setWinchMotor(Robot.stacky.getDistanceUp()* RandomConstants.ENC_TICK_PER_REV / RandomConstants.WINCH_DRUM_CIRCUMFERENCE);
+        Robot.stacky.setWinchPosition(Robot.stacky.getDistanceUp() * RandomConstants.ENC_TICK_PER_REV / RandomConstants.WINCH_DRUM_CIRCUMFERENCE);
         state = 0;
     }
 
