@@ -9,6 +9,7 @@ import org.bitbuckets.frc2015.RobotMap;
  */
 public class Tilty extends Subsystem {
     private DoubleSolenoid tilty;
+    private boolean upTilt = false;
 
     /**
      * Sets up the solenoid.
@@ -29,6 +30,11 @@ public class Tilty extends Subsystem {
      */
     public void setTiltyUp(boolean up) {
         tilty.set(up ? DoubleSolenoid.Value.kReverse : DoubleSolenoid.Value.kForward);
+        upTilt = !up;
+    }
+
+    public boolean getUp(){
+        return upTilt;
     }
 }
 
