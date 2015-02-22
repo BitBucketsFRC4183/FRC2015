@@ -169,7 +169,7 @@ public class Stacky extends Subsystem {
     }
 
     public double getDistanceUp() {
-        return winch.getEncPosition() * RandomConstants.WINCH_DRUM_CIRCUMFERENCE / RandomConstants.ENC_TICK_PER_REV;
+        return winch.getEncPosition() * RandomConstants.STACKY_WINCH_DRUM_CIRCUMFERENCE / RandomConstants.ENC_TICK_PER_REV;
     }
 
     //*/*/*/*/*/*/*/*/*///*/****/HACK

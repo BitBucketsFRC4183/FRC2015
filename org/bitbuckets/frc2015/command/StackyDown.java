@@ -79,7 +79,7 @@ public class StackyDown extends Command {
      */
     protected void end() {
         Robot.stacky.setClosedLoop(true);
-        Robot.stacky.setWinchPosition(Robot.stacky.getDistanceUp() * RandomConstants.ENC_TICK_PER_REV / RandomConstants.WINCH_DRUM_CIRCUMFERENCE);
+        Robot.stacky.setWinchPosition(Robot.stacky.getDistanceUp() * RandomConstants.ENC_TICK_PER_REV / RandomConstants.STACKY_WINCH_DRUM_CIRCUMFERENCE);
         state = 0;
     }
 

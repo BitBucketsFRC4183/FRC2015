@@ -14,7 +14,9 @@ public class RandomConstants {
 
     public static final double WHEEL_CIRCUMFERENCE = Math.PI / 3;
 
-    public static final double WINCH_DRUM_CIRCUMFERENCE = Math.PI / 6;
+    public static final double STACKY_WINCH_DRUM_CIRCUMFERENCE = Math.PI / 6;
+
+    public static final double GRABBY_WINCH_DRUM_CIRCUMFERENCE = 3 * Math.PI / 24;
 
     /**
      * Maximum translational speed in ft/s.(needs to be converted to ft/s)
@@ -32,6 +34,10 @@ public class RandomConstants {
      * Maximum rotational acceleration in rad/s^2
      */
     public static final double MAX_ROT_ACCEL = 3;
+
+    public static final double MAX_GRABBY_LIFTER_SPEED = 2;
+
+    public static final double MAX_GRABBY_LIFTER_ACCEL = 1;
 
     /**
      * The speed for the carriage while it is going fast.

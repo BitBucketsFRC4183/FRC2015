@@ -25,6 +25,9 @@ public class Grabby extends Subsystem {
         grabberController = new Talon(RobotMap.GRABBY_GRABBER);
         lifterController = new CANTalon(RobotMap.GRABBY_LIFTER);
 
+        lifterController.setPID(RandomConstants.GRABBY_KP, RandomConstants.GRABBY_KI, RandomConstants.GRABBY_KD);
+        lifterController.changeControlMode(CANTalon.ControlMode.Speed);
+
         open = new DigitalInput(RobotMap.GRABBY_OPEN);
     }
 
@@ -41,12 +44,17 @@ public class Grabby extends Subsystem {
         return Robot.pdp.getCurrent(RobotMap.GRABBER_MOTOR_CHANNEL) >= RandomConstants.GRABBY_CURRRENT_MAX;
     }
 
+
+    public double getVerticalPosition(){
+        return lifterController.getEncPosition() * RandomConstants.GRABBY_WINCH_DRUM_CIRCUMFERENCE / RandomConstants.ENC_TICK_PER_REV;
+    }
+
     public boolean getOpen(){
         return open.get();
     }
 
     public void setLifterMotor(double speed){
-        lifterController.set(speed);
+        lifterController.set(speed * RandomConstants.ENC_TICK_PER_REV / RandomConstants.GRABBY_WINCH_DRUM_CIRCUMFERENCE);
     }
 }
 
