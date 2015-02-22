@@ -5,7 +5,7 @@ public class RandomConstants {
     /**
      * Encoder ticks per revolution of a motor shaft
      */
-    public static final double ENC_TICK_PER_REV = 1000.;
+    public static final double ENC_TICK_PER_REV = 1024.;
 
     /**
      * The gear ratio of the gearbox between the encoder and the wheel in a wheel module.
@@ -19,7 +19,7 @@ public class RandomConstants {
     /**
      * Maximum translational speed in ft/s.(needs to be converted to ft/s)
      */
-    public static final double MAX_TRANS_SPEED = 4;
+    public static final double MAX_TRANS_SPEED = 10;
     /**
      * Maximum translational acceleration in ft/s^2.(needs to be converted to ft/s^2)
      */
@@ -27,7 +27,7 @@ public class RandomConstants {
     /**
      * Maximum rotational speed in rad/s.
      */
-    public static final double MAX_ROT_SPEED = 3;
+    public static final double MAX_ROT_SPEED = 2;
     /**
      * Maximum rotational acceleration in rad/s^2
      */
@@ -36,15 +36,16 @@ public class RandomConstants {
     /**
      * The speed for the carriage while it is going fast.
      */
-    public static final double CARRIAGE_FAST_SPEED = .5;
+    public static final double CARRIAGE_FAST_SPEED = .7;
     /**
      * The speed for the carriage while it is going slowly.
      */
-    public static final double CARRIAGE_SLOW_SPEED = .3;
+    public static final double CARRIAGE_SLOW_SPEED = .5;
     /**
      *
      */
-    public static final double STACK_TIMEOUT = 2;
+    public static final double STACK_UP_TIMEOUT = 2;
+    public static final double STACK_DOWN_TIMEOUT = 4;
 
     //////////////////////////GRABBY/////////////////////////////
     /**
@@ -65,9 +66,17 @@ public class RandomConstants {
     /**
      *
      */
-    public static final double DRIVE_KP = .1;
+    public static final double DRIVE_KP = .05;
     public static final double DRIVE_KI = 0;
     public static final double DRIVE_KD = 0;
-    public static final double DRIVE_KF = 5.976;
-    public static final int DRIVE_IZONE = 0;
+    public static final double DRIVE_KF = 0.01;
+    public static final int DRIVE_IZONE = 300000;
+
+    public static final double STACKY_KP = .3;
+    public static final double STACKY_KI = 0;
+    public static final double STACKY_KD = 0;
+
+    public static final double GRABBY_KP = .3;
+    public static final double GRABBY_KI = 0;
+    public static final double GRABBY_KD = 0;
 }
