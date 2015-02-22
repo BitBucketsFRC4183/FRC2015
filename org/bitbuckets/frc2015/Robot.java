@@ -82,14 +82,16 @@ public class Robot extends IterativeRobot {
         oi.tiltDown.whenActive(tiltDown);
         oi.changeControl.whenPressed(driveMode);
 //        oi.driverTriangBut.whenPressed(upOne);
-        oi.driverXBut.whenPressed(downAll);
-//        oi.operatorTriangBut.whenPressed(upOne);
-//        oi.operatorXBut.whenPressed(downAll);
+//        oi.driverXBut.whenPressed(downAll);
+        oi.operatorTriangBut.whenPressed(upOne);
+        oi.operatorCircleBut.whenPressed(downOne);
+        oi.operatorSquareBut.whenPressed(downAll);
+        oi.operatorXBut.whenPressed(new StackyDownDistance(0.5));
 
-        oi.operatorToteDown.whenPressed(downOne);
-        oi.operatorToteDownAll.whenPressed(downAll);
-        oi.operatorTiltUp.whenPressed(tiltUp);
-        oi.operatorTiltDown.whenPressed(tiltDown);
+//        oi.operatorToteDown.whenPressed(downOne);
+//        oi.operatorToteDownAll.whenPressed(downAll);
+//        oi.operatorTiltUp.whenPressed(tiltUp);
+//        oi.operatorTiltDown.whenPressed(tiltDown);
     }
 
     /**
@@ -120,6 +122,7 @@ public class Robot extends IterativeRobot {
 
     public void teleopInit() {
         drivey.resetEncoders();
+        stacky.setClosedLoop(false);
     }
 
     /**
@@ -131,8 +134,8 @@ public class Robot extends IterativeRobot {
         drivey.resetPIDs();
         double theta = Math.atan2(oi.driver.getRawAxis(OI.GO), oi.driver.getRawAxis(OI.STRAFE));
         double radius = Math.hypot(oi.driver.getRawAxis(OI.GO), oi.driver.getRawAxis(OI.STRAFE));
-        double sqrRadius = Math.pow(radius, 2);
-        drivey.drive(sqrRadius * Math.cos(theta) * RandomConstants.MAX_TRANS_SPEED, -1 * sqrRadius * Math.sin(theta) * RandomConstants.MAX_TRANS_SPEED, Math.pow(oi.driver.getRawAxis(OI.TURN), 2) * RandomConstants.MAX_ROT_SPEED);
+        double sqrRadius = Math.pow(radius, 1);
+        drivey.drive(sqrRadius * Math.cos(theta) * RandomConstants.MAX_TRANS_SPEED, -1 * sqrRadius * Math.sin(theta) * RandomConstants.MAX_TRANS_SPEED, Math.pow(oi.driver.getRawAxis(OI.TURN), 1) * RandomConstants.MAX_ROT_SPEED);
 
 //        if (!(downAll.isRunning() || upOne.isRunning())) {
 //            if (stacky.getLimitBottom()) {
@@ -146,18 +149,20 @@ public class Robot extends IterativeRobot {
 
         //***/*//*/*//*/*/*HACK
         if(!upOne.isRunning() && !downAll.isRunning() && !downOne.isRunning()) {
-            stacky.setWinchMotor(oi.driver.getRawAxis(3) - oi.driver.getRawAxis(4));
+            stacky.setWinchMotor(oi.operator.getRawAxis(3) - oi.operator.getRawAxis(4));
         }
         //**/*/**///*/*//*/*/*/*/*/*/*//*/*/*
 
         ///*/*/*///*/*/*/**/*/*/HACK
-        if(oi.grabberUp.get()){
-            grabby.setLifterMotor(.5);
-        }else if(oi.grabberDown.get()){
-            grabby.setLifterMotor(-.5);
-        }else{
-            grabby.setLifterMotor(0);
-        }
+//        if(oi.grabberUp.get()){
+//            grabby.setLifterMotor(.5);
+//        }else if(oi.grabberDown.get()){
+//            grabby.setLifterMotor(-.5);
+//        }else{
+//            grabby.setLifterMotor(0);
+//        }
+
+        grabby.setLifterMotor(-1 * oi.operator.getRawAxis(5));
 
         if(oi.grabOpen.get()){
             grabby.setGrabMotor(.5);
@@ -168,11 +173,21 @@ public class Robot extends IterativeRobot {
         }
         //*/*/*/**//*/*/*///*/*//*/*/*/*
 
+        //*/*/*/***//*/***/*/HACK
+
+//        Robot.stacky.setWinchPosition(Robot.stacky.getDistanceUp() * RandomConstants.ENC_TICK_PER_REV/ RandomConstants.WINCH_DRUM_CIRCUMFERENCE);
+//        Robot.stacky.setWinchPosition(Robot.stacky.getDistanceUp() * RandomConstants.ENC_TICK_PER_REV/ RandomConstants.WINCH_DRUM_CIRCUMFERENCE);
+        //*/**/*/*/*////*/*/**//*
+
         //***/*/*/*/*/*///*/*///HACK
-        if (oi.driverTriangBut.get() && stacky.getButtonsActive() && !upOne.isRunning() && !downAll.isRunning() && !downOne.isRunning()) {
+        if (oi.operatorTriangBut.get() && stacky.getButtonsActive() && !upOne.isRunning() && !downAll.isRunning() && !downOne.isRunning()) {
             upOne.start();
         }
         //*/*////*/*/*///
+
+        ////*/*//*/*//***/*/*//HACK
+        stacky.printStuff();
+        ///*/***/*/*/*/*/
 
         SmartDashboard.putData(Scheduler.getInstance());
         SmartDashboard.putBoolean("Limit Top", stacky.getLimitTop());
