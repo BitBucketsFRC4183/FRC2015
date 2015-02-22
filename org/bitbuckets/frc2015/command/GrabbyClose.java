@@ -6,15 +6,15 @@ import org.bitbuckets.frc2015.Robot;
 //TODO Fix Javadocs
 
 /**
+<<<<<<< HEAD
  * Created by James on 2/12/2015.
  */
-public class OpenGrabber extends Command {
+public class GrabbyClose extends Command {
     private long timeInit;
-
     /**
      * The constructor for this {@link edu.wpi.first.wpilibj.command.Command}. It should use <code>requires()</code> to tell the compiler which subsystem it uses.
      */
-    public OpenGrabber() {
+    public GrabbyClose() {
     }
 
     /**
@@ -28,14 +28,14 @@ public class OpenGrabber extends Command {
      * Called repeatedly when this Command is scheduled to run.
      */
     protected void execute() {
-        Robot.grabby.setGrabMotor(-1 * RandomConstants.GRAB_SPEED);
+        Robot.grabby.setGrabMotor(RandomConstants.GRAB_SPEED);
     }
 
     /**
      * Make this return true when this Command no longer needs to run <code>execute()</code>.
      */
     protected boolean isFinished() {
-        return Robot.grabby.getOpen() || (System.currentTimeMillis() - timeInit) / 1000 >= RandomConstants.GRAB_TIMEOUT;
+        return Robot.grabby.getCurrentFinised() || (System.currentTimeMillis() - timeInit)/1000 >= RandomConstants.GRAB_TIMEOUT;
     }
 
     /**
@@ -49,5 +49,6 @@ public class OpenGrabber extends Command {
      * Called when another command which requires one or more of the same subsystems is scheduled to run.
      */
     protected void interrupted() {
+        Robot.grabby.setGrabMotor(0);
     }
 }
