@@ -58,8 +58,8 @@ public class Robot extends IterativeRobot {
         compressor.setClosedLoopControl(true);
         // instantiate the command used for the autonomous period
 
-        OpenGrabber openGrabber = new OpenGrabber();
-        CloseGrabber closeGrabber = new CloseGrabber();
+        GrabbyOpen grabbyOpen = new GrabbyOpen();
+        GrabbyClose grabbyClose = new GrabbyClose();
         TiltUp tiltUp = new TiltUp();
         TiltDown tiltDown = new TiltDown();
         ChangeDriveMode driveMode = new ChangeDriveMode();
@@ -86,7 +86,7 @@ public class Robot extends IterativeRobot {
         oi.operatorTriangBut.whenPressed(upOne);
         oi.operatorCircleBut.whenPressed(downOne);
         oi.operatorSquareBut.whenPressed(downAll);
-        oi.operatorXBut.whenPressed(new StackyDownDistance(0.5));
+        oi.operatorXBut.whenPressed(new StackyMoveDistance(-0.5));
 
 //        oi.operatorToteDown.whenPressed(downOne);
 //        oi.operatorToteDownAll.whenPressed(downAll);

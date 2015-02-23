@@ -14,14 +14,6 @@ public class RobotMap {
     ///////////////////////////////////////////////////////////////////////////////////
 
     /**
-     * The first port for the double solenoid controlling the grabber pistons.
-     */
-    public static final int GRABBY_SOLENOID_1 = 3;
-    /**
-     * The second port for the double solenoid controlling the grabber pistons.
-     */
-    public static final int GRABBY_SOLENOID_2 = 4;
-    /**
      * The first port for the double solenoid controlling the tilty pistons.
      */
     public static final int TILTY_SOLENOID_1 = 0;
@@ -29,14 +21,6 @@ public class RobotMap {
      * The second port for the double solenoid controlling the tilty pistons.
      */
     public static final int TILTY_SOLENOID_2 = 1;
-    /**
-     * The first port for the double solenoid controlling the flippy pistons.
-     */
-    public static final int FLIPPY_SOLENOID_1 = 5;
-    /**
-     * The second port for the double solenoid controlling the flippy pistons.
-     */
-    public static final int FLIPPY_SOLENOID_2 = 6;
 
     /////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////----PWM----/////////////////////////////////
@@ -97,15 +81,6 @@ public class RobotMap {
      * The reed switch above the tote pickup point.
      */
     public static final int HALL_ABOVE = 3;
-
-    /**
-     * The limit switch at the top of stacky.
-     */
-    public static final int SWITCH_TOP = 0;
-    /**
-     * The limit switch at the bottom of stacky.
-     */
-    public static final int SWITCH_BOTTOM = 1;
 
     /**
      * The right side sensor to detect collision with a tote
