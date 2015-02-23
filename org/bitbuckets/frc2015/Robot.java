@@ -83,10 +83,13 @@ public class Robot extends IterativeRobot {
         oi.changeControl.whenPressed(driveMode);
 //        oi.driverTriangBut.whenPressed(upOne);
 //        oi.driverXBut.whenPressed(downAll);
-        oi.operatorTriangBut.whenPressed(upOne);
-        oi.operatorCircleBut.whenPressed(downOne);
-        oi.operatorSquareBut.whenPressed(downAll);
+//        oi.operatorTriangBut.whenPressed(upOne);
+        oi.operatorCircleBut.whenPressed(grabbyOpen);
+        oi.operatorSquareBut.whenPressed(grabbyClose);
         oi.operatorXBut.whenPressed(new StackyMoveDistance(-0.5));
+
+        oi.operatorToteDown.whenActive(downOne);
+        oi.operatorToteDownAll.whenActive(downAll);
 
 //        oi.operatorToteDown.whenPressed(downOne);
 //        oi.operatorToteDownAll.whenPressed(downAll);
@@ -154,14 +157,6 @@ public class Robot extends IterativeRobot {
         //**/*/**///*/*//*/*/*/*/*/*/*//*/*/*
 
         ///*/*/*///*/*/*/**/*/*/HACK
-//        if(oi.grabberUp.get()){
-//            grabby.setLifterMotor(.5);
-//        }else if(oi.grabberDown.get()){
-//            grabby.setLifterMotor(-.5);
-//        }else{
-//            grabby.setLifterMotor(0);
-//        }
-
         grabby.setLifterMotor(-1 * oi.operator.getRawAxis(5));
 
         if(oi.grabOpen.get()){
@@ -180,7 +175,7 @@ public class Robot extends IterativeRobot {
         //*/**/*/*/*////*/*/**//*
 
         //***/*/*/*/*/*///*/*///HACK
-        if (oi.operatorTriangBut.get() && stacky.getButtonsActive() && !upOne.isRunning() && !downAll.isRunning() && !downOne.isRunning()) {
+        if (oi.operatorToteUp.get() && stacky.getButtonsActive() && !upOne.isRunning() && !downAll.isRunning() && !downOne.isRunning()) {
             upOne.start();
         }
         //*/*////*/*/*///

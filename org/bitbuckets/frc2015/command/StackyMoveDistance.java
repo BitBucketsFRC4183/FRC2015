@@ -13,6 +13,8 @@ public class StackyMoveDistance extends Command {
 
     /**
      * The constructor for this {@link edu.wpi.first.wpilibj.command.Command}. It should use <code>requires()</code> to tell the compiler which subsystem it uses.
+     *
+     * TODO Make sure it's the right direction
      */
     public StackyMoveDistance(double distance) {
         set = (Robot.stacky.getDistanceUp() - distance) * RandomConstants.ENC_TICK_PER_REV / RandomConstants.STACKY_WINCH_DRUM_CIRCUMFERENCE;

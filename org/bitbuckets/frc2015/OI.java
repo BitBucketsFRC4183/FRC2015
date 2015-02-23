@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import org.bitbuckets.frc2015.util.Direction;
+import org.bitbuckets.frc2015.util.JoystickDirButton;
 import org.bitbuckets.frc2015.util.POVHatDirButton;
 
 /**
@@ -19,10 +20,13 @@ public class OI {
     public POVHatDirButton grabOpen = new POVHatDirButton(operator, Direction.LEFT);
     public POVHatDirButton grabClose = new POVHatDirButton(operator, Direction.RIGHT);
 
-//    public JoystickDirButton operatorToteUp = new JoystickDirButton(operator, Direction.UP, 0, 1);
-//    public JoystickDirButton operatorToteDown = new JoystickDirButton(operator, Direction.DOWN, 0, 1);
+    public JoystickDirButton operatorToteUp = new JoystickDirButton(operator, Direction.UP, 0, 1);
+    public JoystickDirButton operatorToteDown = new JoystickDirButton(operator, Direction.DOWN, 0, 1);
 //    public JoystickDirButton operatorGrabbyUp = new JoystickDirButton(operator, Direction.UP, 5, 4);
 //    public JoystickDirButton operatorGrabbyDown = new JoystickDirButton(operator, Direction.DOWN, 5, 4);
+
+    //TODO get the right button
+    public Button operatorToteDownAll = new JoystickButton(operator, 5);
 
     ////////////////////Console////////////////////
 //    public Button operatorToteUp = new JoystickButton(operator, 1);
@@ -30,9 +34,7 @@ public class OI {
 //    public Button operatorToteDownAll = new JoystickButton(operator, 7);
 //    public Button operatorTiltUp = new JoystickButton(operator, 3);
 //    public Button operatorTiltDown = new JoystickButton(operator, 4);
-
-    public Button grabberUp = new JoystickButton(operator, 5);
-    public Button grabberDown = new JoystickButton(operator, 6);
+    ///////////////////////////////////////////////
 
     public Button changeControl = new JoystickButton(driver, 10);
 
