@@ -2,9 +2,12 @@ package org.bitbuckets.frc2015.command.autonomous;
 
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import org.bitbuckets.frc2015.RandomConstants;
 import org.bitbuckets.frc2015.Robot;
+import org.bitbuckets.frc2015.control.PositionMotionProfiler;
 import org.bitbuckets.frc2015.control.TrapezoidalMotionProfiler;
+import org.bitbuckets.frc2015.util.SerialPortManager;
 
 /**
  * This {@link edu.wpi.first.wpilibj.command.Command} tells the robot to move a radius at angle theta.
@@ -14,8 +17,10 @@ import org.bitbuckets.frc2015.control.TrapezoidalMotionProfiler;
 public class DrivePolar extends Command {
     private double distance;
     private double theta;
-    private TrapezoidalMotionProfiler profiler;
-    private long time;
+    private double velocity;
+    private double initHeading;
+    private double currentHeading;
+    private PositionMotionProfiler profiler;
 
     /**
      * Calls the main constructor with the max velocity of the robot as the max velocity of this command.
@@ -44,9 +49,12 @@ public class DrivePolar extends Command {
             SmartDashboard.putString("Maximum tran speed", "is too high");
         }
 
-        profiler = new TrapezoidalMotionProfiler(radius, maxVel, RandomConstants.MAX_TRANS_ACCEL);
+        profiler = new PositionMotionProfiler(radius, maxVel, RandomConstants.MAX_TRANS_ACCEL);
         theta = angle;
         distance = 0;
+        //TODO getHeading() is not yet implemented
+        initHeading = SerialPortManager.getHeading();
+        currentHeading = initHeading;
     }
 
     /**
@@ -54,7 +62,6 @@ public class DrivePolar extends Command {
      */
     protected void initialize() {
         profiler.start();
-        time = System.currentTimeMillis();
     }
 
     /**
@@ -62,16 +69,15 @@ public class DrivePolar extends Command {
      * position, and calls the robots <code>drive()</code> method.
      */
     protected void execute() {
-        double velocity = profiler.update(distance);
-
-        distance += velocity * (System.currentTimeMillis() - time) / 1000;
-
+    	//TODO which order should this be
+        velocity = profiler.getVelocity();
+        distance = profiler.getTargetPosition();
+        currentHeading = SerialPortManager.getHeading();
+        
         SmartDashboard.putNumber("Autonomous velocity", velocity);
         SmartDashboard.putNumber("Autonomous position", distance);
 
-        Robot.drivey.drive(velocity * Math.cos(theta), velocity * Math.sin(theta), 0);
-
-        time = System.currentTimeMillis();
+        Robot.drivey.drive(velocity * Math.cos(theta), velocity * Math.sin(theta), initHeading-currentHeading);
     }
 
     /**
@@ -80,7 +86,7 @@ public class DrivePolar extends Command {
      * @return Whether the profiler is finished.
      */
     protected boolean isFinished() {
-        return profiler.getFinished();
+        return profiler.isFinished();
     }
 
     /**

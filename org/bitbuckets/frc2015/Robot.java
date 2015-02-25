@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import org.bitbuckets.frc2015.command.*;
 import org.bitbuckets.frc2015.subsystems.Drivey;
 import org.bitbuckets.frc2015.subsystems.Grabby;
@@ -58,8 +59,8 @@ public class Robot extends IterativeRobot {
         compressor.setClosedLoopControl(true);
         // instantiate the command used for the autonomous period
 
-        OpenGrabber openGrabber = new OpenGrabber();
-        CloseGrabber closeGrabber = new CloseGrabber();
+        GrabbyOpen openGrabber = new GrabbyOpen();
+        GrabbyClose closeGrabber = new GrabbyClose();
         TiltUp tiltUp = new TiltUp();
         TiltDown tiltDown = new TiltDown();
         ChangeDriveMode driveMode = new ChangeDriveMode();
@@ -86,7 +87,7 @@ public class Robot extends IterativeRobot {
         oi.operatorTriangBut.whenPressed(upOne);
         oi.operatorCircleBut.whenPressed(downOne);
         oi.operatorSquareBut.whenPressed(downAll);
-        oi.operatorXBut.whenPressed(new StackyDownDistance(0.5));
+        oi.operatorXBut.whenPressed(new StackyMoveDistance(-0.5));
 
 //        oi.operatorToteDown.whenPressed(downOne);
 //        oi.operatorToteDownAll.whenPressed(downAll);
