@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.bitbuckets.frc2015.RandomConstants;
 import org.bitbuckets.frc2015.Robot;
 import org.bitbuckets.frc2015.control.PositionMotionProfiler;
+import org.bitbuckets.frc2015.util.SerialPortManager;
 //TODO Fix Javadocs
 
 /**
@@ -55,11 +56,10 @@ public class DriveRotate extends Command {
      * Called repeatedly when this Command is scheduled to run.
      */
     protected void execute() {
-    	angVel = profiler.getVelocity();
-    	theta = profiler.getTargetPosition();
+    	angVel = profiler.getNextVel(SerialPortManager.getHeading());
 
         SmartDashboard.putNumber("Autonomous omega", angVel);
-        SmartDashboard.putNumber("Autonomous theta", theta);
+        //SmartDashboard.putNumber("Autonomous theta", theta);
 
         Robot.drivey.drive(0, 0, angVel);
     }

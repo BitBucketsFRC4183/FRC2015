@@ -19,7 +19,7 @@ public class DrivePolar extends Command {
     private double theta;
     private double velocity;
     private double initHeading;
-    private double currentHeading;
+    private double correctionHeading;
     private PositionMotionProfiler profiler;
 
     /**
@@ -54,7 +54,6 @@ public class DrivePolar extends Command {
         distance = 0;
         //TODO getHeading() is not yet implemented
         initHeading = SerialPortManager.getHeading();
-        currentHeading = initHeading;
     }
 
     /**
@@ -70,14 +69,13 @@ public class DrivePolar extends Command {
      */
     protected void execute() {
     	//TODO which order should this be
-        velocity = profiler.getVelocity();
-        distance = profiler.getTargetPosition();
-        currentHeading = SerialPortManager.getHeading();
+        velocity = profiler.getNextVel();
+        correctionHeading = SerialPortManager.getCorrectionHeading(initHeading);
         
         SmartDashboard.putNumber("Autonomous velocity", velocity);
         SmartDashboard.putNumber("Autonomous position", distance);
 
-        Robot.drivey.drive(velocity * Math.cos(theta), velocity * Math.sin(theta), initHeading-currentHeading);
+        Robot.drivey.drive(velocity * Math.cos(theta), velocity * Math.sin(theta), correctionHeading);
     }
 
     /**

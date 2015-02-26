@@ -43,7 +43,13 @@ public class PositionMotionProfiler {
 	       finished = false;
 	   }
 
-	   public double getTargetPosition() {
+	   /**
+	    * Call this function repeatedly to get updated velocities matching a position profile curve.
+	    * Use this function if you do not have the ability to read the current position.
+	    * 
+	    * @return the current velocity as dictated by the profile.
+	    */
+	   public double getNextVel() {
 	       currTime = System.currentTimeMillis();
 	       if(currTime - initTime > expectedTime * 1000){
 	    	   finished = true;
@@ -53,6 +59,37 @@ public class PositionMotionProfiler {
 	       dt = (double)(currTime - prevTime) / 1000.0;
 	       prevTime = currTime;
 
+	       updateVelocity();
+
+	       position += velocity * dt;
+
+	       return velocity*dir;
+	   }
+	   
+	   /**
+	    * Call this function repeatedly to get updated velocities matching a position profile curve.
+	    * Use this function if you can directly read the current position.
+	    * 
+	    * @param pos - The current position as measured with some sort of sensor.
+	    * @return the current velocity as dictated by the profile.
+	    */
+	   public double getNextVel(double pos) {
+		   position = pos;
+	       currTime = System.currentTimeMillis();
+	       if(currTime - initTime > expectedTime * 1000){
+	    	   finished = true;
+	           return targetDist*dir;
+	       }
+
+	       dt = (double)(currTime - prevTime) / 1000.0;
+	       prevTime = currTime;
+
+	       updateVelocity();
+
+	       return velocity*dir;
+	   }
+	   
+	   private void updateVelocity(){
 	       if(triProfile) {
 	           if(position < targetDist/2.0) {
 	               velocity += maxAcceleration * dt;
@@ -68,10 +105,6 @@ public class PositionMotionProfiler {
 	               velocity -= maxAcceleration * dt;
 	           }
 	       }
-
-	       position += velocity * dt;
-
-	       return position*dir;
 	   }
 
 	   public double getVelocity() {

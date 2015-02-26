@@ -14,6 +14,7 @@ import org.bitbuckets.frc2015.subsystems.Drivey;
 import org.bitbuckets.frc2015.subsystems.Grabby;
 import org.bitbuckets.frc2015.subsystems.Stacky;
 import org.bitbuckets.frc2015.subsystems.Tilty;
+import org.bitbuckets.frc2015.util.SerialPortManager;
 
 
 /**
@@ -53,6 +54,8 @@ public class Robot extends IterativeRobot {
         grabby = new Grabby();
         stacky = new Stacky();
         tilty = new Tilty();
+        
+        SerialPortManager.init();
 
         pdp = new PowerDistributionPanel();
         compressor = new Compressor(0);
@@ -110,6 +113,7 @@ public class Robot extends IterativeRobot {
     public void autonomousInit() {
         // schedule the autonomous command (example)
         drivey.resetEncoders();
+        SerialPortManager.analogGyro.reset();
         autonomousCommand = (Command) autoChooser.getSelected();
         autonomousCommand.start();
     }
@@ -124,6 +128,7 @@ public class Robot extends IterativeRobot {
     public void teleopInit() {
         drivey.resetEncoders();
         stacky.setClosedLoop(false);
+        SerialPortManager.analogGyro.reset();
     }
 
     /**
@@ -195,6 +200,8 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putBoolean("Limit Bottom", stacky.getLimitBottom());
         SmartDashboard.putBoolean("Reed Above", stacky.getReedAbove());
         SmartDashboard.putBoolean("Reed Below", stacky.getReedBelow());
+        SmartDashboard.putNumber("Gyro heading", SerialPortManager.getHeading());
+        SmartDashboard.putNumber("Gyro Angular Velocity", SerialPortManager.getAngularVel());    
     }
 
     /**

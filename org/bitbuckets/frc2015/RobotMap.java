@@ -185,4 +185,13 @@ public class RobotMap {
      * The Y coordinate of the center of rotation.
      */
     public static final double CENTER_Y = 0 / 12;
+    
+    /////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////----AnalogInputs----/////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////
+    /**
+     * Port number for the analog gyroscope
+     */
+    public static final int ANALOG_GYRO = 0;
+    
 }
