@@ -3,20 +3,23 @@ package org.bitbuckets.frc2015;
 
 public class RandomConstants {
     /**
-     * Encoder ticks per revolution of a motor shaft
-     */
-    public static final double ENC_TICK_PER_REV = 1024.;
-
-    /**
      * The gear ratio of the gearbox between the encoder and the wheel in a wheel module.
      */
     public static final double WHEEL_GEAR_RATIO = 70. / 24.;
+
+    public static final double FUDGE_FACTOR = 1;
+    /**
+     * Encoder ticks per revolution of a motor shaft
+     */
+    public static final double ENC_TICK_PER_REV = 256.0 * WHEEL_GEAR_RATIO;
 
     public static final double WHEEL_CIRCUMFERENCE = Math.PI / 3;
 
     public static final double STACKY_WINCH_DRUM_CIRCUMFERENCE = Math.PI / 6;
 
     public static final double GRABBY_WINCH_DRUM_CIRCUMFERENCE = 3 * Math.PI / 24;
+
+    public static final double DEADZONE = 0.01;
 
     /**
      * Maximum translational speed in ft/s.(needs to be converted to ft/s)
@@ -29,7 +32,7 @@ public class RandomConstants {
     /**
      * Maximum rotational speed in rad/s.
      */
-    public static final double MAX_ROT_SPEED = 2;
+    public static final double MAX_ROT_SPEED = 3;
     /**
      * Maximum rotational acceleration in rad/s^2
      */
@@ -72,11 +75,11 @@ public class RandomConstants {
     /**
      *
      */
-    public static final double DRIVE_KP = .05;
-    public static final double DRIVE_KI = 0;
-    public static final double DRIVE_KD = 0;
+    public static final double DRIVE_KP = 0.2;
+    public static final double DRIVE_KI = 0.01;
+    public static final double DRIVE_KD = 0.01;
     public static final double DRIVE_KF = 0.01;
-    public static final int DRIVE_IZONE = 300000;
+    public static final int DRIVE_IZONE = 50;
 
     public static final double STACKY_KP = .3;
     public static final double STACKY_KI = 0;

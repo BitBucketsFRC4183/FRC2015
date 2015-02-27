@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.bitbuckets.frc2015.autonomous.AutoDriveTest;
 import org.bitbuckets.frc2015.command.*;
 import org.bitbuckets.frc2015.subsystems.Drivey;
 import org.bitbuckets.frc2015.subsystems.Grabby;
@@ -95,6 +96,7 @@ public class Robot extends IterativeRobot {
 //        oi.operatorToteDownAll.whenPressed(downAll);
 //        oi.operatorTiltUp.whenPressed(tiltUp);
 //        oi.operatorTiltDown.whenPressed(tiltDown);
+        autonomousCommand = new AutoDriveTest();
     }
 
     /**
@@ -112,7 +114,8 @@ public class Robot extends IterativeRobot {
     public void autonomousInit() {
         // schedule the autonomous command (example)
         drivey.resetEncoders();
-        autonomousCommand = (Command) autoChooser.getSelected();
+//        autonomousCommand = (Command) autoChooser.getSelected();
+        autonomousCommand = new AutoDriveTest();
         autonomousCommand.start();
     }
 
@@ -126,6 +129,7 @@ public class Robot extends IterativeRobot {
     public void teleopInit() {
         drivey.resetEncoders();
         stacky.setClosedLoop(false);
+        autonomousCommand.cancel();
     }
 
     /**
@@ -134,10 +138,12 @@ public class Robot extends IterativeRobot {
     public void teleopPeriodic() {
         Scheduler.getInstance().run();
 
+        ///*/*/*//*/*/*/HACK
         drivey.resetPIDs();
+        ///*/*/*/*/*/*/*/*/*/*
         double theta = Math.atan2(oi.driver.getRawAxis(OI.GO), oi.driver.getRawAxis(OI.STRAFE));
         double radius = Math.hypot(oi.driver.getRawAxis(OI.GO), oi.driver.getRawAxis(OI.STRAFE));
-        double sqrRadius = Math.pow(radius, 1);
+        double sqrRadius = deadzone(Math.pow(radius, 1));
         drivey.drive(sqrRadius * Math.cos(theta) * RandomConstants.MAX_TRANS_SPEED, -1 * sqrRadius * Math.sin(theta) * RandomConstants.MAX_TRANS_SPEED, Math.pow(oi.driver.getRawAxis(OI.TURN), 1) * RandomConstants.MAX_ROT_SPEED);
 
 //        if (!(downAll.isRunning() || upOne.isRunning())) {
@@ -207,8 +213,8 @@ public class Robot extends IterativeRobot {
     }
 
     //*/*//*/*//*/*/*/*/*//*/*/Hck
-    public double deadband(double thing) {
-        return Math.abs(thing) < .1 ? 0 : thing;
+    public double deadzone(double thing) {
+        return Math.abs(thing) < RandomConstants.DEADZONE ? 0 : thing;
     }
     //*///*/**/**/*/*/*/*/*/
 }

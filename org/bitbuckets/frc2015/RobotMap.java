@@ -103,11 +103,11 @@ public class RobotMap {
     /**
      * The X coordinate of the front left wheel from the center of the robot in inches.
      */
-    public static final double WHEEL_FL_X = -10 / 12.0;
+    public static final double WHEEL_FL_X = -9.5 / 12.0;
     /**
      * The Y coordinate of the front left wheel from the center of the robot in inches.
      */
-    public static final double WHEEL_FL_Y = 14 / 12.0;
+    public static final double WHEEL_FL_Y = 12.5 / 12.0;
     /**
      * The angle of the front left wheel from top down positive X.
      */
@@ -116,11 +116,11 @@ public class RobotMap {
     /**
      * The X coordinate of the front right wheel from the center of the robot in inches.
      */
-    public static final double WHEEL_FR_X = 10 / 12.0;
+    public static final double WHEEL_FR_X = 9.5 / 12.0;
     /**
      * The Y coordinate of the front right wheel from the center of the robot in inches.
      */
-    public static final double WHEEL_FR_Y = 14 / 12.0;
+    public static final double WHEEL_FR_Y = 12.5 / 12.0;
     /**
      * The angle of the front right wheel from top down positive X.
      */
@@ -129,11 +129,11 @@ public class RobotMap {
     /**
      * The X coordinate of the rear left wheel from the center of the robot in inches.
      */
-    public static final double WHEEL_RL_X = -18 / 12.0;
+    public static final double WHEEL_RL_X = -9.5 / 12.0;
     /**
      * The Y coordinate of the rear left wheel from the center of the robot in inches.
      */
-    public static final double WHEEL_RL_Y = -14 / 12.0;
+    public static final double WHEEL_RL_Y = -12.5 / 12.0;
     /**
      * The angle of the rear left wheel from top down positive X.
      */
@@ -142,11 +142,11 @@ public class RobotMap {
     /**
      * The X coordinate of the rear right wheel from the center of the robot in inches.
      */
-    public static final double WHEEL_RR_X = 18 / 12.0;
+    public static final double WHEEL_RR_X = 9.5 / 12.0;
     /**
      * The Y coordinate of the rear right wheel from the center of the robot in inches.
      */
-    public static final double WHEEL_RR_Y = -14 / 12.0;
+    public static final double WHEEL_RR_Y = -12.5 / 12.0;
     /**
      * The angle of the rear right wheel from top down positive X.
      */

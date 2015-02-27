@@ -76,6 +76,7 @@ public class Drivey extends Subsystem {
         SmartDashboard.putNumber("KI", RandomConstants.DRIVE_KI);
         SmartDashboard.putNumber("KD", RandomConstants.DRIVE_KD);
         SmartDashboard.putNumber("KF", RandomConstants.DRIVE_KF);
+        SmartDashboard.putNumber("IZONE", RandomConstants.DRIVE_IZONE);
     }
 
     public void initDefaultCommand() {
@@ -91,10 +92,16 @@ public class Drivey extends Subsystem {
     }
 
     public void resetPIDs() {
-        flController.setPID(SmartDashboard.getNumber("KP"), SmartDashboard.getNumber("KI"), SmartDashboard.getNumber("KD"), SmartDashboard.getNumber("KF"), RandomConstants.DRIVE_IZONE, 0, 0);
-        frController.setPID(SmartDashboard.getNumber("KP"), SmartDashboard.getNumber("KI"), SmartDashboard.getNumber("KD"), SmartDashboard.getNumber("KF"), RandomConstants.DRIVE_IZONE, 0, 0);
-        rlController.setPID(SmartDashboard.getNumber("KP"), SmartDashboard.getNumber("KI"), SmartDashboard.getNumber("KD"), SmartDashboard.getNumber("KF"), RandomConstants.DRIVE_IZONE, 0, 0);
-        rrController.setPID(SmartDashboard.getNumber("KP"), SmartDashboard.getNumber("KI"), SmartDashboard.getNumber("KD"), SmartDashboard.getNumber("KF"), RandomConstants.DRIVE_IZONE, 0, 0);
+        flController.setPID(SmartDashboard.getNumber("KP"), SmartDashboard.getNumber("KI"), SmartDashboard.getNumber("KD"), SmartDashboard.getNumber("KF"), (int) SmartDashboard.getNumber("IZONE"), 0, 0);
+        frController.setPID(SmartDashboard.getNumber("KP"), SmartDashboard.getNumber("KI"), SmartDashboard.getNumber("KD"), SmartDashboard.getNumber("KF"), (int) SmartDashboard.getNumber("IZONE"), 0, 0);
+        rlController.setPID(SmartDashboard.getNumber("KP"), SmartDashboard.getNumber("KI"), SmartDashboard.getNumber("KD"), SmartDashboard.getNumber("KF"), (int) SmartDashboard.getNumber("IZONE"), 0, 0);
+        rrController.setPID(SmartDashboard.getNumber("KP"), SmartDashboard.getNumber("KI"), SmartDashboard.getNumber("KD"), SmartDashboard.getNumber("KF"), (int) SmartDashboard.getNumber("IZONE"), 0, 0);
+
+        SmartDashboard.putNumber("KP", flController.getP());
+        SmartDashboard.putNumber("KI", flController.getI());
+        SmartDashboard.putNumber("KD", flController.getD());
+        SmartDashboard.putNumber("KF", flController.getF());
+        SmartDashboard.putNumber("IZONE", flController.getIZone());
     }
 
     /**
@@ -134,10 +141,10 @@ public class Drivey extends Subsystem {
 //            RR = RR * kLimit;
 //        }
 
-        flController.set(FL * RandomConstants.ENC_TICK_PER_REV * RandomConstants.WHEEL_GEAR_RATIO / RandomConstants.WHEEL_CIRCUMFERENCE);
-        frController.set(FR * RandomConstants.ENC_TICK_PER_REV * RandomConstants.WHEEL_GEAR_RATIO / RandomConstants.WHEEL_CIRCUMFERENCE);
-        rlController.set(RL * RandomConstants.ENC_TICK_PER_REV * RandomConstants.WHEEL_GEAR_RATIO / RandomConstants.WHEEL_CIRCUMFERENCE);
-        rrController.set(RR * RandomConstants.ENC_TICK_PER_REV * RandomConstants.WHEEL_GEAR_RATIO / RandomConstants.WHEEL_CIRCUMFERENCE);
+        flController.set(FL * RandomConstants.ENC_TICK_PER_REV / RandomConstants.WHEEL_CIRCUMFERENCE * RandomConstants.FUDGE_FACTOR);
+        frController.set(FR * RandomConstants.ENC_TICK_PER_REV / RandomConstants.WHEEL_CIRCUMFERENCE * RandomConstants.FUDGE_FACTOR);
+        rlController.set(RL * RandomConstants.ENC_TICK_PER_REV / RandomConstants.WHEEL_CIRCUMFERENCE * RandomConstants.FUDGE_FACTOR);
+        rrController.set(RR * RandomConstants.ENC_TICK_PER_REV / RandomConstants.WHEEL_CIRCUMFERENCE * RandomConstants.FUDGE_FACTOR);
 
         try {
             csvWriterfrEnc.append("" + frController.getEncVelocity());
@@ -154,6 +161,11 @@ public class Drivey extends Subsystem {
         SmartDashboard.putNumber("FREnc", frController.getEncPosition());
         SmartDashboard.putNumber("RLEnc", rlController.getEncPosition());
         SmartDashboard.putNumber("RREnc", rrController.getEncPosition());
+
+        SmartDashboard.putNumber("FLEncVel", flController.getEncVelocity());
+        SmartDashboard.putNumber("FREncVel", frController.getEncVelocity());
+        SmartDashboard.putNumber("RLEncVel", rlController.getEncVelocity());
+        SmartDashboard.putNumber("RREncVel", rrController.getEncVelocity());
 
         SmartDashboard.putNumber("FL Speed", FL);
         SmartDashboard.putNumber("FR Speed", FR);
