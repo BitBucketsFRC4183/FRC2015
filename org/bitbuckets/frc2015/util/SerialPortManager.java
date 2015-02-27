@@ -1,12 +1,10 @@
 package org.bitbuckets.frc2015.util;
 
 import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.util.Arrays;
+import javax.xml.bind.DatatypeConverter;
 
 import org.bitbuckets.frc2015.RobotMap;
 
-import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.Gyro;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.SerialPort.Parity;
@@ -58,28 +56,45 @@ public final class SerialPortManager {
 	}
 	
 	/**
-	 * Currently implemented for an analogGyro
+	 * Currently implemented for an serialPort
+	 * 
+	 * Check units, currently returns degrees
 	 * 
 	 * @return
 	 */
 	public static double getHeading(){
+		
+//		sp.enableTermination('\n');
+//		String inputString = null;
+//		double heading = 0;
+//		double dt;
+//		double mo;
+//		
+//		while(sp.getBytesReceived() >= 62){
+//			inputString = sp.readString();
+//		}
+//		
+//	    // 34B048C0,6D8104BB,3735CDBE,F86EF7BB,9C02533D,85002141,4E20,0
+//		if (inputString != null && inputString.length() > 0) {
+//		   	String [] inputStringArr = inputString.split(",");
+//		   	// print(inputStringArr.length);
+//		   	if(inputStringArr.length == 9) {           // 8 elements min
+//		   		heading  = decodeFloat(inputStringArr[2]);
+//		   		dt       = ByteBuffer.wrap(DatatypeConverter.parseHexBinary(inputStringArr[6])).getDouble();
+//		   		mo       = Integer.parseInt(inputStringArr[7]);
+//		   	}
+//		}
+		
 		double heading = analogGyro.getAngle() % 360;
-		//byte[] out = sp.read(sp.getBytesReceived());
+		    
 		return heading;
 	}
-	
-	/**
-	 * Converts an angle in degrees to an angle in radians.
-	 * 
-	 * @param degrees
-	 * @return
-	 */
-	public static double degreesToRadians(double degrees){
-		if(Math.abs(degrees) >= 360){
-			degrees %= 360;
-		}
-		return degrees * Math.PI / 180;
+
+	private static double decodeFloat(String stringHex) {
+		byte [] inData = new byte[4];
+		inData = DatatypeConverter.parseHexBinary(stringHex);
+		      
+		return ByteBuffer.wrap(inData).getDouble();
 	}
-	
-	
+
 }

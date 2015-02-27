@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import org.bitbuckets.frc2015.autonomous.ThreeTotePickupAutoMode;
 import org.bitbuckets.frc2015.command.*;
 import org.bitbuckets.frc2015.subsystems.Drivey;
 import org.bitbuckets.frc2015.subsystems.Grabby;
@@ -114,7 +115,8 @@ public class Robot extends IterativeRobot {
         // schedule the autonomous command (example)
         drivey.resetEncoders();
         SerialPortManager.analogGyro.reset();
-        autonomousCommand = (Command) autoChooser.getSelected();
+        //autonomousCommand = (Command) autoChooser.getSelected();
+        autonomousCommand = (Command) new ThreeTotePickupAutoMode();
         autonomousCommand.start();
     }
 
