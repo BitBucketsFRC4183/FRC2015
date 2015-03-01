@@ -11,7 +11,7 @@ public class DriveToAutoZone extends CommandGroup {
     
     public  DriveToAutoZone() {
     	
-    	addSequential(new DrivePolar(3, 0));
+    	addSequential(new DrivePolar(5, 0));
     	
         // Add Commands here:
         // e.g. addSequential(new Command1());
