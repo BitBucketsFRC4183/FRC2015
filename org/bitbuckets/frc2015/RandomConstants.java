@@ -6,6 +6,12 @@ public class RandomConstants {
      * Encoder ticks per revolution of a motor shaft
      */
     public static final double ENC_TICK_PER_REV = 1024.;
+    
+    /**
+     * Default settle time for autonomous driving, in milliseconds.
+     */
+    public static final int DEFAULT_SETTLE_TIME = 200;
+
 
     /**
      * The gear ratio of the gearbox between the encoder and the wheel in a wheel module.
@@ -72,11 +78,11 @@ public class RandomConstants {
     /**
      *
      */
-    public static final double DRIVE_KP = .05;
-    public static final double DRIVE_KI = 0;
-    public static final double DRIVE_KD = 0;
+    public static final double DRIVE_KP = 0.2;
+    public static final double DRIVE_KI = 0.01;
+    public static final double DRIVE_KD = 0.01;
     public static final double DRIVE_KF = 0.01;
-    public static final int DRIVE_IZONE = 300000;
+    public static final int DRIVE_IZONE = 50;
 
     public static final double STACKY_KP = .3;
     public static final double STACKY_KI = 0;

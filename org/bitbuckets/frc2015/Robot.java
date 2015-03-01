@@ -1,5 +1,6 @@
 package org.bitbuckets.frc2015;
 
+import edu.wpi.first.wpilibj.CANTalon.ControlMode;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
@@ -9,7 +10,7 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import org.bitbuckets.frc2015.autonomous.ThreeTotePickupAutoMode;
+import org.bitbuckets.frc2015.autonomous.AutoDriveTest;
 import org.bitbuckets.frc2015.command.*;
 import org.bitbuckets.frc2015.subsystems.Drivey;
 import org.bitbuckets.frc2015.subsystems.Grabby;
@@ -43,7 +44,7 @@ public class Robot extends IterativeRobot {
     private StackyUp upOne;
     private StackyDown downOne;
     private StackyDownAll downAll;
-
+    
 
     /**
      * This function is run when the robot is first started up and should be
@@ -114,9 +115,12 @@ public class Robot extends IterativeRobot {
     public void autonomousInit() {
         // schedule the autonomous command (example)
         drivey.resetEncoders();
+        
+        drivey.setEncoderSetting(ControlMode.Position);
+        
         SerialPortManager.analogGyro.reset();
         //autonomousCommand = (Command) autoChooser.getSelected();
-        autonomousCommand = (Command) new ThreeTotePickupAutoMode();
+        autonomousCommand = (Command) new AutoDriveTest();
         autonomousCommand.start();
     }
 
@@ -129,6 +133,7 @@ public class Robot extends IterativeRobot {
 
     public void teleopInit() {
         drivey.resetEncoders();
+        drivey.setEncoderSetting(ControlMode.Speed);
         stacky.setClosedLoop(false);
         SerialPortManager.analogGyro.reset();
     }
@@ -192,7 +197,7 @@ public class Robot extends IterativeRobot {
             upOne.start();
         }
         //*/*////*/*/*///
-
+        
         ////*/*//*/*//***/*/*//HACK
         stacky.printStuff();
         ///*/***/*/*/*/*/
@@ -203,7 +208,6 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putBoolean("Reed Above", stacky.getReedAbove());
         SmartDashboard.putBoolean("Reed Below", stacky.getReedBelow());
         SmartDashboard.putNumber("Gyro heading", SerialPortManager.getHeading());
-        SmartDashboard.putNumber("Gyro Angular Velocity", SerialPortManager.getAngularVel());    
     }
 
     /**

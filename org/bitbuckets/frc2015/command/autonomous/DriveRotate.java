@@ -56,11 +56,12 @@ public class DriveRotate extends Command {
      * Called repeatedly when this Command is scheduled to run.
      */
     protected void execute() {
-    	angVel = profiler.getNextVel(SerialPortManager.getHeading());
-
+    	theta = profiler.getTargetPosition();
+    	
         SmartDashboard.putNumber("Autonomous omega", angVel);
         //SmartDashboard.putNumber("Autonomous theta", theta);
 
+        //TODO this is wrong
         Robot.drivey.drive(0, 0, angVel);
     }
 
@@ -68,7 +69,7 @@ public class DriveRotate extends Command {
      * Make this return true when this Command no longer needs to run <code>execute()</code>.
      */
     protected boolean isFinished() {
-        return profiler.isFinished();
+        return System.currentTimeMillis() - 500 > profiler.getFinishTime();
     }
 
     /**

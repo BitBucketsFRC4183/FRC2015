@@ -1,11 +1,13 @@
 package org.bitbuckets.frc2015.util;
 
 import java.nio.ByteBuffer;
+
 import javax.xml.bind.DatatypeConverter;
 
 import org.bitbuckets.frc2015.RobotMap;
 
 import edu.wpi.first.wpilibj.Gyro;
+import edu.wpi.first.wpilibj.PIDSource.PIDSourceParameter;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.SerialPort.Parity;
 import edu.wpi.first.wpilibj.SerialPort.StopBits;
@@ -28,6 +30,7 @@ public final class SerialPortManager {
 		//sp = new SerialPort(115200, SerialPort.Port.kUSB, 8, Parity.kNone, StopBits.kOne);
 		analogGyro = new Gyro(RobotMap.ANALOG_GYRO);
 		analogGyro.initGyro();
+		analogGyro.setPIDSourceParameter(PIDSourceParameter.kAngle);
 	}
 	
 	//TODO units
@@ -52,7 +55,7 @@ public final class SerialPortManager {
 	 * @return
 	 */
 	public static double getCorrectionHeading(double intendedHeading){
-		return intendedHeading - getHeading();
+		return (intendedHeading - getHeading())*Math.PI/180;
 	}
 	
 	/**
@@ -91,10 +94,10 @@ public final class SerialPortManager {
 	}
 
 	private static double decodeFloat(String stringHex) {
-		byte [] inData = new byte[4];
-		inData = DatatypeConverter.parseHexBinary(stringHex);
-		      
-		return ByteBuffer.wrap(inData).getDouble();
+		Long l = Long.parseLong(stringHex, 16);
+		float f = Float.intBitsToFloat(l.intValue());
+		double d = f;
+		return d;
 	}
 
 }
