@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.bitbuckets.frc2015.RandomConstants;
 import org.bitbuckets.frc2015.RobotMap;
 import org.bitbuckets.frc2015.util.EmptyPIDOutput;
+import org.bitbuckets.frc2015.util.EmptyPIDSource;
 import org.bitbuckets.frc2015.util.SerialPortManager;
 
 import java.io.FileWriter;
@@ -28,6 +29,7 @@ public class Drivey extends Subsystem {
     private CANTalon rrController;
     
     public PIDController headingController;
+    public EmptyPIDSource serialGyroSource;
     public EmptyPIDOutput headingOut;
 
     private FileWriter csvWriterfrEnc;
@@ -53,6 +55,8 @@ public class Drivey extends Subsystem {
         }
         
         //If changed to serial port gyro/accel/magnetometer, you need to setup an EmptyPIDSource for it
+        serialGyroSource = new EmptyPIDSource();
+        headingOut = new EmptyPIDOutput();
         headingController = new PIDController(0.3, 0.001, 0, 0, SerialPortManager.analogGyro, headingOut, 20);
 
         FL = 0;

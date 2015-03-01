@@ -10,7 +10,7 @@ public class RandomConstants {
     /**
      * Default settle time for autonomous driving, in milliseconds.
      */
-    public static final int DEFAULT_SETTLE_TIME = 200;
+    public static final int DEFAULT_SETTLE_TIME = 150;
 
     /**
      * 

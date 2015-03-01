@@ -1,18 +1,17 @@
 package org.bitbuckets.frc2015.autonomous;
 
-import org.bitbuckets.frc2015.command.autonomous.DriveRectangular;
+import org.bitbuckets.frc2015.command.autonomous.DrivePolar;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
 /**
  *
  */
-public class WheelTest extends CommandGroup {
+public class DriveToAutoZone extends CommandGroup {
     
-    public  WheelTest() {
+    public  DriveToAutoZone() {
     	
-    	addSequential(new DriveRectangular(-5.0, 0.0));
-    	
+    	addSequential(new DrivePolar(3, 0));
     	
         // Add Commands here:
         // e.g. addSequential(new Command1());

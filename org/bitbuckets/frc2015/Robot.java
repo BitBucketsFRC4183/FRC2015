@@ -10,7 +10,10 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import org.bitbuckets.frc2015.autonomous.AutoCanMove;
 import org.bitbuckets.frc2015.autonomous.AutoDriveTest;
+import org.bitbuckets.frc2015.autonomous.DriveToAutoZone;
+import org.bitbuckets.frc2015.autonomous.ThreeTotePickupAutoMode;
 import org.bitbuckets.frc2015.command.*;
 import org.bitbuckets.frc2015.subsystems.Drivey;
 import org.bitbuckets.frc2015.subsystems.Grabby;
@@ -101,7 +104,12 @@ public class Robot extends IterativeRobot {
 //        oi.operatorToteDownAll.whenPressed(downAll);
 //        oi.operatorTiltUp.whenPressed(tiltUp);
 //        oi.operatorTiltDown.whenPressed(tiltDown);
-        autonomousCommand = new AutoDriveTest();
+        
+        //autonomousCommand = new AutoDriveTest();
+        autoChooser.addDefault("Three Tote",  new ThreeTotePickupAutoMode());
+        autoChooser.addObject("Drive to AutoZone", new DriveToAutoZone());
+        autoChooser.addObject("Drive Test", new AutoDriveTest());
+        autoChooser.addObject("Take Can", new AutoCanMove());
     }
 
     /**
@@ -121,8 +129,9 @@ public class Robot extends IterativeRobot {
         drivey.resetEncoders();
         drivey.setEncoderSetting(ControlMode.Position);
         SerialPortManager.analogGyro.reset();
-        //autonomousCommand = (Command) autoChooser.getSelected();
-        autonomousCommand = (Command) new AutoDriveTest();
+        
+        autonomousCommand = (Command) autoChooser.getSelected();
+        //autonomousCommand = (Command) new AutoDriveTest();
         autonomousCommand.start();
     }
 
