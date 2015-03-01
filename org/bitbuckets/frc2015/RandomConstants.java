@@ -6,7 +6,15 @@ public class RandomConstants {
      * The gear ratio of the gearbox between the encoder and the wheel in a wheel module.
      */
     public static final double WHEEL_GEAR_RATIO = 70. / 24.;
+    
+    /**
+     * Default settle time for autonomous driving, in milliseconds.
+     */
+    public static final int DEFAULT_SETTLE_TIME = 200;
 
+    /**
+     * 
+     */
     public static final double FUDGE_FACTOR = 1;
     /**
      * Encoder ticks per revolution of a motor shaft

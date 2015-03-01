@@ -1,5 +1,6 @@
 package org.bitbuckets.frc2015;
 
+import edu.wpi.first.wpilibj.CANTalon.ControlMode;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
@@ -8,12 +9,14 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import org.bitbuckets.frc2015.autonomous.AutoDriveTest;
 import org.bitbuckets.frc2015.command.*;
 import org.bitbuckets.frc2015.subsystems.Drivey;
 import org.bitbuckets.frc2015.subsystems.Grabby;
 import org.bitbuckets.frc2015.subsystems.Stacky;
 import org.bitbuckets.frc2015.subsystems.Tilty;
+import org.bitbuckets.frc2015.util.SerialPortManager;
 
 
 /**
@@ -41,7 +44,7 @@ public class Robot extends IterativeRobot {
     private StackyUp upOne;
     private StackyDown downOne;
     private StackyDownAll downAll;
-
+    
 
     /**
      * This function is run when the robot is first started up and should be
@@ -53,6 +56,8 @@ public class Robot extends IterativeRobot {
         grabby = new Grabby();
         stacky = new Stacky();
         tilty = new Tilty();
+        
+        SerialPortManager.init();
 
         pdp = new PowerDistributionPanel();
         compressor = new Compressor(0);
@@ -114,8 +119,10 @@ public class Robot extends IterativeRobot {
     public void autonomousInit() {
         // schedule the autonomous command (example)
         drivey.resetEncoders();
-//        autonomousCommand = (Command) autoChooser.getSelected();
-        autonomousCommand = new AutoDriveTest();
+        drivey.setEncoderSetting(ControlMode.Position);
+        SerialPortManager.analogGyro.reset();
+        //autonomousCommand = (Command) autoChooser.getSelected();
+        autonomousCommand = (Command) new AutoDriveTest();
         autonomousCommand.start();
     }
 
@@ -128,8 +135,10 @@ public class Robot extends IterativeRobot {
 
     public void teleopInit() {
         drivey.resetEncoders();
+        drivey.setEncoderSetting(ControlMode.Speed);
         stacky.setClosedLoop(false);
         autonomousCommand.cancel();
+        SerialPortManager.analogGyro.reset();
     }
 
     /**
@@ -185,7 +194,7 @@ public class Robot extends IterativeRobot {
             upOne.start();
         }
         //*/*////*/*/*///
-
+        
         ////*/*//*/*//***/*/*//HACK
         stacky.printStuff();
         ///*/***/*/*/*/*/
@@ -195,6 +204,7 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putBoolean("Limit Bottom", stacky.getLimitBottom());
         SmartDashboard.putBoolean("Reed Above", stacky.getReedAbove());
         SmartDashboard.putBoolean("Reed Below", stacky.getReedBelow());
+        SmartDashboard.putNumber("Gyro heading", SerialPortManager.getHeading());
     }
 
     /**

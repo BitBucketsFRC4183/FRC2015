@@ -2,9 +2,12 @@ package org.bitbuckets.frc2015.command.autonomous;
 
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import org.bitbuckets.frc2015.RandomConstants;
 import org.bitbuckets.frc2015.Robot;
-import org.bitbuckets.frc2015.control.TrapezoidalMotionProfiler;
+import org.bitbuckets.frc2015.RobotMap;
+import org.bitbuckets.frc2015.control.PositionMotionProfiler;
+import org.bitbuckets.frc2015.util.SerialPortManager;
 
 /**
  * This {@link edu.wpi.first.wpilibj.command.Command} tells the robot to move a radius at angle theta.
@@ -14,8 +17,10 @@ import org.bitbuckets.frc2015.control.TrapezoidalMotionProfiler;
 public class DrivePolar extends Command {
     private double distance;
     private double theta;
-    private TrapezoidalMotionProfiler profiler;
-    private long time;
+    private double initHeading;
+    private double correctionHeading;
+    private double feetPerEncTick;
+    private PositionMotionProfiler profiler;
 
     /**
      * Calls the main constructor with the max velocity of the robot as the max velocity of this command.
@@ -44,34 +49,42 @@ public class DrivePolar extends Command {
             SmartDashboard.putString("Maximum tran speed", "is too high");
         }
 
-        profiler = new TrapezoidalMotionProfiler(radius, maxVel, RandomConstants.MAX_TRANS_ACCEL);
+        profiler = new PositionMotionProfiler(radius, maxVel, RandomConstants.MAX_TRANS_ACCEL, 150);
         theta = angle;
         distance = 0;
+        feetPerEncTick = RandomConstants.WHEEL_CIRCUMFERENCE / RandomConstants.ENC_TICK_PER_REV;
     }
 
     /**
      * Initializes the time and starts the profiler.
      */
     protected void initialize() {
+    	initHeading = SerialPortManager.getHeading();
+    	Robot.drivey.headingController.setSetpoint(initHeading);
         profiler.start();
-        time = System.currentTimeMillis();
     }
 
     /**
-     * Called repeatedly when this Command is scheduled to run. Calculates the velocity from the profiler, updates the
-     * position, and calls the robots <code>drive()</code> method.
+     * Called repeatedly when this Command is scheduled to run. Uses a position motion profile and calculates the desired encoder position on each wheel.
      */
     protected void execute() {
-        double velocity = profiler.update(distance);
-
-        distance += velocity * (System.currentTimeMillis() - time) / 1000;
-
-        SmartDashboard.putNumber("Autonomous velocity", velocity);
+    	distance = profiler.getTargetPosition();
+        correctionHeading = Robot.drivey.headingOut.getIn();
+        
+        
+        
+        //SmartDashboard.putNumber("Autonomous velocity", velocity);
         SmartDashboard.putNumber("Autonomous position", distance);
+        
+        double targetX = distance * Math.cos(theta);
+        double targetY = distance * Math.sin(theta);
+        
+        Robot.drivey.setControllers(Robot.drivey.getWheelSpeed(RobotMap.CENTER_X, RobotMap.CENTER_Y, RobotMap.WHEEL_FL_X, RobotMap.WHEEL_FL_Y, RobotMap.WHEEL_FL_THETA, targetX, targetY, correctionHeading) * feetPerEncTick,
+        							Robot.drivey.getWheelSpeed(RobotMap.CENTER_X, RobotMap.CENTER_Y, RobotMap.WHEEL_FR_X, RobotMap.WHEEL_FR_Y, RobotMap.WHEEL_FR_THETA, targetX, targetY, correctionHeading) * feetPerEncTick,
+        							Robot.drivey.getWheelSpeed(RobotMap.CENTER_X, RobotMap.CENTER_Y, RobotMap.WHEEL_RL_X, RobotMap.WHEEL_RL_Y, RobotMap.WHEEL_RL_THETA, targetX, targetY, correctionHeading) * feetPerEncTick,
+        							Robot.drivey.getWheelSpeed(RobotMap.CENTER_X, RobotMap.CENTER_Y, RobotMap.WHEEL_RR_X, RobotMap.WHEEL_RR_Y, RobotMap.WHEEL_RR_THETA, targetX, targetY, correctionHeading) * feetPerEncTick);
 
-        Robot.drivey.drive(velocity * Math.cos(theta), velocity * Math.sin(theta), 0);
-
-        time = System.currentTimeMillis();
+        //Robot.drivey.drive(velocity * Math.cos(theta), velocity * Math.sin(theta), correctionHeading);
     }
 
     /**
@@ -80,7 +93,7 @@ public class DrivePolar extends Command {
      * @return Whether the profiler is finished.
      */
     protected boolean isFinished() {
-        return profiler.getFinished();
+    	return System.currentTimeMillis() > profiler.getFinishTime();
     }
 
     /**

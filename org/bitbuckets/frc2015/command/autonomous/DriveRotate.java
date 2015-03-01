@@ -2,9 +2,11 @@ package org.bitbuckets.frc2015.command.autonomous;
 
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import org.bitbuckets.frc2015.RandomConstants;
 import org.bitbuckets.frc2015.Robot;
-import org.bitbuckets.frc2015.control.TrapezoidalMotionProfiler;
+import org.bitbuckets.frc2015.control.PositionMotionProfiler;
+import org.bitbuckets.frc2015.util.SerialPortManager;
 //TODO Fix Javadocs
 
 /**
@@ -12,9 +14,8 @@ import org.bitbuckets.frc2015.control.TrapezoidalMotionProfiler;
  */
 public class DriveRotate extends Command {
     private double theta;
-    private TrapezoidalMotionProfiler profiler;
-    private long time;
-
+    private double angVel;
+    private PositionMotionProfiler profiler;
     /**
      * Calls the main constructor with the max rotational velocity of the robot as the max velocity of this command.
      *
@@ -40,7 +41,7 @@ public class DriveRotate extends Command {
             SmartDashboard.putString("Maximum rot speed", "is too high");
         }
 
-        profiler = new TrapezoidalMotionProfiler(angle, maxVel, RandomConstants.MAX_ROT_ACCEL);
+        profiler = new PositionMotionProfiler(angle, maxVel, RandomConstants.MAX_ROT_ACCEL);
         theta = 0;
     }
 
@@ -49,30 +50,26 @@ public class DriveRotate extends Command {
      */
     protected void initialize() {
         profiler.start();
-        time = System.currentTimeMillis();
     }
 
     /**
      * Called repeatedly when this Command is scheduled to run.
      */
     protected void execute() {
-        double omega = profiler.update(theta);
+    	theta = profiler.getTargetPosition();
+    	
+        SmartDashboard.putNumber("Autonomous omega", angVel);
+        //SmartDashboard.putNumber("Autonomous theta", theta);
 
-        theta += omega * (System.currentTimeMillis() - time) / 1000;
-
-        SmartDashboard.putNumber("Autonomous omega", omega);
-        SmartDashboard.putNumber("Autonomous theta", theta);
-
-        Robot.drivey.drive(0, 0, omega);
-
-        time = System.currentTimeMillis();
+        //TODO this is wrong
+        Robot.drivey.drive(0, 0, angVel);
     }
 
     /**
      * Make this return true when this Command no longer needs to run <code>execute()</code>.
      */
     protected boolean isFinished() {
-        return profiler.getFinished();
+        return System.currentTimeMillis() - 500 > profiler.getFinishTime();
     }
 
     /**

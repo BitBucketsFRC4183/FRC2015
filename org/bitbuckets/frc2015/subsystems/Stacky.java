@@ -11,6 +11,12 @@ import org.bitbuckets.frc2015.RobotMap;
  *
  */
 public class Stacky extends Subsystem {
+	
+	/**
+	 * This hack is for the StackyAutomatic command
+	 */
+    public static boolean automaticStacky = false;
+    
     /**
      * The CANTalon that controls the elevator winch
      */

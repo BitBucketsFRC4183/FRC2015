@@ -1,10 +1,14 @@
 package org.bitbuckets.frc2015.subsystems;
 
 import edu.wpi.first.wpilibj.CANTalon;
+import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import org.bitbuckets.frc2015.RandomConstants;
 import org.bitbuckets.frc2015.RobotMap;
+import org.bitbuckets.frc2015.util.EmptyPIDOutput;
+import org.bitbuckets.frc2015.util.SerialPortManager;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -22,6 +26,9 @@ public class Drivey extends Subsystem {
     private CANTalon frController;
     private CANTalon rlController;
     private CANTalon rrController;
+    
+    public PIDController headingController;
+    public EmptyPIDOutput headingOut;
 
     private FileWriter csvWriterfrEnc;
     private FileWriter csvWriterflEnc;
@@ -44,6 +51,9 @@ public class Drivey extends Subsystem {
             csvWriterflEnc.append("time");
         } catch (IOException e) {
         }
+        
+        //If changed to serial port gyro/accel/magnetometer, you need to setup an EmptyPIDSource for it
+        headingController = new PIDController(0.3, 0.001, 0, 0, SerialPortManager.analogGyro, headingOut, 20);
 
         FL = 0;
         FR = 0;
@@ -113,7 +123,6 @@ public class Drivey extends Subsystem {
      * @param omega The intended rotation of the robot around the center of rotation.
      */
     public void drive(double vx, double vy, double omega) {
-
 
         //Gets the wheel speed
         FL = getWheelSpeed(RobotMap.CENTER_X, RobotMap.CENTER_Y, RobotMap.WHEEL_FL_X, RobotMap.WHEEL_FL_Y, RobotMap.WHEEL_FL_THETA, vx, vy, omega);
@@ -193,6 +202,20 @@ public class Drivey extends Subsystem {
         double vTan = Math.sqrt(Math.pow((xc - xw), 2) + Math.pow((yc - yw), 2)) * rotc;
         double thetaR = Math.atan2((yw - yc), (xw - xc));
         return vTan * Math.abs(Math.cos(theta - (thetaR + Math.PI / 2))) + vxc * Math.cos(theta) + vyc * Math.sin(theta);
+    }
+    
+    public void setEncoderSetting(CANTalon.ControlMode mode){
+    	flController.changeControlMode(mode);
+        frController.changeControlMode(mode);
+        rlController.changeControlMode(mode);
+        rrController.changeControlMode(mode);
+    }
+    
+    public void setControllers(double flSet, double frSet, double rlSet, double rrSet){
+    	flController.set(flSet);
+    	frController.set(frSet);
+    	rlController.set(rlSet);
+    	rrController.set(rrSet);
     }
 }
 
