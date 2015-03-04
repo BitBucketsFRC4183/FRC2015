@@ -3,6 +3,7 @@ package org.bitbuckets.frc2015.autonomous;
 import org.bitbuckets.frc2015.RandomConstants;
 import org.bitbuckets.frc2015.command.StackyAutomatic;
 import org.bitbuckets.frc2015.command.StackyDownAll;
+import org.bitbuckets.frc2015.command.StackyMoveDistance;
 import org.bitbuckets.frc2015.command.TiltDown;
 import org.bitbuckets.frc2015.command.TiltUp;
 import org.bitbuckets.frc2015.command.autonomous.DrivePolar;
@@ -36,10 +37,11 @@ public class ThreeTotePickupAutoMode extends CommandGroup {
     	addSequential(new DrivePolar(9, 0, RandomConstants.MAX_TRANS_SPEED));
     	//set down all totes
     	addSequential(new TiltDown());
-    	addSequential(new StackyDownAll());
+    	addSequential(new StackyMoveDistance(-0.5));
     	//drive backwards a little bit to not be touching the totes
     	addSequential(new DrivePolar(0.5, 180, RandomConstants.MAX_TRANS_SPEED));
     	addSequential(new TiltUp());
+    	addSequential(new StackyDownAll());
 
     	/*
     	 * Things that need to happen during this autonomous:

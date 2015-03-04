@@ -1,8 +1,5 @@
 package org.bitbuckets.frc2015.autonomous;
 
-import org.bitbuckets.frc2015.command.GrabbyClose;
-import org.bitbuckets.frc2015.command.GrabbyOpen;
-import org.bitbuckets.frc2015.command.Wait;
 import org.bitbuckets.frc2015.command.autonomous.DrivePolar;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
@@ -10,13 +7,12 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 /**
  *
  */
-public class AutoCanMove extends CommandGroup {
+public class AutoPushTote extends CommandGroup {
     
-    public  AutoCanMove() {
+    public  AutoPushTote() {
     	
-    	addSequential(new GrabbyClose());
-    	addSequential(new DrivePolar(6, 0));
-    	addSequential(new Wait(0.5));
+    	addSequential(new DrivePolar(9.0, 0));
+    	
         // Add Commands here:
         // e.g. addSequential(new Command1());
         //      addSequential(new Command2());
