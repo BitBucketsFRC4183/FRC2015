@@ -11,12 +11,12 @@ import org.bitbuckets.frc2015.RobotMap;
  *
  */
 public class Stacky extends Subsystem {
-	
-	/**
-	 * This hack is for the StackyAutomatic command
-	 */
+
+    /**
+     * This hack is for the StackyAutomatic command
+     */
     public static boolean automaticStacky = false;
-    
+
     /**
      * The CANTalon that controls the elevator winch
      */
@@ -85,7 +85,9 @@ public class Stacky extends Subsystem {
     public void setWinchMotor(double speed) {
         if (winch.getControlMode() == CANTalon.ControlMode.PercentVbus) {
             winch.set(speed);
-            SmartDashboard.putNumber("winch encoder", winch.getEncPosition());
+            if (RandomConstants.TESTING) {
+                SmartDashboard.putNumber("winch encoder", winch.getEncPosition());
+            }
         } else {
             SmartDashboard.putString("Uhh", "You tried to set open loop speed with closed loop control");
         }
@@ -158,9 +160,9 @@ public class Stacky extends Subsystem {
         return numUp;
     }
 
-    public void setNumUp(int up){
+    public void setNumUp(int up) {
         numUp = up;
-        if(numUp < 0){
+        if (numUp < 0) {
             numUp = 0;
         }
     }
@@ -179,10 +181,12 @@ public class Stacky extends Subsystem {
     }
 
     //*/*/*/*/*/*/*/*/*///*/****/HACK
-    public void printStuff(){
-        SmartDashboard.putNumber("Setpointwinch", winch.getSetpoint());
-        SmartDashboard.putBoolean("Buttons", getButtonsActive());
-        SmartDashboard.putNumber("PutNumUp", getNumUp());
+    public void printStuff() {
+        if (RandomConstants.TESTING) {
+            SmartDashboard.putNumber("Setpointwinch", winch.getSetpoint());
+            SmartDashboard.putBoolean("Buttons", getButtonsActive());
+            SmartDashboard.putNumber("PutNumUp", getNumUp());
+        }
     }
 }
 

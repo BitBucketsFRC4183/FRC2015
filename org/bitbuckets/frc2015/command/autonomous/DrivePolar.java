@@ -2,7 +2,6 @@ package org.bitbuckets.frc2015.command.autonomous;
 
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 import org.bitbuckets.frc2015.RandomConstants;
 import org.bitbuckets.frc2015.Robot;
 import org.bitbuckets.frc2015.RobotMap;
@@ -44,7 +43,7 @@ public class DrivePolar extends Command {
 
         maxVel = Math.abs(maxVel);
 
-        if(maxVel > RandomConstants.MAX_TRANS_SPEED){
+        if (maxVel > RandomConstants.MAX_TRANS_SPEED) {
             maxVel = RandomConstants.MAX_TRANS_SPEED;
             SmartDashboard.putString("Maximum tran speed", "is too high");
         }
@@ -59,8 +58,8 @@ public class DrivePolar extends Command {
      * Initializes the time and starts the profiler.
      */
     protected void initialize() {
-    	initHeading = SerialPortManager.getHeading();
-    	Robot.drivey.headingController.setSetpoint(initHeading);
+        initHeading = SerialPortManager.getHeading();
+        Robot.drivey.headingController.setSetpoint(initHeading);
         profiler.start();
     }
 
@@ -68,21 +67,21 @@ public class DrivePolar extends Command {
      * Called repeatedly when this Command is scheduled to run. Uses a position motion profile and calculates the desired encoder position on each wheel.
      */
     protected void execute() {
-    	distance = profiler.getTargetPosition();
+        distance = profiler.getTargetPosition();
         correctionHeading = Robot.drivey.headingOut.getIn();
-        
-        
-        
-        //SmartDashboard.putNumber("Autonomous velocity", velocity);
-        SmartDashboard.putNumber("Autonomous position", distance);
-        
+
+        if (RandomConstants.TESTING) {
+            //SmartDashboard.putNumber("Autonomous velocity", velocity);
+            SmartDashboard.putNumber("Autonomous position", distance);
+        }
+
         double targetX = distance * Math.cos(theta);
         double targetY = distance * Math.sin(theta);
-        
+
         Robot.drivey.setControllers(Robot.drivey.getWheelSpeed(RobotMap.CENTER_X, RobotMap.CENTER_Y, RobotMap.WHEEL_FL_X, RobotMap.WHEEL_FL_Y, RobotMap.WHEEL_FL_THETA, targetX, targetY, correctionHeading) * feetPerEncTick,
-        							Robot.drivey.getWheelSpeed(RobotMap.CENTER_X, RobotMap.CENTER_Y, RobotMap.WHEEL_FR_X, RobotMap.WHEEL_FR_Y, RobotMap.WHEEL_FR_THETA, targetX, targetY, correctionHeading) * feetPerEncTick,
-        							Robot.drivey.getWheelSpeed(RobotMap.CENTER_X, RobotMap.CENTER_Y, RobotMap.WHEEL_RL_X, RobotMap.WHEEL_RL_Y, RobotMap.WHEEL_RL_THETA, targetX, targetY, correctionHeading) * feetPerEncTick,
-        							Robot.drivey.getWheelSpeed(RobotMap.CENTER_X, RobotMap.CENTER_Y, RobotMap.WHEEL_RR_X, RobotMap.WHEEL_RR_Y, RobotMap.WHEEL_RR_THETA, targetX, targetY, correctionHeading) * feetPerEncTick);
+                Robot.drivey.getWheelSpeed(RobotMap.CENTER_X, RobotMap.CENTER_Y, RobotMap.WHEEL_FR_X, RobotMap.WHEEL_FR_Y, RobotMap.WHEEL_FR_THETA, targetX, targetY, correctionHeading) * feetPerEncTick,
+                Robot.drivey.getWheelSpeed(RobotMap.CENTER_X, RobotMap.CENTER_Y, RobotMap.WHEEL_RL_X, RobotMap.WHEEL_RL_Y, RobotMap.WHEEL_RL_THETA, targetX, targetY, correctionHeading) * feetPerEncTick,
+                Robot.drivey.getWheelSpeed(RobotMap.CENTER_X, RobotMap.CENTER_Y, RobotMap.WHEEL_RR_X, RobotMap.WHEEL_RR_Y, RobotMap.WHEEL_RR_THETA, targetX, targetY, correctionHeading) * feetPerEncTick);
 
         //Robot.drivey.drive(velocity * Math.cos(theta), velocity * Math.sin(theta), correctionHeading);
     }
@@ -93,7 +92,7 @@ public class DrivePolar extends Command {
      * @return Whether the profiler is finished.
      */
     protected boolean isFinished() {
-    	return System.currentTimeMillis() > profiler.getFinishTime();
+        return System.currentTimeMillis() > profiler.getFinishTime();
     }
 
     /**

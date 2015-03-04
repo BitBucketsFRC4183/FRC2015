@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 import org.bitbuckets.frc2015.autonomous.AutoCanMove;
 import org.bitbuckets.frc2015.autonomous.AutoDriveTest;
 import org.bitbuckets.frc2015.autonomous.DriveToAutoZone;
@@ -47,7 +46,7 @@ public class Robot extends IterativeRobot {
     private StackyUp upOne;
     private StackyDown downOne;
     private StackyDownAll downAll;
-    
+
 
     /**
      * This function is run when the robot is first started up and should be
@@ -59,13 +58,12 @@ public class Robot extends IterativeRobot {
         grabby = new Grabby();
         stacky = new Stacky();
         tilty = new Tilty();
-        
+
         SerialPortManager.init();
 
         pdp = new PowerDistributionPanel();
         compressor = new Compressor(0);
         compressor.setClosedLoopControl(true);
-        // instantiate the command used for the autonomous period
 
         GrabbyOpen grabbyOpen = new GrabbyOpen();
         GrabbyClose grabbyClose = new GrabbyClose();
@@ -76,8 +74,6 @@ public class Robot extends IterativeRobot {
         upOne = new StackyUp();
         downOne = new StackyDown();
         downAll = new StackyDownAll();
-
-        SmartDashboardInit();
 
         //FileManager.fetchFiles();
 
@@ -104,9 +100,9 @@ public class Robot extends IterativeRobot {
 //        oi.operatorToteDownAll.whenPressed(downAll);
 //        oi.operatorTiltUp.whenPressed(tiltUp);
 //        oi.operatorTiltDown.whenPressed(tiltDown);
-        
+
         //autonomousCommand = new AutoDriveTest();
-        autoChooser.addDefault("Three Tote",  new ThreeTotePickupAutoMode());
+        autoChooser.addDefault("Three Tote", new ThreeTotePickupAutoMode());
         autoChooser.addObject("Drive to AutoZone", new DriveToAutoZone());
         autoChooser.addObject("Drive Test", new AutoDriveTest());
         autoChooser.addObject("Take Can", new AutoCanMove());
@@ -129,7 +125,7 @@ public class Robot extends IterativeRobot {
         drivey.resetEncoders();
         drivey.setEncoderSetting(ControlMode.Position);
         SerialPortManager.analogGyro.reset();
-        
+
         autonomousCommand = (Command) autoChooser.getSelected();
         //autonomousCommand = (Command) new AutoDriveTest();
         autonomousCommand.start();
@@ -156,26 +152,19 @@ public class Robot extends IterativeRobot {
     public void teleopPeriodic() {
         Scheduler.getInstance().run();
 
-        ///*/*/*//*/*/*/HACK
-        drivey.resetPIDs();
-        ///*/*/*/*/*/*/*/*/*/*
+        if(RandomConstants.TESTING) {
+            drivey.resetPIDs();
+        }
+
+        ////////////////////////DRIVING//////////////////////////////
         double theta = Math.atan2(oi.driver.getRawAxis(OI.GO), oi.driver.getRawAxis(OI.STRAFE));
         double radius = Math.hypot(oi.driver.getRawAxis(OI.GO), oi.driver.getRawAxis(OI.STRAFE));
         double sqrRadius = deadzone(Math.pow(radius, 1));
         drivey.drive(sqrRadius * Math.cos(theta) * RandomConstants.MAX_TRANS_SPEED, -1 * sqrRadius * Math.sin(theta) * RandomConstants.MAX_TRANS_SPEED, Math.pow(oi.driver.getRawAxis(OI.TURN), 1) * RandomConstants.MAX_ROT_SPEED);
-
-//        if (!(downAll.isRunning() || upOne.isRunning())) {
-//            if (stacky.getLimitBottom()) {
-//                stacky.setWinchMotor(oi.driver.getRawAxis(3));
-//            } else if (stacky.getLimitTop()) {
-//                stacky.setWinchMotor(0 - oi.driver.getRawAxis(2));
-//            } else {
-//                stacky.setWinchMotor(oi.driver.getRawAxis(3) - oi.driver.getRawAxis(2));
-//            }
-//        }
+        /////////////////////////////////////////////////////////////
 
         //***/*//*/*//*/*/*HACK
-        if(!upOne.isRunning() && !downAll.isRunning() && !downOne.isRunning()) {
+        if (!upOne.isRunning() && !downAll.isRunning() && !downOne.isRunning()) {
             stacky.setWinchMotor(oi.operator.getRawAxis(3) - oi.operator.getRawAxis(4));
         }
         //**/*/**///*/*//*/*/*/*/*/*/*//*/*/*
@@ -183,37 +172,34 @@ public class Robot extends IterativeRobot {
         ///*/*/*///*/*/*/**/*/*/HACK
         grabby.setLifterMotor(-1 * oi.operator.getRawAxis(5));
 
-        if(oi.grabOpen.get()){
+        if (oi.grabOpen.get()) {
             grabby.setGrabMotor(.5);
-        }else if(oi.grabClose.get()){
+        } else if (oi.grabClose.get()) {
             grabby.setGrabMotor(-.5);
-        }else{
+        } else {
             grabby.setGrabMotor(0);
         }
         //*/*/*/**//*/*/*///*/*//*/*/*/*
-
-        //*/*/*/***//*/***/*/HACK
-
-//        Robot.stacky.setWinchPosition(Robot.stacky.getDistanceUp() * RandomConstants.ENC_TICK_PER_REV/ RandomConstants.STACKY_WINCH_DRUM_CIRCUMFERENCE);
-//        Robot.stacky.setWinchPosition(Robot.stacky.getDistanceUp() * RandomConstants.ENC_TICK_PER_REV/ RandomConstants.STACKY_WINCH_DRUM_CIRCUMFERENCE);
-        //*/**/*/*/*////*/*/**//*
 
         //***/*/*/*/*/*///*/*///HACK
         if (oi.operatorToteUp.get() && stacky.getButtonsActive() && !upOne.isRunning() && !downAll.isRunning() && !downOne.isRunning()) {
             upOne.start();
         }
         //*/*////*/*/*///
-        
-        ////*/*//*/*//***/*/*//HACK
-        stacky.printStuff();
-        ///*/***/*/*/*/*/
+
+        if(RandomConstants.TESTING) {
+            stacky.printStuff();
+        }
 
         SmartDashboard.putData(Scheduler.getInstance());
-        SmartDashboard.putBoolean("Limit Top", stacky.getLimitTop());
-        SmartDashboard.putBoolean("Limit Bottom", stacky.getLimitBottom());
-        SmartDashboard.putBoolean("Reed Above", stacky.getReedAbove());
-        SmartDashboard.putBoolean("Reed Below", stacky.getReedBelow());
-        SmartDashboard.putNumber("Gyro heading", SerialPortManager.getHeading());
+
+        if (RandomConstants.TESTING) {
+            SmartDashboard.putBoolean("Limit Top", stacky.getLimitTop());
+            SmartDashboard.putBoolean("Limit Bottom", stacky.getLimitBottom());
+            SmartDashboard.putBoolean("Reed Above", stacky.getReedAbove());
+            SmartDashboard.putBoolean("Reed Below", stacky.getReedBelow());
+            SmartDashboard.putNumber("Gyro heading", SerialPortManager.getHeading());
+        }
     }
 
     /**
@@ -221,14 +207,6 @@ public class Robot extends IterativeRobot {
      */
     public void testPeriodic() {
         LiveWindow.run();
-    }
-
-    public void SmartDashboardInit() {
-        SmartDashboard.putString("test", "This is a test!");
-        SmartDashboard.putData(Scheduler.getInstance());
-        //SmartDashboard.putNumber("Speed", drivey.getSpeed());
-        //SmartDashboard.putNumber("Tilty Angle", tilty.getAngle());
-        //SmartDashboard.put
     }
 
     //*/*//*/*//*/*/*/*/*//*/*/Hck

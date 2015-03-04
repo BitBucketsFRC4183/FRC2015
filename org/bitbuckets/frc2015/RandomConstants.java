@@ -64,6 +64,8 @@ public class RandomConstants {
     public static final double STACK_UP_TIMEOUT = 2;
     public static final double STACK_DOWN_TIMEOUT = 4;
 
+    public static final boolean TESTING = true;
+
     //////////////////////////GRABBY/////////////////////////////
     /**
      *

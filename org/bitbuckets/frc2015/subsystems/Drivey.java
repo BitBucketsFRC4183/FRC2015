@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 import org.bitbuckets.frc2015.RandomConstants;
 import org.bitbuckets.frc2015.RobotMap;
 import org.bitbuckets.frc2015.util.EmptyPIDOutput;
@@ -27,7 +26,7 @@ public class Drivey extends Subsystem {
     private CANTalon frController;
     private CANTalon rlController;
     private CANTalon rrController;
-    
+
     public PIDController headingController;
     public EmptyPIDSource serialGyroSource;
     public EmptyPIDOutput headingOut;
@@ -53,7 +52,7 @@ public class Drivey extends Subsystem {
             csvWriterflEnc.append("time");
         } catch (IOException e) {
         }
-        
+
         //If changed to serial port gyro/accel/magnetometer, you need to setup an EmptyPIDSource for it
         serialGyroSource = new EmptyPIDSource();
         headingOut = new EmptyPIDOutput();
@@ -86,11 +85,13 @@ public class Drivey extends Subsystem {
         rlController.reverseSensor(true);
         rrController.reverseSensor(true);
 
-        SmartDashboard.putNumber("KP", RandomConstants.DRIVE_KP);
-        SmartDashboard.putNumber("KI", RandomConstants.DRIVE_KI);
-        SmartDashboard.putNumber("KD", RandomConstants.DRIVE_KD);
-        SmartDashboard.putNumber("KF", RandomConstants.DRIVE_KF);
-        SmartDashboard.putNumber("IZONE", RandomConstants.DRIVE_IZONE);
+        if (RandomConstants.TESTING) {
+            SmartDashboard.putNumber("KP", RandomConstants.DRIVE_KP);
+            SmartDashboard.putNumber("KI", RandomConstants.DRIVE_KI);
+            SmartDashboard.putNumber("KD", RandomConstants.DRIVE_KD);
+            SmartDashboard.putNumber("KF", RandomConstants.DRIVE_KF);
+            SmartDashboard.putNumber("IZONE", RandomConstants.DRIVE_IZONE);
+        }
     }
 
     public void initDefaultCommand() {
@@ -170,20 +171,22 @@ public class Drivey extends Subsystem {
 
         }
 
-        SmartDashboard.putNumber("FLEnc", flController.getEncPosition());
-        SmartDashboard.putNumber("FREnc", frController.getEncPosition());
-        SmartDashboard.putNumber("RLEnc", rlController.getEncPosition());
-        SmartDashboard.putNumber("RREnc", rrController.getEncPosition());
+        if (RandomConstants.TESTING) {
+            SmartDashboard.putNumber("FLEnc", flController.getEncPosition());
+            SmartDashboard.putNumber("FREnc", frController.getEncPosition());
+            SmartDashboard.putNumber("RLEnc", rlController.getEncPosition());
+            SmartDashboard.putNumber("RREnc", rrController.getEncPosition());
 
-        SmartDashboard.putNumber("FLEncVel", flController.getEncVelocity());
-        SmartDashboard.putNumber("FREncVel", frController.getEncVelocity());
-        SmartDashboard.putNumber("RLEncVel", rlController.getEncVelocity());
-        SmartDashboard.putNumber("RREncVel", rrController.getEncVelocity());
+            SmartDashboard.putNumber("FLEncVel", flController.getEncVelocity());
+            SmartDashboard.putNumber("FREncVel", frController.getEncVelocity());
+            SmartDashboard.putNumber("RLEncVel", rlController.getEncVelocity());
+            SmartDashboard.putNumber("RREncVel", rrController.getEncVelocity());
 
-        SmartDashboard.putNumber("FL Speed", FL);
-        SmartDashboard.putNumber("FR Speed", FR);
-        SmartDashboard.putNumber("RL Speed", RL);
-        SmartDashboard.putNumber("RR Speed", RR);
+            SmartDashboard.putNumber("FL Speed", FL);
+            SmartDashboard.putNumber("FR Speed", FR);
+            SmartDashboard.putNumber("RL Speed", RL);
+            SmartDashboard.putNumber("RR Speed", RR);
+        }
     }
 
     /**
@@ -207,19 +210,19 @@ public class Drivey extends Subsystem {
         double thetaR = Math.atan2((yw - yc), (xw - xc));
         return vTan * Math.abs(Math.cos(theta - (thetaR + Math.PI / 2))) + vxc * Math.cos(theta) + vyc * Math.sin(theta);
     }
-    
-    public void setEncoderSetting(CANTalon.ControlMode mode){
-    	flController.changeControlMode(mode);
+
+    public void setEncoderSetting(CANTalon.ControlMode mode) {
+        flController.changeControlMode(mode);
         frController.changeControlMode(mode);
         rlController.changeControlMode(mode);
         rrController.changeControlMode(mode);
     }
-    
-    public void setControllers(double flSet, double frSet, double rlSet, double rrSet){
-    	flController.set(flSet);
-    	frController.set(frSet);
-    	rlController.set(rlSet);
-    	rrController.set(rrSet);
+
+    public void setControllers(double flSet, double frSet, double rlSet, double rrSet) {
+        flController.set(flSet);
+        frController.set(frSet);
+        rlController.set(rlSet);
+        rrController.set(rrSet);
     }
 }
 

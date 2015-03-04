@@ -44,14 +44,20 @@ public class StackyDown extends Command {
                 if (Robot.stacky.getReedAbove()) {
                     state = 2;
                 }
-                SmartDashboard.putNumber("Down State", 1);
+
+                if (RandomConstants.TESTING) {
+                    SmartDashboard.putNumber("Down State", 1);
+                }
                 break;
             case 2:
                 Robot.stacky.setWinchMotor(-1 * RandomConstants.CARRIAGE_FAST_SPEED);
                 if (Robot.stacky.getReedBelow()) {
                     state = 3;
                 }
-                SmartDashboard.putNumber("Down State", 2);
+
+                if (RandomConstants.TESTING) {
+                    SmartDashboard.putNumber("Down State", 2);
+                }
                 break;
             case 3:
                 Robot.stacky.setWinchMotor(-1 * RandomConstants.CARRIAGE_FAST_SPEED);
@@ -60,7 +66,10 @@ public class StackyDown extends Command {
                     Robot.stacky.downOne();
                     timeInit = System.currentTimeMillis();
                 }
-                SmartDashboard.putNumber("Down State", 3);
+
+                if (RandomConstants.TESTING) {
+                    SmartDashboard.putNumber("Down State", 3);
+                }
                 break;
             default:
                 break;

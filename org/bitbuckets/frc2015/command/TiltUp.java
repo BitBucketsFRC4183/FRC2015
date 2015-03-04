@@ -2,6 +2,7 @@ package org.bitbuckets.frc2015.command;
 
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.bitbuckets.frc2015.RandomConstants;
 import org.bitbuckets.frc2015.Robot;
 //TODO Fix Javadocs
 
@@ -21,7 +22,10 @@ public class TiltUp extends Command {
      */
     protected void initialize() {
         Robot.tilty.setTiltyUp(false);
-        SmartDashboard.putString("Tilty", "Up");
+
+        if (RandomConstants.TESTING) {
+            SmartDashboard.putString("Tilty", "Up");
+        }
     }
 
     /**

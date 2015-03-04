@@ -1,6 +1,7 @@
 package org.bitbuckets.frc2015.control;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.bitbuckets.frc2015.RandomConstants;
 
 /**
  * A motion profiler that creates a trapezoidal profile and updates the speed accordingly.
@@ -67,9 +68,11 @@ public class TrapezoidalMotionProfiler {
                     state = 3;
                     maxVel = speed;
                     timeInit = System.currentTimeMillis();
-                    SmartDashboard.putNumber("State2time", timeInit);
                 }
-                SmartDashboard.putNumber("State", 1);
+
+                if (RandomConstants.TESTING) {
+                    SmartDashboard.putNumber("Trapezoidal State", 1);
+                }
                 break;
             case 2:
                 speed = maxVel;
@@ -77,16 +80,21 @@ public class TrapezoidalMotionProfiler {
                 if (dist - pos <= (maxVel * maxVel) / (accel * 2)) {
                     state = 3;
                     timeInit = System.currentTimeMillis();
-                    SmartDashboard.putNumber("State3time", timeInit);
                 }
-                SmartDashboard.putNumber("State", 2);
+
+                if (RandomConstants.TESTING) {
+                    SmartDashboard.putNumber("Trapezoidal State", 2);
+                }
                 break;
             case 3:
                 speed = maxVel - accel * (System.currentTimeMillis() - timeInit) / 1000;
                 if (speed <= 0) {
                     state = 4;
                 }
-                SmartDashboard.putNumber("State", 3);
+
+                if (RandomConstants.TESTING) {
+                    SmartDashboard.putNumber("Trapezoidal State", 3);
+                }
                 break;
             case 4:
                 speed = 0;
