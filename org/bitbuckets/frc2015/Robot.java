@@ -46,6 +46,7 @@ public class Robot extends IterativeRobot {
     private StackyUp upOne;
     private StackyDown downOne;
     private StackyDownAll downAll;
+    private StackyMoveDistance downBit;
 
 
     /**
@@ -65,16 +66,32 @@ public class Robot extends IterativeRobot {
         compressor = new Compressor(0);
         compressor.setClosedLoopControl(true);
 
+        ///////////////////COMMANDS////////////////
+//        ChangeDriveMode driveMode = new ChangeDriveMode();
+
         GrabbyOpen grabbyOpen = new GrabbyOpen();
         GrabbyClose grabbyClose = new GrabbyClose();
+
         TiltUp tiltUp = new TiltUp();
         TiltDown tiltDown = new TiltDown();
-        ChangeDriveMode driveMode = new ChangeDriveMode();
 
         upOne = new StackyUp();
         downOne = new StackyDown();
         downAll = new StackyDownAll();
+        downBit = new StackyMoveDistance(-0.5);
 
+        ///////////////////ASSIGNMENTS/////////////
+        oi.operatorGrabOpen.whenPressed(grabbyOpen);
+        oi.operatorGrabClose.whenPressed(grabbyClose);
+
+        oi.operatorTiltUp.whenActive(tiltUp);
+        oi.operatorTiltDown.whenActive(tiltDown);
+
+//        oi.operatorToteUp.whenActive(upOne);
+        oi.operatorToteDown.whenActive(downOne);
+        oi.operatorToteDownAll.whenPressed(downAll);
+        oi.operatorToteDownBit.whenPressed(downBit);
+        ///////////////////////////////////////////
         //FileManager.fetchFiles();
 
         //ConstantsManager.fetchConstants();
@@ -83,29 +100,12 @@ public class Robot extends IterativeRobot {
         //TODO make some sort of tag at start of scripts required, so that auto scripts, constant files, etc. don't get confused
         //AutoProgramGenerator.generateAutoPrograms();
 
-        oi.tiltUp.whenActive(tiltUp);
-        oi.tiltDown.whenActive(tiltDown);
-        oi.changeControl.whenPressed(driveMode);
-//        oi.driverTriangBut.whenPressed(upOne);
-//        oi.driverXBut.whenPressed(downAll);
-//        oi.operatorTriangBut.whenPressed(upOne);
-        oi.operatorCircleBut.whenPressed(grabbyOpen);
-        oi.operatorSquareBut.whenPressed(grabbyClose);
-        oi.operatorXBut.whenPressed(new StackyMoveDistance(-0.5));
-
-        oi.operatorToteDown.whenActive(downOne);
-        oi.operatorToteDownAll.whenActive(downAll);
-
-//        oi.operatorToteDown.whenPressed(downOne);
-//        oi.operatorToteDownAll.whenPressed(downAll);
-//        oi.operatorTiltUp.whenPressed(tiltUp);
-//        oi.operatorTiltDown.whenPressed(tiltDown);
-
         //autonomousCommand = new AutoDriveTest();
         autoChooser.addDefault("Three Tote", new ThreeTotePickupAutoMode());
         autoChooser.addObject("Drive to AutoZone", new DriveToAutoZone());
         autoChooser.addObject("Drive Test", new AutoDriveTest());
         autoChooser.addObject("Take Can", new AutoCanMove());
+        SmartDashboard.putData("Auto Chooser", autoChooser);
     }
 
     /**
@@ -139,10 +139,13 @@ public class Robot extends IterativeRobot {
     }
 
     public void teleopInit() {
+        //Resets driving encoders to 0
         drivey.resetEncoders();
+        //Sets the ControlMode of the drive controllers
         drivey.setEncoderSetting(ControlMode.Speed);
-        stacky.setClosedLoop(false);
-        autonomousCommand.cancel();
+        if(autonomousCommand != null) {
+            autonomousCommand.cancel();
+        }
         SerialPortManager.analogGyro.reset();
     }
 
@@ -163,23 +166,7 @@ public class Robot extends IterativeRobot {
         drivey.drive(sqrRadius * Math.cos(theta) * RandomConstants.MAX_TRANS_SPEED, -1 * sqrRadius * Math.sin(theta) * RandomConstants.MAX_TRANS_SPEED, Math.pow(oi.driver.getRawAxis(OI.TURN), 1) * RandomConstants.MAX_ROT_SPEED);
         /////////////////////////////////////////////////////////////
 
-        //***/*//*/*//*/*/*HACK
-        if (!upOne.isRunning() && !downAll.isRunning() && !downOne.isRunning()) {
-            stacky.setWinchMotor(oi.operator.getRawAxis(3) - oi.operator.getRawAxis(4));
-        }
-        //**/*/**///*/*//*/*/*/*/*/*/*//*/*/*
-
-        ///*/*/*///*/*/*/**/*/*/HACK
-        grabby.setLifterMotor(-1 * oi.operator.getRawAxis(5));
-
-        if (oi.grabOpen.get()) {
-            grabby.setGrabMotor(.5);
-        } else if (oi.grabClose.get()) {
-            grabby.setGrabMotor(-.5);
-        } else {
-            grabby.setGrabMotor(0);
-        }
-        //*/*/*/**//*/*/*///*/*//*/*/*/*
+        grabby.setLifterMotor(-1 * oi.operator.getRawAxis(oi.LIFT) * RandomConstants.MAX_GRABBY_LIFTER_SPEED);
 
         //***/*/*/*/*/*///*/*///HACK
         if (oi.operatorToteUp.get() && stacky.getButtonsActive() && !upOne.isRunning() && !downAll.isRunning() && !downOne.isRunning()) {

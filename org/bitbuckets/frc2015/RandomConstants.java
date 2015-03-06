@@ -70,7 +70,7 @@ public class RandomConstants {
     /**
      *
      */
-    public static final double GRABBY_CURRRENT_MAX = 12;
+    public static final double GRABBY_CURRRENT_MAX = 8;
     /**
      *
      */

@@ -7,7 +7,7 @@ public class PositionMotionProfiler {
    private long initTime;
    private long prevTime;
    private long currTime;
-   private int settleTime;
+   private double settleTime;
    private double targetDist;
    private double maxVelocity;
    private double maxAcceleration;
@@ -23,7 +23,7 @@ public class PositionMotionProfiler {
        this(targetDist, maxVelocity, maxAcceleration, RandomConstants.DEFAULT_SETTLE_TIME);
    }
    
-   public PositionMotionProfiler(double targetDist, double maxVelocity, double maxAcceleration, int settleTime){
+   public PositionMotionProfiler(double targetDist, double maxVelocity, double maxAcceleration, double settleTime){
 	   this.targetDist = Math.abs(targetDist);
        this.maxVelocity = maxVelocity;
        this.maxAcceleration = maxAcceleration;
@@ -40,7 +40,7 @@ public class PositionMotionProfiler {
        expectedTime = triProfile
                ? 2 * Math.sqrt(targetDist/maxAcceleration)
                : accelDist*4 / maxVelocity + (targetDist - accelDist*2) / maxVelocity;
-       expectedTime += settleTime;
+       expectedTime += settleTime / 1000;
        System.out.println("Expected time: " + expectedTime);
    }
 

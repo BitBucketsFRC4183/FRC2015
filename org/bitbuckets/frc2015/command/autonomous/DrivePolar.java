@@ -1,5 +1,6 @@
 package org.bitbuckets.frc2015.command.autonomous;
 
+import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.bitbuckets.frc2015.RandomConstants;
@@ -48,7 +49,7 @@ public class DrivePolar extends Command {
             SmartDashboard.putString("Maximum tran speed", "is too high");
         }
 
-        profiler = new PositionMotionProfiler(radius, maxVel, RandomConstants.MAX_TRANS_ACCEL, 150);
+        profiler = new PositionMotionProfiler(radius, maxVel, RandomConstants.MAX_TRANS_ACCEL, .25);
         theta = angle;
         distance = 0;
         feetPerEncTick = RandomConstants.WHEEL_CIRCUMFERENCE / RandomConstants.ENC_TICK_PER_REV;
@@ -58,6 +59,7 @@ public class DrivePolar extends Command {
      * Initializes the time and starts the profiler.
      */
     protected void initialize() {
+        Robot.drivey.setEncoderSetting(CANTalon.ControlMode.Position);
         initHeading = SerialPortManager.getHeading();
         Robot.drivey.headingController.setSetpoint(initHeading);
         profiler.start();
@@ -70,18 +72,21 @@ public class DrivePolar extends Command {
         distance = profiler.getTargetPosition();
         correctionHeading = Robot.drivey.headingOut.getIn();
 
-        if (RandomConstants.TESTING) {
-            //SmartDashboard.putNumber("Autonomous velocity", velocity);
-            SmartDashboard.putNumber("Autonomous position", distance);
-        }
-
         double targetX = distance * Math.cos(theta);
         double targetY = distance * Math.sin(theta);
 
-        Robot.drivey.setControllers(Robot.drivey.getWheelSpeed(RobotMap.CENTER_X, RobotMap.CENTER_Y, RobotMap.WHEEL_FL_X, RobotMap.WHEEL_FL_Y, RobotMap.WHEEL_FL_THETA, targetX, targetY, correctionHeading) * feetPerEncTick,
-                Robot.drivey.getWheelSpeed(RobotMap.CENTER_X, RobotMap.CENTER_Y, RobotMap.WHEEL_FR_X, RobotMap.WHEEL_FR_Y, RobotMap.WHEEL_FR_THETA, targetX, targetY, correctionHeading) * feetPerEncTick,
-                Robot.drivey.getWheelSpeed(RobotMap.CENTER_X, RobotMap.CENTER_Y, RobotMap.WHEEL_RL_X, RobotMap.WHEEL_RL_Y, RobotMap.WHEEL_RL_THETA, targetX, targetY, correctionHeading) * feetPerEncTick,
-                Robot.drivey.getWheelSpeed(RobotMap.CENTER_X, RobotMap.CENTER_Y, RobotMap.WHEEL_RR_X, RobotMap.WHEEL_RR_Y, RobotMap.WHEEL_RR_THETA, targetX, targetY, correctionHeading) * feetPerEncTick);
+        if (RandomConstants.TESTING) {
+            //SmartDashboard.putNumber("Autonomous velocity", velocity);
+            SmartDashboard.putNumber("Autonomous position", distance);
+            System.out.println(Robot.drivey.getWheelSpeed(RobotMap.CENTER_X, RobotMap.CENTER_Y, RobotMap.WHEEL_FL_X, RobotMap.WHEEL_FL_Y, RobotMap.WHEEL_FL_THETA, targetX, targetY, correctionHeading) / feetPerEncTick);
+            System.out.println("Current time: " + System.currentTimeMillis() + "\tFinish time:" + profiler.getFinishTime());
+        }
+
+        Robot.drivey.setControllers(
+                Robot.drivey.getWheelSpeed(RobotMap.CENTER_X, RobotMap.CENTER_Y, RobotMap.WHEEL_FL_X, RobotMap.WHEEL_FL_Y, RobotMap.WHEEL_FL_THETA, targetX, targetY, correctionHeading) / feetPerEncTick,
+                Robot.drivey.getWheelSpeed(RobotMap.CENTER_X, RobotMap.CENTER_Y, RobotMap.WHEEL_FR_X, RobotMap.WHEEL_FR_Y, RobotMap.WHEEL_FR_THETA, targetX, targetY, correctionHeading) / feetPerEncTick,
+                Robot.drivey.getWheelSpeed(RobotMap.CENTER_X, RobotMap.CENTER_Y, RobotMap.WHEEL_RL_X, RobotMap.WHEEL_RL_Y, RobotMap.WHEEL_RL_THETA, targetX, targetY, correctionHeading) / feetPerEncTick,
+                Robot.drivey.getWheelSpeed(RobotMap.CENTER_X, RobotMap.CENTER_Y, RobotMap.WHEEL_RR_X, RobotMap.WHEEL_RR_Y, RobotMap.WHEEL_RR_THETA, targetX, targetY, correctionHeading) / feetPerEncTick);
 
         //Robot.drivey.drive(velocity * Math.cos(theta), velocity * Math.sin(theta), correctionHeading);
     }
@@ -99,6 +104,7 @@ public class DrivePolar extends Command {
      * Called once after <code>isFinished()</code> returns true. Stops the robot.
      */
     protected void end() {
+        Robot.drivey.setEncoderSetting(CANTalon.ControlMode.Speed);
         Robot.drivey.drive(0, 0, 0);
     }
 
@@ -106,6 +112,7 @@ public class DrivePolar extends Command {
      * Called when another command which requires one or more of the same subsystems is scheduled to run. Stops the robot.
      */
     protected void interrupted() {
+        Robot.drivey.setEncoderSetting(CANTalon.ControlMode.Speed);
         Robot.drivey.drive(0, 0, 0);
     }
 }

@@ -21,14 +21,13 @@ import edu.wpi.first.wpilibj.SerialPort.StopBits;
 public final class SerialPortManager {
 	
 	public static SerialPort sp;
-	public static Gyro analogGyro;
+	public static Gyro analogGyro = new Gyro(RobotMap.ANALOG_GYRO);
 	
 	private SerialPortManager(){
 	}
 
 	public static void init(){
 		//sp = new SerialPort(115200, SerialPort.Port.kUSB, 8, Parity.kNone, StopBits.kOne);
-		analogGyro = new Gyro(RobotMap.ANALOG_GYRO);
 		analogGyro.initGyro();
 		analogGyro.setPIDSourceParameter(PIDSourceParameter.kAngle);
 	}

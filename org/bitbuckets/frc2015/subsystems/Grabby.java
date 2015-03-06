@@ -2,6 +2,7 @@ package org.bitbuckets.frc2015.subsystems;
 
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.bitbuckets.frc2015.RandomConstants;
 import org.bitbuckets.frc2015.Robot;
 import org.bitbuckets.frc2015.RobotMap;
@@ -67,6 +68,9 @@ public class Grabby extends Subsystem {
      * @return If the current draw from the grab motor port is greater than the threshold.
      */
     public boolean getCurrentFinised(){
+        if(RandomConstants.TESTING){
+            SmartDashboard.putNumber("Current", Robot.pdp.getCurrent(RobotMap.GRABBER_MOTOR_CHANNEL));
+        }
         return Robot.pdp.getCurrent(RobotMap.GRABBER_MOTOR_CHANNEL) >= RandomConstants.GRABBY_CURRRENT_MAX;
     }
 
