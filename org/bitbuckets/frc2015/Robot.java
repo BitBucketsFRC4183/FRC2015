@@ -172,6 +172,9 @@ public class Robot extends IterativeRobot {
         if (oi.operatorToteUp.get() && stacky.getButtonsActive() && !upOne.isRunning() && !downAll.isRunning() && !downOne.isRunning()) {
             upOne.start();
         }
+        if (!upOne.isRunning() && !downAll.isRunning() && !downOne.isRunning()) {
+            stacky.setWinchMotor(oi.operator.getRawAxis(3) - oi.operator.getRawAxis(4));
+        }
         //*/*////*/*/*///
 
         if(RandomConstants.TESTING) {

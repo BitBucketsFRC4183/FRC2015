@@ -186,6 +186,8 @@ public class Stacky extends Subsystem {
             SmartDashboard.putNumber("Setpointwinch", winch.getSetpoint());
             SmartDashboard.putBoolean("Buttons", getButtonsActive());
             SmartDashboard.putNumber("PutNumUp", getNumUp());
+            SmartDashboard.putBoolean("Reed Above", getReedAbove());
+            SmartDashboard.putBoolean("Reed Below", getReedBelow());
         }
     }
 }

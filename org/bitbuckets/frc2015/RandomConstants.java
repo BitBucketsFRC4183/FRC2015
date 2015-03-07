@@ -53,7 +53,7 @@ public class RandomConstants {
     /**
      * The speed for the carriage while it is going fast.
      */
-    public static final double CARRIAGE_FAST_SPEED = .7;
+    public static final double CARRIAGE_FAST_SPEED = .5;
     /**
      * The speed for the carriage while it is going slowly.
      */
@@ -61,7 +61,7 @@ public class RandomConstants {
     /**
      *
      */
-    public static final double STACK_UP_TIMEOUT = 2;
+    public static final double STACK_UP_TIMEOUT = 1.5;
     public static final double STACK_DOWN_TIMEOUT = 4;
 
     public static final boolean TESTING = true;
