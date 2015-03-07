@@ -13,6 +13,7 @@ import org.bitbuckets.frc2015.autonomous.AutoCanMove;
 import org.bitbuckets.frc2015.autonomous.AutoDriveTest;
 import org.bitbuckets.frc2015.autonomous.DriveToAutoZone;
 import org.bitbuckets.frc2015.autonomous.ThreeTotePickupAutoMode;
+import org.bitbuckets.frc2015.autonomous.DefaultProgram;
 import org.bitbuckets.frc2015.command.*;
 import org.bitbuckets.frc2015.subsystems.Drivey;
 import org.bitbuckets.frc2015.subsystems.Grabby;
@@ -126,8 +127,9 @@ public class Robot extends IterativeRobot {
         drivey.setEncoderSetting(ControlMode.Position);
         SerialPortManager.analogGyro.reset();
 
-        autonomousCommand = (Command) autoChooser.getSelected();
+        //autonomousCommand = (Command) autoChooser.getSelected();
         //autonomousCommand = (Command) new AutoDriveTest();
+        autonomousCommand = (Command) new DefaultProgram();
         autonomousCommand.start();
     }
 

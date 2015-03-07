@@ -73,6 +73,9 @@ public class DigitalInputLatch implements Runnable {
 	 * Stops this DigitalInputLatch's thread and allows for a new thread to be created.
 	 */
 	public void stopThread(){
+		if(thread ==null){
+			return;
+		}
 		thread.interrupt();
 		thread = null;
 	}

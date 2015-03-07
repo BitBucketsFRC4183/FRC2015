@@ -64,8 +64,8 @@ public class Stacky extends Subsystem {
 
         reedAbove = new DigitalInput(RobotMap.HALL_ABOVE);
         reedBelow = new DigitalInput(RobotMap.HALL_BELOW);
-        reedAboveLatch = new DigitalInputLatch(reedAbove);
-        reedBelowLatch = new DigitalInputLatch(reedBelow);
+        reedAboveLatch = new DigitalInputLatch(reedAbove, 2L);
+        reedBelowLatch = new DigitalInputLatch(reedBelow, 2L);
 
 //        limitTop = new DigitalInput(RobotMap.SWITCH_TOP);
 //        limitBottom = new DigitalInput(RobotMap.SWITCH_BOTTOM);
