@@ -28,6 +28,8 @@ public class Grabby extends Subsystem {
 
         lifterController.setPID(RandomConstants.GRABBY_KP, RandomConstants.GRABBY_KI, RandomConstants.GRABBY_KD);
         lifterController.changeControlMode(CANTalon.ControlMode.Speed);
+        lifterController.enableForwardSoftLimit(true);
+        lifterController.enableReverseSoftLimit(true);
 
         open = new DigitalInput(RobotMap.GRABBY_OPEN);
     }
