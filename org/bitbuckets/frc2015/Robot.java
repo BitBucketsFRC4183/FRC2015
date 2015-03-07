@@ -166,7 +166,20 @@ public class Robot extends IterativeRobot {
         drivey.drive(sqrRadius * Math.cos(theta) * RandomConstants.MAX_TRANS_SPEED, -1 * sqrRadius * Math.sin(theta) * RandomConstants.MAX_TRANS_SPEED, Math.pow(oi.driver.getRawAxis(OI.TURN), 1) * RandomConstants.MAX_ROT_SPEED);
         /////////////////////////////////////////////////////////////
 
-        grabby.setLifterMotor(-1 * oi.operator.getRawAxis(oi.LIFT) * RandomConstants.MAX_GRABBY_LIFTER_SPEED);
+//        //moving -> not moving
+//        if(oi.operator.getRawAxis(OI.LIFT) == 0          &&   grabby.getLifterController().getControlMode() == ControlMode.Speed){
+//        	grabby.getLifterController().changeControlMode(ControlMode.Position);
+//        	grabby.getLifterController().set(grabby.getLifterController().get());
+//        //not moving -> moving
+//        } else if(oi.operator.getRawAxis(OI.LIFT) != 0   &&   grabby.getLifterController().getControlMode() == ControlMode.Position){
+//        	grabby.getLifterController().changeControlMode(ControlMode.Speed);
+//        	grabby.setLifterMotor(-1 * oi.operator.getRawAxis(OI.LIFT) * RandomConstants.MAX_GRABBY_LIFTER_SPEED);
+//        //moving
+//        } else if(oi.operator.getRawAxis(OI.LIFT) != 0){
+//        	grabby.setLifterMotor(-1 * oi.operator.getRawAxis(OI.LIFT) * RandomConstants.MAX_GRABBY_LIFTER_SPEED);
+//        //not moving
+//        } else{}
+    	grabby.setLifterMotor(-1 * oi.operator.getRawAxis(OI.LIFT) * RandomConstants.MAX_GRABBY_LIFTER_SPEED);
 
         //***/*/*/*/*/*///*/*///HACK
         if (oi.operatorToteUp.get() && stacky.getButtonsActive() && !upOne.isRunning() && !downAll.isRunning() && !downOne.isRunning()) {

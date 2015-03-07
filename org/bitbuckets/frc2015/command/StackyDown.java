@@ -25,6 +25,7 @@ public class StackyDown extends Command {
      */
     protected void initialize() {
         Robot.stacky.setClosedLoop(false);
+        Robot.stacky.startReedAbove(false);
         if (!Robot.stacky.getLimitBottom()) {
             state = 1;
         }
@@ -43,6 +44,7 @@ public class StackyDown extends Command {
                 Robot.stacky.setWinchMotor(-1 * RandomConstants.CARRIAGE_FAST_SPEED);
                 if (Robot.stacky.getReedAbove()) {
                     state = 2;
+                    Robot.stacky.startReedBelow(true);
                 }
 
                 if (RandomConstants.TESTING) {
@@ -53,6 +55,7 @@ public class StackyDown extends Command {
                 Robot.stacky.setWinchMotor(-1 * RandomConstants.CARRIAGE_FAST_SPEED);
                 if (Robot.stacky.getReedBelow()) {
                     state = 3;
+                    Robot.stacky.startReedAbove(false);
                 }
 
                 if (RandomConstants.TESTING) {
@@ -61,7 +64,7 @@ public class StackyDown extends Command {
                 break;
             case 3:
                 Robot.stacky.setWinchMotor(-1 * RandomConstants.CARRIAGE_FAST_SPEED);
-                if (!Robot.stacky.getReedAbove()) {
+                if (Robot.stacky.getReedAbove()) {
                     state = 4;
                     Robot.stacky.downOne();
                     timeInit = System.currentTimeMillis();
@@ -71,6 +74,7 @@ public class StackyDown extends Command {
                     SmartDashboard.putNumber("Down State", 3);
                 }
                 break;
+            case 4:
             default:
                 break;
         }
@@ -90,6 +94,8 @@ public class StackyDown extends Command {
         Robot.stacky.setClosedLoop(true);
         Robot.stacky.setWinchPosition(Robot.stacky.getDistanceUp() * RandomConstants.ENC_TICK_PER_REV / RandomConstants.STACKY_WINCH_DRUM_CIRCUMFERENCE);
         state = 0;
+        Robot.stacky.stopReedAbove();
+        Robot.stacky.stopReedBelow();
     }
 
     /**
@@ -98,5 +104,7 @@ public class StackyDown extends Command {
     protected void interrupted() {
         Robot.stacky.setWinchMotor(0);
         state = 0;
+        Robot.stacky.stopReedAbove();
+        Robot.stacky.stopReedBelow();
     }
 }

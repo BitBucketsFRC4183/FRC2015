@@ -4,8 +4,10 @@ import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import org.bitbuckets.frc2015.RandomConstants;
 import org.bitbuckets.frc2015.RobotMap;
+import org.bitbuckets.frc2015.control.DigitalInputLatch;
 
 /**
  *
@@ -26,10 +28,12 @@ public class Stacky extends Subsystem {
      * The upper control reed switch
      */
     private DigitalInput reedAbove;
+    private DigitalInputLatch reedAboveLatch;
     /**
      * The upper control reed switch
      */
     private DigitalInput reedBelow;
+    private DigitalInputLatch reedBelowLatch;
 
 //    private DigitalInput limitTop;
 //    private DigitalInput limitBottom;
@@ -60,6 +64,8 @@ public class Stacky extends Subsystem {
 
         reedAbove = new DigitalInput(RobotMap.HALL_ABOVE);
         reedBelow = new DigitalInput(RobotMap.HALL_BELOW);
+        reedAboveLatch = new DigitalInputLatch(reedAbove);
+        reedBelowLatch = new DigitalInputLatch(reedBelow);
 
 //        limitTop = new DigitalInput(RobotMap.SWITCH_TOP);
 //        limitBottom = new DigitalInput(RobotMap.SWITCH_BOTTOM);
@@ -114,13 +120,37 @@ public class Stacky extends Subsystem {
     public void setClosedLoop(boolean closed) {
         winch.changeControlMode(closed ? CANTalon.ControlMode.Position : CANTalon.ControlMode.PercentVbus);
     }
+    
+    public void startReedAbove(boolean goal){
+    	try{
+    		reedAboveLatch.start(goal);
+    	} catch(NullPointerException e){
+    		System.out.println(e.getMessage());
+    	}
+    }
+    
+    public void startReedBelow(boolean goal){
+    	try{
+    		reedBelowLatch.start(goal);
+    	} catch(NullPointerException e){
+    		System.out.println(e.getMessage());
+    	}
+    }
+    
+    public void stopReedAbove(){
+    	reedAboveLatch.stopThread();
+    }
+    
+    public void stopReedBelow(){
+    	reedBelowLatch.stopThread();
+    }
 
     public boolean getReedAbove() {
-        return !reedAbove.get();
+        return reedAboveLatch.getValue();
     }
 
     public boolean getReedBelow() {
-        return !reedBelow.get();
+        return reedBelowLatch.getValue();
     }
 
     /**

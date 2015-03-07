@@ -115,5 +115,14 @@ public class Grabby extends Subsystem {
         }
         return false;
     }
+    
+    /**
+     * Returns a reference to the lift CANTalon
+     * 
+     * @return
+     */
+    public CANTalon getLifterController(){
+    	return lifterController;
+    }
 }
 

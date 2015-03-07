@@ -18,6 +18,7 @@ public class StackyUp extends Command {
     // Called just before this Command runs the first time
     protected void initialize() {
         Robot.stacky.setClosedLoop(false);
+        Robot.stacky.startReedAbove(false);
         if (!Robot.stacky.getLimitTop()) {
             state = 1;
         }
@@ -36,14 +37,19 @@ public class StackyUp extends Command {
         switch (state) {
             case 1:
                 Robot.stacky.setWinchMotor(RandomConstants.CARRIAGE_FAST_SPEED);
-                if (!Robot.stacky.getReedAbove()) {
+                if (Robot.stacky.getReedAbove()) {
                     state = 2;
+                    Robot.stacky.startReedBelow(true);
                 }
                 break;
             case 2:
                 Robot.stacky.setWinchMotor(RandomConstants.CARRIAGE_FAST_SPEED);
                 if (Robot.stacky.getReedBelow()) {
                     state = 3;
+                    Robot.stacky.startReedAbove(true);
+                }
+                if (Robot.stacky.getReedAbove()) {
+                	state = 4;
                 }
                 break;
             case 3:
@@ -53,6 +59,7 @@ public class StackyUp extends Command {
                     Robot.stacky.upOne();
                 }
                 break;
+            case 4:
             default:
                 break;
         }
@@ -74,6 +81,8 @@ public class StackyUp extends Command {
         Robot.stacky.setClosedLoop(true);
         Robot.stacky.setWinchPosition(Robot.stacky.getDistanceUp() * RandomConstants.ENC_TICK_PER_REV/ RandomConstants.STACKY_WINCH_DRUM_CIRCUMFERENCE);
         state = 0;
+        Robot.stacky.stopReedAbove();
+        Robot.stacky.stopReedBelow();
     }
 
     /**
@@ -82,5 +91,7 @@ public class StackyUp extends Command {
     protected void interrupted() {
         Robot.stacky.setWinchMotor(0);
         state = 0;
+        Robot.stacky.stopReedAbove();
+        Robot.stacky.stopReedBelow();
     }
 }
