@@ -1,6 +1,8 @@
 package org.bitbuckets.frc2015.command;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import org.bitbuckets.frc2015.RandomConstants;
 import org.bitbuckets.frc2015.Robot;
 
@@ -10,6 +12,7 @@ import org.bitbuckets.frc2015.Robot;
 public class StackyUp extends Command {
     private int state = 0;
     private long timeInit;
+    private boolean timeout;
 
     public StackyUp() {
         requires(Robot.stacky);
@@ -18,10 +21,12 @@ public class StackyUp extends Command {
     // Called just before this Command runs the first time
     protected void initialize() {
         Robot.stacky.setClosedLoop(false);
+        Robot.stacky.startReedAbove(false);
         if (!Robot.stacky.getLimitTop()) {
             state = 1;
         }
         timeInit = System.currentTimeMillis();
+        timeout = false;
     }
 
     /**
@@ -36,8 +41,10 @@ public class StackyUp extends Command {
         switch (state) {
             case 1:
                 Robot.stacky.setWinchMotor(RandomConstants.CARRIAGE_FAST_SPEED);
-                if (!Robot.stacky.getReedAbove()) {
+                if (Robot.stacky.getReedAbove()) {
                     state = 2;
+                    Robot.stacky.startElevatorLatch(true);
+                    Robot.stacky.startReedBelow(true);
                 }
                 break;
             case 2:
@@ -45,17 +52,22 @@ public class StackyUp extends Command {
                 if (Robot.stacky.getReedBelow()) {
                     state = 3;
                 }
+                if (Robot.stacky.getElevatorLatch()) {
+                	state = 4;
+                }
                 break;
             case 3:
                 Robot.stacky.setWinchMotor(RandomConstants.CARRIAGE_SLOW_SPEED);
-                if (Robot.stacky.getReedAbove()) {
+                if (Robot.stacky.getElevatorLatch()) {
                     state = 4;
                     Robot.stacky.upOne();
                 }
                 break;
+            case 4:
             default:
                 break;
         }
+        Robot.stacky.logStuffs((int)(System.currentTimeMillis() - timeInit));
     }
 
     /**
@@ -64,6 +76,7 @@ public class StackyUp extends Command {
      * @return Whether the command has finished executing.
      */
     protected boolean isFinished() {
+    	timeout = (System.currentTimeMillis() - timeInit) / 1000 >= RandomConstants.STACK_UP_TIMEOUT;
         return state == 4 || Robot.stacky.getLimitTop() || (System.currentTimeMillis() - timeInit) / 1000 >= RandomConstants.STACK_UP_TIMEOUT;
     }
 
@@ -74,6 +87,14 @@ public class StackyUp extends Command {
         Robot.stacky.setClosedLoop(true);
         Robot.stacky.setWinchPosition(Robot.stacky.getDistanceUp() * RandomConstants.ENC_TICK_PER_REV/ RandomConstants.STACKY_WINCH_DRUM_CIRCUMFERENCE);
         state = 0;
+        Robot.stacky.stopReedAbove();
+        Robot.stacky.stopReedBelow();
+        Robot.stacky.stopElevatorLatch();
+        
+        if(timeout) {
+        	System.out.println("StackUp has TIMED OUT YOU FOOLS!");
+        	SmartDashboard.putString("StackUpTimeoutStatus", "It's bad, you guys.");
+        }
     }
 
     /**
@@ -82,5 +103,8 @@ public class StackyUp extends Command {
     protected void interrupted() {
         Robot.stacky.setWinchMotor(0);
         state = 0;
+        Robot.stacky.stopReedAbove();
+        Robot.stacky.stopReedBelow();
+        Robot.stacky.stopElevatorLatch();
     }
 }

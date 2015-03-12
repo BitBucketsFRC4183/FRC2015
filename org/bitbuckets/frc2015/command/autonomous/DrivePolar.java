@@ -52,7 +52,7 @@ public class DrivePolar extends Command {
         profiler = new PositionMotionProfiler(radius, maxVel, RandomConstants.MAX_TRANS_ACCEL, .25);
         theta = angle;
         distance = 0;
-        feetPerEncTick = RandomConstants.WHEEL_CIRCUMFERENCE / RandomConstants.ENC_TICK_PER_REV;
+        feetPerEncTick = RandomConstants.WHEEL_CIRCUMFERENCE / RandomConstants.DRIVEY_ENC_TICK_PER_REV;
     }
 
     /**

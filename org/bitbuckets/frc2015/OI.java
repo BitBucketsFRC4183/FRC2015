@@ -3,6 +3,7 @@ package org.bitbuckets.frc2015;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import edu.wpi.first.wpilibj.buttons.Trigger;
 import org.bitbuckets.frc2015.util.Direction;
 import org.bitbuckets.frc2015.util.JoystickDirButton;
 import org.bitbuckets.frc2015.util.POVHatDirButton;
@@ -17,6 +18,9 @@ public class OI {
     public Joystick operator = new Joystick(2);
 
     ///////////////////BUTTONS//////////////////////////
+    //Driver
+    public Button driverSlowMode = new JoystickButton(driver, 8);
+
     //Tilty
     public POVHatDirButton operatorTiltUp = new POVHatDirButton(operator, Direction.UP);
     public POVHatDirButton operatorTiltDown = new POVHatDirButton(operator, Direction.DOWN);
@@ -26,8 +30,8 @@ public class OI {
     public Button operatorGrabClose = new JoystickButton(operator, 6);
 
     //Stacky
-    public JoystickDirButton operatorToteUp = new JoystickDirButton(operator, Direction.UP, 0, 1);
-    public JoystickDirButton operatorToteDown = new JoystickDirButton(operator, Direction.DOWN, 0, 1);
+    public Button operatorToteUp = new JoystickDirButton(operator, Direction.UP, 0, 1);
+    public Button operatorToteDown = new JoystickDirButton(operator, Direction.DOWN, 0, 1);
     public Button operatorToteDownAll = new JoystickButton(operator, 11);
     public Button operatorToteDownBit = new JoystickButton(operator, 3);
 
@@ -43,9 +47,9 @@ public class OI {
 
     //////////////////AXIS STUFF///////////////////////////
     //Driving (driver)
-    public static int GO = 5;
-    public static int STRAFE = 2;
-    public static int TURN = 0;
+    public static int GO = 1;
+    public static int STRAFE = 0;
+    public static int TURN = 2;
     //Grabber (operator)
     //Do you even
     public static final int LIFT = 5;

@@ -155,10 +155,10 @@ public class Drivey extends Subsystem {
 //            RR = RR * kLimit;
 //        }
 
-        flController.set(FL * RandomConstants.ENC_TICK_PER_REV / RandomConstants.WHEEL_CIRCUMFERENCE * RandomConstants.FUDGE_FACTOR);
-        frController.set(FR * RandomConstants.ENC_TICK_PER_REV / RandomConstants.WHEEL_CIRCUMFERENCE * RandomConstants.FUDGE_FACTOR);
-        rlController.set(RL * RandomConstants.ENC_TICK_PER_REV / RandomConstants.WHEEL_CIRCUMFERENCE * RandomConstants.FUDGE_FACTOR);
-        rrController.set(RR * RandomConstants.ENC_TICK_PER_REV / RandomConstants.WHEEL_CIRCUMFERENCE * RandomConstants.FUDGE_FACTOR);
+        flController.set(FL * RandomConstants.DRIVEY_ENC_TICK_PER_REV / RandomConstants.WHEEL_CIRCUMFERENCE * RandomConstants.FUDGE_FACTOR);
+        frController.set(FR * RandomConstants.DRIVEY_ENC_TICK_PER_REV / RandomConstants.WHEEL_CIRCUMFERENCE * RandomConstants.FUDGE_FACTOR);
+        rlController.set(RL * RandomConstants.DRIVEY_ENC_TICK_PER_REV / RandomConstants.WHEEL_CIRCUMFERENCE * RandomConstants.FUDGE_FACTOR);
+        rrController.set(RR * RandomConstants.DRIVEY_ENC_TICK_PER_REV / RandomConstants.WHEEL_CIRCUMFERENCE * RandomConstants.FUDGE_FACTOR);
 
         try {
             csvWriterfrEnc.append("" + frController.getEncVelocity());

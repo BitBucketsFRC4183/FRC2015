@@ -1,6 +1,7 @@
 package org.bitbuckets.frc2015.util;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.Trigger;
 import org.bitbuckets.frc2015.RandomConstants;
 
@@ -9,7 +10,7 @@ import org.bitbuckets.frc2015.RandomConstants;
  * <p/>
  * Created by James on 1/25/2015.
  */
-public class JoystickDirButton extends Trigger {
+public class JoystickDirButton extends Button {
     private Direction joyDir;
     private Joystick stick;
     private int xAxis;

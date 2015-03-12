@@ -1,33 +1,51 @@
 package org.bitbuckets.frc2015.autonomous;
 
-import org.bitbuckets.frc2015.command.autonomous.DrivePolar;
-
-import edu.wpi.first.wpilibj.command.CommandGroup;
+import edu.wpi.first.wpilibj.command.Command;
+import org.bitbuckets.frc2015.Robot;
+//TODO Fix Javadocs
 
 /**
- *
+ * Created by Alia on 3/7/15.
  */
-public class DriveToAutoZone extends CommandGroup {
-    
-    public  DriveToAutoZone() {
-    	
-    	addSequential(new DrivePolar(5, 0));
-    	
-        // Add Commands here:
-        // e.g. addSequential(new Command1());
-        //      addSequential(new Command2());
-        // these will run in order.
+public class DriveToAutoZone extends Command {
+    private long timeInit;
 
-        // To run multiple commands at the same time,
-        // use addParallel()
-        // e.g. addParallel(new Command1());
-        //      addSequential(new Command2());
-        // Command1 and Command2 will run in parallel.
+    /**
+     * The constructor for this {@link edu.wpi.first.wpilibj.command.Command}. It should use <code>requires()</code> to tell the compiler which subsystem it uses.
+     */
+    public DriveToAutoZone() {
+    }
 
-        // A command group will require all of the subsystems that each member
-        // would require.
-        // e.g. if Command1 requires chassis, and Command2 requires arm,
-        // a CommandGroup containing them would require both the chassis and the
-        // arm.
+    /**
+     * Called just before this Command runs the first time.
+     */
+    protected void initialize() {
+        timeInit = System.currentTimeMillis();
+    }
+
+    /**
+     * Called repeatedly when this Command is scheduled to run.
+     */
+    protected void execute() {
+        Robot.drivey.drive(0, 2, 0);
+    }
+
+    /**
+     * Make this return true when this Command no longer needs to run <code>execute()</code>.
+     */
+    protected boolean isFinished() {
+        return Math.abs(System.currentTimeMillis() - timeInit) >= 3000;
+    }
+
+    /**
+     * Called once after <code>isFinished()</code> returns true.
+     */
+    protected void end() {
+    }
+
+    /**
+     * Called when another command which requires one or more of the same subsystems is scheduled to run.
+     */
+    protected void interrupted() {
     }
 }
