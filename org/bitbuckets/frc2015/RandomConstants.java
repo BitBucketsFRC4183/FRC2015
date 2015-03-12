@@ -13,17 +13,23 @@ public class RandomConstants {
     public static final int DEFAULT_SETTLE_TIME = 150;
 
     /**
-     * 
+     *
+     */
+    public static final double slowModeRatio = 0.5;
+    /**
+     *
      */
     public static final double FUDGE_FACTOR = 1;
     /**
      * Encoder ticks per revolution of a motor shaft
      */
-    public static final double ENC_TICK_PER_REV = 256.0 * WHEEL_GEAR_RATIO;
+    public static final double ENC_TICK_PER_REV = 768.0;//256 enc ticks per rev, 4 ticks per enc tick
+
+    public static final double DRIVEY_ENC_TICK_PER_REV = 256.0 * WHEEL_GEAR_RATIO;
 
     public static final double WHEEL_CIRCUMFERENCE = Math.PI / 3;
 
-    public static final double STACKY_WINCH_DRUM_CIRCUMFERENCE = Math.PI / 6;
+    public static final double STACKY_WINCH_DRUM_CIRCUMFERENCE = 2 * Math.PI / 12;
 
     public static final double GRABBY_WINCH_DRUM_CIRCUMFERENCE = 3 * Math.PI / 24;
 
@@ -61,7 +67,7 @@ public class RandomConstants {
     /**
      *
      */
-    public static final double STACK_UP_TIMEOUT = 1.5;
+    public static final double STACK_UP_TIMEOUT = 4;
     public static final double STACK_DOWN_TIMEOUT = 4;
 
     public static final boolean TESTING = true;
@@ -92,8 +98,9 @@ public class RandomConstants {
     public static final int DRIVE_IZONE = 50;
 
     public static final double STACKY_KP = .3;
-    public static final double STACKY_KI = 0;
+    public static final double STACKY_KI = 0.005;
     public static final double STACKY_KD = 0;
+    public static final int STACKY_IZONE = 50;
 
     public static final double GRABBY_KP = .3;
     public static final double GRABBY_KI = 0;

@@ -1,14 +1,15 @@
 package org.bitbuckets.frc2015.control;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DigitalInputLatch implements Runnable {
 	
-	private long sleepTime = 10L;
-	private DigitalInput input;
-	private boolean triggered = true;
-	private Thread thread;
-	private boolean goal;
+	protected long sleepTime = 10L;
+	protected DigitalInput input;
+	protected Thread thread;
+    protected boolean triggered = true;
+    protected boolean goal;
 		
 	/**
 	 * 
@@ -44,6 +45,7 @@ public class DigitalInputLatch implements Runnable {
 			System.out.println("Warning: attempted to start duplicate DigitalInputLatch thread.");
 			return;
 		}
+		SmartDashboard.putString("DigitalInputLatchThread "+input.getChannel(), "Thread started");
 		this.goal = goal;
 		triggered = false;
 		thread = new Thread(this);
@@ -67,6 +69,8 @@ public class DigitalInputLatch implements Runnable {
 		}
 		triggered = true;
 		stopThread();
+		System.out.println("Edge detected on digitalinput " + input.getChannel());
+		SmartDashboard.putString("DigitalInputLatchStatus "+input.getChannel(), "Edge detected");
 	}
 	
 	/**
@@ -78,6 +82,7 @@ public class DigitalInputLatch implements Runnable {
 		}
 		thread.interrupt();
 		thread = null;
+		SmartDashboard.putString("DigitalInputLatchThread "+input.getChannel(), "Thread stopped");
 	}
 	
 	/**

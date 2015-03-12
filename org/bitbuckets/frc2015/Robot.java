@@ -88,8 +88,8 @@ public class Robot extends IterativeRobot {
         oi.operatorTiltUp.whenActive(tiltUp);
         oi.operatorTiltDown.whenActive(tiltDown);
 
-//        oi.operatorToteUp.whenActive(upOne);
-        oi.operatorToteDown.whenActive(downOne);
+//        oi.operatorToteUp.whenPressed(upOne);
+        oi.operatorToteDown.whenPressed(downOne);
         oi.operatorToteDownAll.whenPressed(downAll);
         oi.operatorToteDownBit.whenPressed(downBit);
         ///////////////////////////////////////////
@@ -165,7 +165,13 @@ public class Robot extends IterativeRobot {
         double theta = Math.atan2(oi.driver.getRawAxis(OI.GO), oi.driver.getRawAxis(OI.STRAFE));
         double radius = Math.hypot(oi.driver.getRawAxis(OI.GO), oi.driver.getRawAxis(OI.STRAFE));
         double sqrRadius = deadzone(Math.pow(radius, 1));
-        drivey.drive(sqrRadius * Math.cos(theta) * RandomConstants.MAX_TRANS_SPEED, -1 * sqrRadius * Math.sin(theta) * RandomConstants.MAX_TRANS_SPEED, Math.pow(oi.driver.getRawAxis(OI.TURN), 1) * RandomConstants.MAX_ROT_SPEED);
+        if(oi.driverSlowMode.get()){
+            drivey.drive(sqrRadius * Math.cos(theta) * RandomConstants.MAX_TRANS_SPEED * RandomConstants.slowModeRatio,
+                    -1 * sqrRadius * Math.sin(theta) * RandomConstants.MAX_TRANS_SPEED * RandomConstants.slowModeRatio,
+                    Math.pow(oi.driver.getRawAxis(OI.TURN), 1) * RandomConstants.MAX_ROT_SPEED * RandomConstants.slowModeRatio);
+        } else{
+            drivey.drive(sqrRadius * Math.cos(theta) * RandomConstants.MAX_TRANS_SPEED, -1 * sqrRadius * Math.sin(theta) * RandomConstants.MAX_TRANS_SPEED, Math.pow(oi.driver.getRawAxis(OI.TURN), 1) * RandomConstants.MAX_ROT_SPEED);
+        }
         /////////////////////////////////////////////////////////////
 
 //        //moving -> not moving
@@ -187,8 +193,16 @@ public class Robot extends IterativeRobot {
         if (oi.operatorToteUp.get() && stacky.getButtonsActive() && !upOne.isRunning() && !downAll.isRunning() && !downOne.isRunning()) {
             upOne.start();
         }
+
         if (!upOne.isRunning() && !downAll.isRunning() && !downOne.isRunning()) {
-            stacky.setWinchMotor(oi.operator.getRawAxis(3) - oi.operator.getRawAxis(4));
+            double speed = (Math.pow(oi.operator.getRawAxis(3), 3) - Math.pow(oi.operator.getRawAxis(4), 3))/2;
+            if(Math.abs(speed) >= RandomConstants.DEADZONE){
+                stacky.setClosedLoop(false);
+                stacky.setWinchMotor(speed);
+            }else if(stacky.getControlMode() == ControlMode.PercentVbus){
+                Robot.stacky.setClosedLoop(true);
+                Robot.stacky.setWinchPosition(Robot.stacky.getDistanceUp() * RandomConstants.ENC_TICK_PER_REV/ RandomConstants.STACKY_WINCH_DRUM_CIRCUMFERENCE);
+            }
         }
         //*/*////*/*/*///
 

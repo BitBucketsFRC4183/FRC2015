@@ -28,8 +28,7 @@ public class Grabby extends Subsystem {
 
         lifterController.setPID(RandomConstants.GRABBY_KP, RandomConstants.GRABBY_KI, RandomConstants.GRABBY_KD);
         lifterController.changeControlMode(CANTalon.ControlMode.Speed);
-        lifterController.enableForwardSoftLimit(true);
-        lifterController.enableReverseSoftLimit(true);
+        lifterController.enableLimitSwitch(true, true);
 
         open = new DigitalInput(RobotMap.GRABBY_OPEN);
     }
@@ -62,6 +61,13 @@ public class Grabby extends Subsystem {
      */
     public void setLifterMotor(double speed){
         lifterController.set(speed * RandomConstants.ENC_TICK_PER_REV / RandomConstants.GRABBY_WINCH_DRUM_CIRCUMFERENCE);
+        SmartDashboard.putNumber("Limit Fault", lifterController.getFaultForLim());
+        SmartDashboard.putNumber("Soft Limit Fault", lifterController.getFaultForSoftLim());
+        SmartDashboard.putNumber("Hardware Faliure Fault", lifterController.getFaultHardwareFailure());
+        SmartDashboard.putNumber("Too Hot Fault", lifterController.getFaultOverTemp());
+        SmartDashboard.putNumber("Too Fast Fault", lifterController.getFaultRevLim());
+        SmartDashboard.putNumber("Too Fast Soft Fault", lifterController.getFaultRevSoftLim());
+        SmartDashboard.putNumber("Under Voltage Fault", lifterController.getFaultUnderVoltage());
     }
 
     /**
@@ -73,6 +79,7 @@ public class Grabby extends Subsystem {
         if(RandomConstants.TESTING){
             SmartDashboard.putNumber("Current", Robot.pdp.getCurrent(RobotMap.GRABBER_MOTOR_CHANNEL));
         }
+        
         return Robot.pdp.getCurrent(RobotMap.GRABBER_MOTOR_CHANNEL) >= RandomConstants.GRABBY_CURRRENT_MAX;
     }
 
