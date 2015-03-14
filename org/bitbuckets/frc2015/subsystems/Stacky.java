@@ -1,6 +1,5 @@
 package org.bitbuckets.frc2015.subsystems;
 
-import edu.wpi.first.wpilibj.CANJaguar;
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -12,10 +11,8 @@ import org.bitbuckets.frc2015.control.DigitalInputLatch;
 import org.bitbuckets.frc2015.control.ElevatorStopLatch;
 
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Calendar;
 
 /**
  *

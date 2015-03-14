@@ -9,16 +9,20 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import org.bitbuckets.frc2015.autonomous.AutoCanMove;
 import org.bitbuckets.frc2015.autonomous.AutoDriveTest;
 import org.bitbuckets.frc2015.autonomous.DriveToAutoZone;
 import org.bitbuckets.frc2015.autonomous.ThreeTotePickupAutoMode;
 import org.bitbuckets.frc2015.autonomous.DefaultProgram;
-import org.bitbuckets.frc2015.command.*;
 import org.bitbuckets.frc2015.subsystems.Drivey;
+import org.bitbuckets.frc2015.subsystems.DriveyThread;
 import org.bitbuckets.frc2015.subsystems.Grabby;
+import org.bitbuckets.frc2015.subsystems.GrabbyThread;
 import org.bitbuckets.frc2015.subsystems.Stacky;
+import org.bitbuckets.frc2015.subsystems.StackyThread;
 import org.bitbuckets.frc2015.subsystems.Tilty;
+import org.bitbuckets.frc2015.subsystems.TiltyThread;
 import org.bitbuckets.frc2015.util.SerialPortManager;
 
 
@@ -43,11 +47,12 @@ public class Robot extends IterativeRobot {
     private Command autonomousCommand;
 
     public static SendableChooser autoChooser = new SendableChooser();
-
-    private StackyUp upOne;
-    private StackyDown downOne;
-    private StackyDownAll downAll;
-    private StackyMoveDistance downBit;
+    
+    private Thread driveyThread;
+    private Thread grabbyThread;
+    private Thread stackyThread;
+    private Thread tiltyThread;
+    
 
 
     /**
@@ -60,6 +65,11 @@ public class Robot extends IterativeRobot {
         grabby = new Grabby();
         stacky = new Stacky();
         tilty = new Tilty();
+        
+        driveyThread = new Thread(new DriveyThread(5L));
+        grabbyThread = new Thread(new GrabbyThread(5L));
+        stackyThread = new Thread(new StackyThread(5L));
+        tiltyThread  = new Thread(new TiltyThread(5L));
 
         SerialPortManager.init();
 
@@ -70,29 +80,6 @@ public class Robot extends IterativeRobot {
         ///////////////////COMMANDS////////////////
 //        ChangeDriveMode driveMode = new ChangeDriveMode();
 
-        GrabbyOpen grabbyOpen = new GrabbyOpen();
-        GrabbyClose grabbyClose = new GrabbyClose();
-
-        TiltUp tiltUp = new TiltUp();
-        TiltDown tiltDown = new TiltDown();
-
-        upOne = new StackyUp();
-        downOne = new StackyDown();
-        downAll = new StackyDownAll();
-        downBit = new StackyMoveDistance(-0.5);
-
-        ///////////////////ASSIGNMENTS/////////////
-        oi.operatorGrabOpen.whenPressed(grabbyOpen);
-        oi.operatorGrabClose.whenPressed(grabbyClose);
-
-        oi.operatorTiltUp.whenActive(tiltUp);
-        oi.operatorTiltDown.whenActive(tiltDown);
-
-//        oi.operatorToteUp.whenPressed(upOne);
-        oi.operatorToteDown.whenPressed(downOne);
-        oi.operatorToteDownAll.whenPressed(downAll);
-        oi.operatorToteDownBit.whenPressed(downBit);
-        ///////////////////////////////////////////
         //FileManager.fetchFiles();
 
         //ConstantsManager.fetchConstants();
@@ -114,7 +101,10 @@ public class Robot extends IterativeRobot {
      * You can use it to reset subsystems before shutting down.
      */
     public void disabledInit() {
-
+    	driveyThread.interrupt();
+    	grabbyThread.interrupt();
+    	stackyThread.interrupt();
+    	tiltyThread.interrupt();
     }
 
     public void disabledPeriodic() {
@@ -141,14 +131,14 @@ public class Robot extends IterativeRobot {
     }
 
     public void teleopInit() {
-        //Resets driving encoders to 0
-        drivey.resetEncoders();
-        //Sets the ControlMode of the drive controllers
-        drivey.setEncoderSetting(ControlMode.Speed);
         if(autonomousCommand != null) {
             autonomousCommand.cancel();
         }
         SerialPortManager.analogGyro.reset();
+        driveyThread.start();
+        grabbyThread.start();
+        stackyThread.start();
+        tiltyThread.start();
     }
 
     /**
@@ -161,58 +151,10 @@ public class Robot extends IterativeRobot {
             drivey.resetPIDs();
         }
 
-        ////////////////////////DRIVING//////////////////////////////
-        double theta = Math.atan2(oi.driver.getRawAxis(OI.GO), oi.driver.getRawAxis(OI.STRAFE));
-        double radius = Math.hypot(oi.driver.getRawAxis(OI.GO), oi.driver.getRawAxis(OI.STRAFE));
-        double sqrRadius = deadzone(Math.pow(radius, 1));
-        if(oi.driverSlowMode.get()){
-            drivey.drive(sqrRadius * Math.cos(theta) * RandomConstants.MAX_TRANS_SPEED * RandomConstants.slowModeRatio,
-                    -1 * sqrRadius * Math.sin(theta) * RandomConstants.MAX_TRANS_SPEED * RandomConstants.slowModeRatio,
-                    Math.pow(oi.driver.getRawAxis(OI.TURN), 1) * RandomConstants.MAX_ROT_SPEED * RandomConstants.slowModeRatio);
-        } else{
-            drivey.drive(sqrRadius * Math.cos(theta) * RandomConstants.MAX_TRANS_SPEED, -1 * sqrRadius * Math.sin(theta) * RandomConstants.MAX_TRANS_SPEED, Math.pow(oi.driver.getRawAxis(OI.TURN), 1) * RandomConstants.MAX_ROT_SPEED);
-        }
-        /////////////////////////////////////////////////////////////
-
-//        //moving -> not moving
-//        if(oi.operator.getRawAxis(OI.LIFT) == 0          &&   grabby.getLifterController().getControlMode() == ControlMode.Speed){
-//        	grabby.getLifterController().changeControlMode(ControlMode.Position);
-//        	grabby.getLifterController().set(grabby.getLifterController().get());
-//        //not moving -> moving
-//        } else if(oi.operator.getRawAxis(OI.LIFT) != 0   &&   grabby.getLifterController().getControlMode() == ControlMode.Position){
-//        	grabby.getLifterController().changeControlMode(ControlMode.Speed);
-//        	grabby.setLifterMotor(-1 * oi.operator.getRawAxis(OI.LIFT) * RandomConstants.MAX_GRABBY_LIFTER_SPEED);
-//        //moving
-//        } else if(oi.operator.getRawAxis(OI.LIFT) != 0){
-//        	grabby.setLifterMotor(-1 * oi.operator.getRawAxis(OI.LIFT) * RandomConstants.MAX_GRABBY_LIFTER_SPEED);
-//        //not moving
-//        } else{}
-    	grabby.setLifterMotor(-1 * oi.operator.getRawAxis(OI.LIFT) * RandomConstants.MAX_GRABBY_LIFTER_SPEED);
-
-        //***/*/*/*/*/*///*/*///HACK
-        if (oi.operatorToteUp.get() && stacky.getButtonsActive() && !upOne.isRunning() && !downAll.isRunning() && !downOne.isRunning()) {
-            upOne.start();
-        }
-
-        if (!upOne.isRunning() && !downAll.isRunning() && !downOne.isRunning()) {
-            double speed = (Math.pow(oi.operator.getRawAxis(3), 3) - Math.pow(oi.operator.getRawAxis(4), 3))/2;
-            if(Math.abs(speed) >= RandomConstants.DEADZONE){
-                stacky.setClosedLoop(false);
-                stacky.setWinchMotor(speed);
-            }else if(stacky.getControlMode() == ControlMode.PercentVbus){
-                Robot.stacky.setClosedLoop(true);
-                Robot.stacky.setWinchPosition(Robot.stacky.getDistanceUp() * RandomConstants.ENC_TICK_PER_REV/ RandomConstants.STACKY_WINCH_DRUM_CIRCUMFERENCE);
-            }
-        }
-        //*/*////*/*/*///
-
-        if(RandomConstants.TESTING) {
-            stacky.printStuff();
-        }
-
         SmartDashboard.putData(Scheduler.getInstance());
 
         if (RandomConstants.TESTING) {
+            stacky.printStuff();
             SmartDashboard.putBoolean("Limit Top", stacky.getLimitTop());
             SmartDashboard.putBoolean("Limit Bottom", stacky.getLimitBottom());
             SmartDashboard.putBoolean("Reed Above", stacky.getReedAbove());
@@ -229,7 +171,7 @@ public class Robot extends IterativeRobot {
     }
 
     //*/*//*/*//*/*/*/*/*//*/*/Hck
-    public double deadzone(double thing) {
+    public static double deadzone(double thing) {
         return Math.abs(thing) < RandomConstants.DEADZONE ? 0 : thing;
     }
     //*///*/**/**/*/*/*/*/*/
