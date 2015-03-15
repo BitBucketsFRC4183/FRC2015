@@ -160,33 +160,33 @@ public class Drivey extends Subsystem {
         rlController.set(RL * RandomConstants.DRIVEY_ENC_TICK_PER_REV / RandomConstants.WHEEL_CIRCUMFERENCE * RandomConstants.FUDGE_FACTOR);
         rrController.set(RR * RandomConstants.DRIVEY_ENC_TICK_PER_REV / RandomConstants.WHEEL_CIRCUMFERENCE * RandomConstants.FUDGE_FACTOR);
 
-        try {
-            csvWriterfrEnc.append("" + frController.getEncVelocity());
-            csvWriterfrEnc.append(",");
-            csvWriterfrEnc.append("" + System.currentTimeMillis());
-            csvWriterflEnc.append("" + flController.getEncVelocity());
-            csvWriterflEnc.append(",");
-            csvWriterflEnc.append("" + System.currentTimeMillis());
-        } catch (IOException e) {
+//        try {
+//            csvWriterfrEnc.append("" + frController.getEncVelocity());
+//            csvWriterfrEnc.append(",");
+//            csvWriterfrEnc.append("" + System.currentTimeMillis());
+//            csvWriterflEnc.append("" + flController.getEncVelocity());
+//            csvWriterflEnc.append(",");
+//            csvWriterflEnc.append("" + System.currentTimeMillis());
+//        } catch (IOException e) {
+//
+//        }
 
-        }
-
-        if (RandomConstants.TESTING) {
-            SmartDashboard.putNumber("FLEnc", flController.getEncPosition());
-            SmartDashboard.putNumber("FREnc", frController.getEncPosition());
-            SmartDashboard.putNumber("RLEnc", rlController.getEncPosition());
-            SmartDashboard.putNumber("RREnc", rrController.getEncPosition());
-
-            SmartDashboard.putNumber("FLEncVel", flController.getEncVelocity());
-            SmartDashboard.putNumber("FREncVel", frController.getEncVelocity());
-            SmartDashboard.putNumber("RLEncVel", rlController.getEncVelocity());
-            SmartDashboard.putNumber("RREncVel", rrController.getEncVelocity());
-
-            SmartDashboard.putNumber("FL Speed", FL);
-            SmartDashboard.putNumber("FR Speed", FR);
-            SmartDashboard.putNumber("RL Speed", RL);
-            SmartDashboard.putNumber("RR Speed", RR);
-        }
+//        if (RandomConstants.TESTING) {
+//            SmartDashboard.putNumber("FLEnc", flController.getEncPosition());
+//            SmartDashboard.putNumber("FREnc", frController.getEncPosition());
+//            SmartDashboard.putNumber("RLEnc", rlController.getEncPosition());
+//            SmartDashboard.putNumber("RREnc", rrController.getEncPosition());
+//
+//            SmartDashboard.putNumber("FLEncVel", flController.getEncVelocity());
+//            SmartDashboard.putNumber("FREncVel", frController.getEncVelocity());
+//            SmartDashboard.putNumber("RLEncVel", rlController.getEncVelocity());
+//            SmartDashboard.putNumber("RREncVel", rrController.getEncVelocity());
+//
+//            SmartDashboard.putNumber("FL Speed", FL);
+//            SmartDashboard.putNumber("FR Speed", FR);
+//            SmartDashboard.putNumber("RL Speed", RL);
+//            SmartDashboard.putNumber("RR Speed", RR);
+//        }
     }
 
     /**

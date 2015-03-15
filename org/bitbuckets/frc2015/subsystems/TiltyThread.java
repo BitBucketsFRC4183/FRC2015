@@ -11,8 +11,8 @@ public class TiltyThread extends SubsystemThread{
 	TiltUp tiltUp;
 	TiltDown tiltDown;
 	
-	public TiltyThread(long iterTime) {
-		super(iterTime);
+	public TiltyThread(long iterTime, String name) {
+		super(iterTime, name);
         tiltUp = new TiltUp();
         tiltDown = new TiltDown();
 		Robot.oi.operatorTiltUp.whenActive(tiltUp);
@@ -20,18 +20,7 @@ public class TiltyThread extends SubsystemThread{
 	}
 	
 	@Override
-	public void start(){
-        super.start();
-	}
-	
-	@Override
-	public void run() {
-		try {
-			while(running){
-				Thread.sleep(iterTime);
-			}
-		} catch (InterruptedException e) {
-		}
+	protected void execute(){
 	}
 
 }

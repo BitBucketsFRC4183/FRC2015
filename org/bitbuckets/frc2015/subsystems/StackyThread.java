@@ -16,8 +16,8 @@ public class StackyThread extends SubsystemThread{
 	StackyDownAll downAll;
 	StackyMoveDistance downBit;
 	
-	public StackyThread(long iterTime) {
-		super(iterTime);
+	public StackyThread(long iterTime, String name) {
+		super(iterTime, name);
         upOne = new StackyUp();
         downOne = new StackyDown();
         downAll = new StackyDownAll();
@@ -30,34 +30,23 @@ public class StackyThread extends SubsystemThread{
 	}
 	
 	@Override
-	public void start(){
-        super.start();
-	}
-	
-	@Override
-	public void run() {
-		try {
-			while(running){
-				Thread.sleep(iterTime);
-		        //***/*/*/*/*/*///*/*///HACK
-		        if (Robot.oi.operatorToteUp.get() && Robot.stacky.getButtonsActive() && !upOne.isRunning() && !downAll.isRunning() && !downOne.isRunning()) {
-		            upOne.start();
-		        }
+	protected void execute(){
+        //***/*/*/*/*/*///*/*///HACK
+        if (Robot.oi.operatorToteUp.get() && Robot.stacky.getButtonsActive() && !upOne.isRunning() && !downAll.isRunning() && !downOne.isRunning()) {
+            upOne.start();
+        }
 
-		        if (!upOne.isRunning() && !downAll.isRunning() && !downOne.isRunning()) {
-		            double speed = (Math.pow(Robot.oi.operator.getRawAxis(3), 3) - Math.pow(Robot.oi.operator.getRawAxis(4), 3))/2;
-		            if(Math.abs(speed) >= RandomConstants.DEADZONE){
-		                Robot.stacky.setClosedLoop(false);
-		                Robot.stacky.setWinchMotor(speed);
-		            }else if(Robot.stacky.getControlMode() == ControlMode.PercentVbus){
-		                Robot.stacky.setClosedLoop(true);
-		                Robot.stacky.setWinchPosition(Robot.stacky.getDistanceUp() * RandomConstants.ENC_TICK_PER_REV/ RandomConstants.STACKY_WINCH_DRUM_CIRCUMFERENCE);
-		            }
-		        }
-		        //*/*////*/*/*///
-			}
-		} catch (InterruptedException e) {
-		}
+        if (!upOne.isRunning() && !downAll.isRunning() && !downOne.isRunning()) {
+            double speed = (Math.pow(Robot.oi.operator.getRawAxis(3), 3) - Math.pow(Robot.oi.operator.getRawAxis(4), 3))/2;
+            if(Math.abs(speed) >= RandomConstants.DEADZONE){
+                Robot.stacky.setClosedLoop(false);
+                Robot.stacky.setWinchMotor(speed);
+            }else if(Robot.stacky.getControlMode() == ControlMode.PercentVbus){
+                Robot.stacky.setClosedLoop(true);
+                Robot.stacky.setWinchPosition(Robot.stacky.getDistanceUp() * RandomConstants.ENC_TICK_PER_REV/ RandomConstants.STACKY_WINCH_DRUM_CIRCUMFERENCE);
+            }
+        }
+        //*/*////*/*/*///
 	}
 
 }

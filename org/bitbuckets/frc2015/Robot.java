@@ -65,11 +65,6 @@ public class Robot extends IterativeRobot {
         grabby = new Grabby();
         stacky = new Stacky();
         tilty = new Tilty();
-        
-        driveyThread = new Thread(new DriveyThread(5L));
-        grabbyThread = new Thread(new GrabbyThread(5L));
-        stackyThread = new Thread(new StackyThread(5L));
-        tiltyThread  = new Thread(new TiltyThread(5L));
 
         SerialPortManager.init();
 
@@ -101,10 +96,18 @@ public class Robot extends IterativeRobot {
      * You can use it to reset subsystems before shutting down.
      */
     public void disabledInit() {
-    	driveyThread.interrupt();
-    	grabbyThread.interrupt();
-    	stackyThread.interrupt();
-    	tiltyThread.interrupt();
+    	if(driveyThread != null ){
+	    	driveyThread.interrupt();
+    	}
+    	if(grabbyThread != null){
+	    	grabbyThread.interrupt();
+    	}
+    	if(stackyThread != null){
+	    	stackyThread.interrupt();
+    	}
+    	if(tiltyThread != null){
+	    	tiltyThread.interrupt();
+    	}
     }
 
     public void disabledPeriodic() {
@@ -135,6 +138,12 @@ public class Robot extends IterativeRobot {
             autonomousCommand.cancel();
         }
         SerialPortManager.analogGyro.reset();
+        
+        driveyThread = new Thread(new DriveyThread(50L, "Drivey Thread"));
+        grabbyThread = new Thread(new GrabbyThread(100L, "Grabby Thread"));
+        stackyThread = new Thread(new StackyThread(20L, "Stacky Thread"));
+        tiltyThread  = new Thread(new TiltyThread(100L, "Tilty Thread"));
+        
         driveyThread.start();
         grabbyThread.start();
         stackyThread.start();
