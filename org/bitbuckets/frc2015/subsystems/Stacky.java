@@ -60,11 +60,15 @@ public class Stacky extends Subsystem {
      * The number of positions the elevator has gone up
      */
     private int numUp;
+	private boolean isReset = false;
 
     /**
      * The constructor. Initializes everything.
      */
     public Stacky() {
+    	
+		SmartDashboard.putBoolean("Winch enc too low", false);
+    	
         winch = new CANTalon(RobotMap.WINCH_MOTOR);
 
         winch.enableLimitSwitch(true, true);
@@ -108,7 +112,12 @@ public class Stacky extends Subsystem {
      * @param speed The speed to set the winch.
      */
     public void setWinchMotor(double speed) {
-        if (winch.getControlMode() == CANTalon.ControlMode.PercentVbus) {
+    	if(winch.getEncPosition() <= -400 && isReset){
+    		speed = 0;
+    		SmartDashboard.putBoolean("Winch enc too low", true);
+    	}
+    	SmartDashboard.putNumber("Running winch at: ", speed);
+    	if (winch.getControlMode() == CANTalon.ControlMode.PercentVbus) {
             winch.set(speed);
             if (RandomConstants.TESTING) {
                 SmartDashboard.putNumber("winch encoder", winch.getEncPosition());
@@ -233,7 +242,12 @@ public class Stacky extends Subsystem {
      */
     public boolean getLimitBottom() {
 //        return !limitBottom.get();
-        return winch.isRevLimitSwitchClosed();
+        if(!winch.isRevLimitSwitchClosed()){
+        	return false;
+        }
+        winch.setPosition(0);
+        isReset = true;
+        return true;
     }
 
     public void upOne() {

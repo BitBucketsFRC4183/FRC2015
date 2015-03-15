@@ -15,6 +15,7 @@ import org.bitbuckets.frc2015.autonomous.AutoDriveTest;
 import org.bitbuckets.frc2015.autonomous.DriveToAutoZone;
 import org.bitbuckets.frc2015.autonomous.ThreeTotePickupAutoMode;
 import org.bitbuckets.frc2015.autonomous.DefaultProgram;
+import org.bitbuckets.frc2015.command.autonomous.DriveTime;
 import org.bitbuckets.frc2015.subsystems.Drivey;
 import org.bitbuckets.frc2015.subsystems.DriveyThread;
 import org.bitbuckets.frc2015.subsystems.Grabby;
@@ -122,7 +123,7 @@ public class Robot extends IterativeRobot {
 
         //autonomousCommand = (Command) autoChooser.getSelected();
         //autonomousCommand = (Command) new AutoDriveTest();
-        autonomousCommand = (Command) new DefaultProgram();
+        autonomousCommand = (Command) new DriveTime(3L);
         autonomousCommand.start();
     }
 
