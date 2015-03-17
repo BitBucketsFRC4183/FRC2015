@@ -146,7 +146,7 @@ public class Stacky extends Subsystem {
     /**
      * Changes the control mode to open or closed loop. Use this in the <code>initialize()</code> method of every command that uses the winch motor.
      *
-     * @param closed True for position control, false for open loop.
+     * @param closed True for position control, false for open loop VBus control.
      */
     public void setClosedLoop(boolean closed) {
         winch.changeControlMode(closed ? CANTalon.ControlMode.Position : CANTalon.ControlMode.PercentVbus);

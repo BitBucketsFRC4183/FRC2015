@@ -10,10 +10,18 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class DriveyThread extends SubsystemThread{
 	
 	private boolean first = true;
+	/**
+	 * If 1, then the robot is stacky-oriented. If -1, it is grabby-oriented.
+	 */
+	private long directionSwitchTime = 0;
 	private long time1 = 0;
 	private long time2 = 0;
 	private long time3 = 0;
 	private long time4 = 0;
+	
+	private double forwardInput = 0;
+	private double lateralInput = 0;
+	private double rotInput = 0;
 
 	public DriveyThread(long iterTime, String name) {
 		super(iterTime, name);
@@ -29,16 +37,40 @@ public class DriveyThread extends SubsystemThread{
 	        Robot.drivey.setEncoderSetting(ControlMode.Speed);
 	        first = false;
 		}
-		SmartDashboard.putNumber("Driver forward input: ", Robot.oi.driver.getRawAxis(OI.GO));
-		SmartDashboard.putNumber("Driver lateral input: ", Robot.oi.driver.getRawAxis(OI.STRAFE));
+				
+		forwardInput = Robot.deadzone(Robot.oi.driver.getRawAxis(OI.GO), 0.02);
+		if(forwardInput != 0){
+			forwardInput -= Math.signum(forwardInput) * 0.02;
+		}
+		
+		lateralInput = Robot.deadzone(Robot.oi.driver.getRawAxis(OI.STRAFE), 0.02);
+		if(lateralInput != 0){
+			lateralInput -= Math.signum(forwardInput) * 0.02;
+		}
+		
+		rotInput = Robot.deadzone(Robot.oi.driver.getRawAxis(OI.TURN), 0.02);
+		if(rotInput != 0){
+			rotInput -= Math.signum(forwardInput) * 0.02;
+		}
+		
+		if(Robot.oi.driverReverse.get()){
+			forwardInput *= -1;
+			lateralInput *= -1;
+		}
+		
+		SmartDashboard.putNumber("Driver forward input: ", forwardInput);
+		SmartDashboard.putNumber("Driver lateral input: ", lateralInput);
+		SmartDashboard.putNumber("Driver rotational input: ", rotInput);
 //        if(false){
         if(Robot.oi.driverSlowMode.get()){
-            Robot.drivey.drive(Robot.oi.driver.getRawAxis(OI.STRAFE) * RandomConstants.MAX_TRANS_SPEED * RandomConstants.slowModeRatio,
-                    -1 * Robot.oi.driver.getRawAxis(OI.GO) * RandomConstants.MAX_TRANS_SPEED * RandomConstants.slowModeRatio,
-                    Robot.oi.driver.getRawAxis(OI.TURN) * RandomConstants.MAX_ROT_SPEED * RandomConstants.slowModeRatio);
+            Robot.drivey.drive(lateralInput * RandomConstants.MAX_TRANS_SPEED * RandomConstants.slowModeRatio,
+                          -1 * forwardInput * RandomConstants.MAX_TRANS_SPEED * RandomConstants.slowModeRatio,
+                               rotInput     * RandomConstants.MAX_ROT_SPEED   * RandomConstants.slowModeRatio);
         } else{
             time2 = System.currentTimeMillis();
-            Robot.drivey.drive(Robot.oi.driver.getRawAxis(OI.STRAFE) * RandomConstants.MAX_TRANS_SPEED, -1 * Robot.oi.driver.getRawAxis(OI.GO) * RandomConstants.MAX_TRANS_SPEED, Math.pow(Robot.oi.driver.getRawAxis(OI.TURN), 1) * RandomConstants.MAX_ROT_SPEED);
+            Robot.drivey.drive(lateralInput * RandomConstants.MAX_TRANS_SPEED,
+            		      -1 * forwardInput * RandomConstants.MAX_TRANS_SPEED,
+            		           rotInput     * RandomConstants.MAX_ROT_SPEED);
         	time3 = System.currentTimeMillis();
         }
         time4 = System.currentTimeMillis();

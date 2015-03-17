@@ -6,6 +6,8 @@ import org.bitbuckets.frc2015.Robot;
 import org.bitbuckets.frc2015.command.GrabbyClose;
 import org.bitbuckets.frc2015.command.GrabbyOpen;
 
+import edu.wpi.first.wpilibj.CANTalon.ControlMode;
+
 public class GrabbyThread extends SubsystemThread{
 	
 	GrabbyOpen grabbyOpen;
@@ -21,20 +23,20 @@ public class GrabbyThread extends SubsystemThread{
 	
 	@Override
 	protected void execute(){
-//        //moving -> not moving
-//        if(oi.operator.getRawAxis(OI.LIFT) == 0          &&   grabby.getLifterController().getControlMode() == ControlMode.Speed){
-//        	grabby.getLifterController().changeControlMode(ControlMode.Position);
-//        	grabby.getLifterController().set(grabby.getLifterController().get());
-//        //not moving -> moving
-//        } else if(oi.operator.getRawAxis(OI.LIFT) != 0   &&   grabby.getLifterController().getControlMode() == ControlMode.Position){
-//        	grabby.getLifterController().changeControlMode(ControlMode.Speed);
-//        	grabby.setLifterMotor(-1 * oi.operator.getRawAxis(OI.LIFT) * RandomConstants.MAX_GRABBY_LIFTER_SPEED);
-//        //moving
-//        } else if(oi.operator.getRawAxis(OI.LIFT) != 0){
-//        	grabby.setLifterMotor(-1 * oi.operator.getRawAxis(OI.LIFT) * RandomConstants.MAX_GRABBY_LIFTER_SPEED);
-//        //not moving
-//        } else{}
-    	Robot.grabby.setLifterMotor(-1 * Robot.oi.operator.getRawAxis(OI.LIFT) * RandomConstants.MAX_GRABBY_LIFTER_SPEED);
+        //moving -> not moving
+        if(Robot.oi.operator.getRawAxis(OI.LIFT) == 0          &&   Robot.grabby.getLifterController().getControlMode() == ControlMode.Speed){
+        	Robot.grabby.getLifterController().changeControlMode(ControlMode.Position);
+        	Robot.grabby.getLifterController().set(Robot.grabby.getLifterController().get());
+        //not moving -> moving
+        } else if(Robot.oi.operator.getRawAxis(OI.LIFT) != 0   &&   Robot.grabby.getLifterController().getControlMode() == ControlMode.Position){
+        	Robot.grabby.getLifterController().changeControlMode(ControlMode.Speed);
+        	Robot.grabby.setLifterMotor(-1 * Robot.oi.operator.getRawAxis(OI.LIFT) * RandomConstants.MAX_GRABBY_LIFTER_SPEED);
+        //moving
+        } else if(Robot.oi.operator.getRawAxis(OI.LIFT) != 0){
+        	Robot.grabby.setLifterMotor(-1 * Robot.oi.operator.getRawAxis(OI.LIFT) * RandomConstants.MAX_GRABBY_LIFTER_SPEED);
+        //not moving
+        } else{}
+//    	Robot.grabby.setLifterMotor(-1 * Robot.oi.operator.getRawAxis(OI.LIFT) * RandomConstants.MAX_GRABBY_LIFTER_SPEED);
 	}
 
 }

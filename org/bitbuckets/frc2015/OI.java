@@ -11,6 +11,45 @@ import org.bitbuckets.frc2015.util.POVHatDirButton;
 /**
  * This class is the glue that binds the controls on the physical operator
  * interface to the commands and command groups that allow control of the robot.
+ * <p>
+ * PLAYSTATION BUTTONS:
+ * <ul>
+ *   <li>1  - SQUARE
+ *   <li>2  - X
+ *   <li>3  - CIRCLE
+ *   <li>4  - TRIANGLE
+ *   <li>5  - LEFT BUMPER (L1)
+ *   <li>6  - RIGHT BUMPER (R1)
+ *   <li>7  - LEFT TRIGGER (L2)
+ *   <li>8  - RIGHT TRIGGER (R2)
+ *   <li>9  - SHARE
+ *   <li>10 - OPTIONS
+ *   <li>11 - LEFT IN (L3)
+ *   <li>12 - RIGHT IN (R3)
+ *   <li>13 - PLAYSTATION BUTTON
+ *   <li>14 - BIG MIDDLE BUTTON
+ * </ul>
+ * 
+ * CURRENTLY USED:
+ * <ul>
+ *   <li>Driver:
+ *     <ul>
+ *       <li>7  - L2
+ *       <li>8  - R2
+ *     </ul>
+ *   <li>Operator:
+ *     <ul>
+ *       <li>2  - X
+ *       <li>3  - CIRCLE
+ *       <li>4  - TRIANGLE
+ *       <li>5  - L1
+ *       <li>6  - R1
+ *       <li>10 - OPTIONS
+ *       <li>11 - L3
+ *       <li>Left Stick Vertical Axis
+ *     </ul>
+ * </ul>
+ * 
  */
 public class OI {
     ////////////////////JOYSTICKS///////////////////////
@@ -19,7 +58,11 @@ public class OI {
 
     ///////////////////BUTTONS//////////////////////////
     //Driver
-    public Button driverSlowMode = new JoystickButton(driver, 8);
+    public Button driverSlowMode = new JoystickButton(driver, 7);
+    public Button driverReverse = new JoystickButton(driver, 8);
+    
+    //Operator
+    public Button cancelCommands = new JoystickButton(operator, 4);
 
     //Tilty
     public POVHatDirButton operatorTiltUp = new POVHatDirButton(operator, Direction.UP);
@@ -30,7 +73,8 @@ public class OI {
     public Button operatorGrabClose = new JoystickButton(operator, 6);
 
     //Stacky
-    public Button operatorToteUp = new JoystickDirButton(operator, Direction.UP, 0, 1);
+    public Button operatorToteUp = new JoystickButton(operator, 2);//JoystickDirButton(operator, Direction.UP, 0, 1);
+    public Button operatorToteUpBlind = new JoystickDirButton(operator, Direction.UP, 0, 1);
     public Button operatorToteDown = new JoystickDirButton(operator, Direction.DOWN, 0, 1);
     public Button operatorToteDownAll = new JoystickButton(operator, 11);
     public Button operatorToteDownBit = new JoystickButton(operator, 3);

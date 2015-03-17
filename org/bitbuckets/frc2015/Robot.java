@@ -49,10 +49,10 @@ public class Robot extends IterativeRobot {
 
     public static SendableChooser autoChooser = new SendableChooser();
     
-    private Thread driveyThread;
-    private Thread grabbyThread;
-    private Thread stackyThread;
-    private Thread tiltyThread;
+    public Thread driveyThread;
+    public Thread grabbyThread;
+    public Thread stackyThread;
+    public Thread tiltyThread;
     
 
 
@@ -140,6 +140,7 @@ public class Robot extends IterativeRobot {
         }
         SerialPortManager.analogGyro.reset();
         
+        
         driveyThread = new Thread(new DriveyThread(50L, "Drivey Thread"));
         grabbyThread = new Thread(new GrabbyThread(100L, "Grabby Thread"));
         stackyThread = new Thread(new StackyThread(20L, "Stacky Thread"));
@@ -181,8 +182,12 @@ public class Robot extends IterativeRobot {
     }
 
     //*/*//*/*//*/*/*/*/*//*/*/Hck
-    public static double deadzone(double thing) {
-        return Math.abs(thing) < RandomConstants.DEADZONE ? 0 : thing;
+    public static double deadzone(double input) {
+        return Math.abs(input) < RandomConstants.DEADZONE ? 0 : input;
+    }
+    
+    public static double deadzone(double input, double deadzoneSize){
+    	return Math.abs(input) < deadzoneSize ? 0 : input;
     }
     //*///*/**/**/*/*/*/*/*/
 }

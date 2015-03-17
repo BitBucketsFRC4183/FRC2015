@@ -23,7 +23,7 @@ public class StackyThread extends SubsystemThread{
         downAll = new StackyDownAll();
         downBit = new StackyMoveDistance(-0.5);
         
-//      Robot.oi.operatorToteUp.whenPressed(upOne);
+        Robot.oi.operatorToteUpBlind.whenPressed(upOne);
         Robot.oi.operatorToteDown.whenPressed(downOne);
         Robot.oi.operatorToteDownAll.whenPressed(downAll);
         Robot.oi.operatorToteDownBit.whenPressed(downBit);
@@ -32,12 +32,13 @@ public class StackyThread extends SubsystemThread{
 	@Override
 	protected void execute(){
         //***/*/*/*/*/*///*/*///HACK
+		//upOne when button sensors are activated & autopickup mode is engaged
         if (Robot.oi.operatorToteUp.get() && Robot.stacky.getButtonsActive() && !upOne.isRunning() && !downAll.isRunning() && !downOne.isRunning()) {
             upOne.start();
         }
 
         if (!upOne.isRunning() && !downAll.isRunning() && !downOne.isRunning()) {
-            double speed = (Math.pow(Robot.oi.operator.getRawAxis(3), 3) - Math.pow(Robot.oi.operator.getRawAxis(4), 3))/2;
+            double speed = (Math.pow(Robot.oi.operator.getRawAxis(4), 3) - Math.pow(Robot.oi.operator.getRawAxis(3), 3))/2;
             if(Math.abs(speed) >= RandomConstants.DEADZONE){
                 Robot.stacky.setClosedLoop(false);
                 Robot.stacky.setWinchMotor(speed);

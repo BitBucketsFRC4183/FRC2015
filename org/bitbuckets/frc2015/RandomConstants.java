@@ -13,18 +13,21 @@ public class RandomConstants {
     public static final int DEFAULT_SETTLE_TIME = 150;
 
     /**
-     *
+     * The ratio at which the slow driving happens.
      */
     public static final double slowModeRatio = 0.5;
     /**
-     *
+     * What is this?
      */
     public static final double FUDGE_FACTOR = 1;
     /**
-     * Encoder ticks per revolution of a motor shaft
+     * Encoder ticks per revolution of a motor shaft.
      */
     public static final double ENC_TICK_PER_REV = 768.0;//256 enc ticks per rev, 4 ticks per enc tick
 
+    /**
+     * 
+     */
     public static final double DRIVEY_ENC_TICK_PER_REV = 256.0 * WHEEL_GEAR_RATIO;
 
     public static final double WHEEL_CIRCUMFERENCE = Math.PI / 3;
@@ -63,13 +66,22 @@ public class RandomConstants {
     /**
      * The speed for the carriage while it is going slowly.
      */
-    public static final double CARRIAGE_SLOW_SPEED = .5;
+    public static final double CARRIAGE_SLOW_SPEED = .35;
     /**
      *
      */
     public static final double STACK_UP_TIMEOUT = 4;
-    public static final double STACK_DOWN_TIMEOUT = 4;
-
+    /**
+     * 
+     */
+    public static final double STACK_DOWN_ONE_TIMEOUT = 1.5;
+    /**
+     * 
+     */
+    public static final double STACK_DOWN_ALL_TIMEOUT = 5;
+    /**
+     * 
+     */
     public static final boolean TESTING = true;
 
     //////////////////////////GRABBY/////////////////////////////
@@ -92,7 +104,7 @@ public class RandomConstants {
      *
      */
     public static final double DRIVE_KP = 0.2;
-    public static final double DRIVE_KI = 0.01;
+    public static final double DRIVE_KI = 0.005;
     public static final double DRIVE_KD = 0.01;
     public static final double DRIVE_KF = 0.01;
     public static final int DRIVE_IZONE = 50;

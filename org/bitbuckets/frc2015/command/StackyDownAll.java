@@ -73,7 +73,7 @@ public class StackyDownAll extends Command {
      * Make this return true when this Command no longer needs to run <code>execute()</code>.
      */
     protected boolean isFinished() {
-        return Robot.stacky.getLimitBottom() || (System.currentTimeMillis() - timeInit) / 1000 >= RandomConstants.STACK_DOWN_TIMEOUT;
+        return Robot.stacky.getLimitBottom() || (System.currentTimeMillis() - timeInit) / 1000 >= RandomConstants.STACK_DOWN_ALL_TIMEOUT;
     }
 
     /**
