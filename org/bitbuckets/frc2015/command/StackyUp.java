@@ -10,7 +10,7 @@ import org.bitbuckets.frc2015.Robot;
  *
  */
 public class StackyUp extends Command {
-    private int state = 0;
+    private boolean finished;
     private long timeInit;
     private boolean timeout;
 
@@ -20,54 +20,27 @@ public class StackyUp extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
+    	finished = false;
+    	timeout = false;
         Robot.stacky.setClosedLoop(false);
-        Robot.stacky.startReedAbove(false);
-        if (!Robot.stacky.getLimitTop()) {
-            state = 1;
+        Robot.stacky.startElevatorLatch(true);
+        Robot.stacky.startReedBelow(true);
+        if (Robot.stacky.getLimitTop()) {
+            finished = true;
         }
         timeInit = System.currentTimeMillis();
-        timeout = false;
     }
 
     /**
-     * This runs a state machine which runs the carriages at different speeds to get the carriages to go up one position.
-     * <ul>
-     * <li>State 1: Sets the winch to fast and waits until it's above the range of the upper switch</li>
-     * <li>State 2: Sets the winch to fast and waits until the next carriage hits the lower switch</li>
-     * <li>State 3: Sets the winch to slow and waits until the next carriage hits the upper switch</li>
-     * </ul>
+     * 
      */
     protected void execute() {
-        switch (state) {
-            case 1:
-                Robot.stacky.setWinchMotor(RandomConstants.CARRIAGE_FAST_SPEED);
-                if (Robot.stacky.getReedAbove()) {
-                    state = 2;
-                    Robot.stacky.startElevatorLatch(true);
-                    Robot.stacky.startReedBelow(true);
-                }
-                break;
-            case 2:
-                Robot.stacky.setWinchMotor(RandomConstants.CARRIAGE_FAST_SPEED);
-                if (Robot.stacky.getReedBelow()) {
-                    state = 3;
-                }
-                if (Robot.stacky.getElevatorLatch()) {
-                	state = 4;
-                }
-                break;
-            case 3:
-                Robot.stacky.setWinchMotor(RandomConstants.CARRIAGE_SLOW_SPEED);
-                if (Robot.stacky.getElevatorLatch()) {
-                    state = 4;
-                    Robot.stacky.upOne();
-                }
-                break;
-            case 4:
-            default:
-                break;
-        }
-        Robot.stacky.logStuffs((int)(System.currentTimeMillis() - timeInit));
+    	if(Robot.stacky.getElevatorLatch()){
+    		finished = true;
+    	}
+    	//requires either that the command is blind, or that the button sensors are pressed
+	    SmartDashboard.putBoolean("StackyUp finshed (top switch) reached?", finished);
+    	Robot.stacky.setWinchMotor(RandomConstants.CARRIAGE_FAST_SPEED);
     }
 
     /**
@@ -77,22 +50,22 @@ public class StackyUp extends Command {
      */
     protected boolean isFinished() {
     	timeout = (System.currentTimeMillis() - timeInit) / 1000 >= RandomConstants.STACK_UP_TIMEOUT;
-        return state == 4 || Robot.stacky.getLimitTop() || (System.currentTimeMillis() - timeInit) / 1000 >= RandomConstants.STACK_UP_TIMEOUT;
+
+        return finished || Robot.stacky.getLimitTop() || timeout;
     }
 
     /**
      * Stops the winch and resets the state machine.
      */
     protected void end() {
+    	finished = false;
+    	Robot.stacky.setWinchMotor(0);
         Robot.stacky.setClosedLoop(true);
         Robot.stacky.setWinchPosition(Robot.stacky.getDistanceUp() * RandomConstants.ENC_TICK_PER_REV/ RandomConstants.STACKY_WINCH_DRUM_CIRCUMFERENCE);
-        state = 0;
-        Robot.stacky.stopReedAbove();
         Robot.stacky.stopReedBelow();
         Robot.stacky.stopElevatorLatch();
         
         if(timeout) {
-        	System.out.println("StackUp has TIMED OUT YOU FOOLS!");
         	SmartDashboard.putString("StackUpTimeoutStatus", "It's bad, you guys.");
         }
     }
@@ -101,9 +74,10 @@ public class StackyUp extends Command {
      * Stops the winch and resets the state machine.
      */
     protected void interrupted() {
+    	finished = false;
         Robot.stacky.setWinchMotor(0);
-        state = 0;
-        Robot.stacky.stopReedAbove();
+        Robot.stacky.setClosedLoop(true);
+        Robot.stacky.setWinchPosition(Robot.stacky.getDistanceUp() * RandomConstants.ENC_TICK_PER_REV / RandomConstants.STACKY_WINCH_DRUM_CIRCUMFERENCE);
         Robot.stacky.stopReedBelow();
         Robot.stacky.stopElevatorLatch();
     }

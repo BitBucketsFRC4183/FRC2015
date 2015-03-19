@@ -1,6 +1,5 @@
 package org.bitbuckets.frc2015;
 
-import edu.wpi.first.wpilibj.CANTalon.ControlMode;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
@@ -14,7 +13,12 @@ import org.bitbuckets.frc2015.autonomous.AutoCanMove;
 import org.bitbuckets.frc2015.autonomous.AutoDriveTest;
 import org.bitbuckets.frc2015.autonomous.DriveToAutoZone;
 import org.bitbuckets.frc2015.autonomous.ThreeTotePickupAutoMode;
-import org.bitbuckets.frc2015.autonomous.DefaultProgram;
+import org.bitbuckets.frc2015.command.StackyDown;
+import org.bitbuckets.frc2015.command.StackyDownAll;
+import org.bitbuckets.frc2015.command.StackyMoveDistance;
+import org.bitbuckets.frc2015.command.StackyUp;
+import org.bitbuckets.frc2015.command.TiltDown;
+import org.bitbuckets.frc2015.command.TiltUp;
 import org.bitbuckets.frc2015.command.autonomous.DriveTime;
 import org.bitbuckets.frc2015.subsystems.Drivey;
 import org.bitbuckets.frc2015.subsystems.DriveyThread;
@@ -55,6 +59,14 @@ public class Robot extends IterativeRobot {
     public Thread tiltyThread;
     
 
+//    public static GrabbyOpen grabbyOpen;
+//	public static GrabbyClose grabbyClose;
+	public static TiltUp tiltUp;
+	public static TiltDown tiltDown;
+    public static StackyUp upOne;
+    public static StackyDown downOne;
+    public static StackyDownAll downAll;
+    public static StackyMoveDistance downBit;
 
     /**
      * This function is run when the robot is first started up and should be
@@ -72,6 +84,25 @@ public class Robot extends IterativeRobot {
         pdp = new PowerDistributionPanel();
         compressor = new Compressor(0);
         compressor.setClosedLoopControl(true);
+        
+//    	grabbyOpen = new GrabbyOpen();
+//    	grabbyClose = new GrabbyClose();
+    	tiltUp = new TiltUp();
+    	tiltDown = new TiltDown();
+        upOne = new StackyUp();
+        downOne = new StackyDown();
+        downAll = new StackyDownAll();
+        downBit = new StackyMoveDistance(-0.5);
+        
+//        oi.operatorGrabOpen.whenPressed(grabbyOpen);
+//        oi.operatorGrabClose.whenPressed(grabbyClose);
+		oi.operatorTiltUp.whenActive(tiltUp);
+		oi.operatorTiltDown.whenActive(tiltDown);
+	    oi.operatorToteUpBlind.whenPressed(upOne);
+	    oi.operatorToteDown.whenPressed(downOne);
+	    oi.operatorToteDownAll.whenPressed(downAll);
+	    oi.operatorToteDownBit.whenPressed(downBit);
+
 
         ///////////////////COMMANDS////////////////
 //        ChangeDriveMode driveMode = new ChangeDriveMode();
@@ -118,12 +149,13 @@ public class Robot extends IterativeRobot {
     public void autonomousInit() {
         // schedule the autonomous command (example)
         drivey.resetEncoders();
-        drivey.setEncoderSetting(ControlMode.Position);
+        //uncomment the following line for position based autoscripts, but ultimately each script should control it on its own.
+//        drivey.setEncoderSetting(ControlMode.Position);
         SerialPortManager.analogGyro.reset();
 
         //autonomousCommand = (Command) autoChooser.getSelected();
         //autonomousCommand = (Command) new AutoDriveTest();
-        autonomousCommand = (Command) new DriveTime(3L);
+        autonomousCommand = (Command) new DriveTime(2L, 9.0);
         autonomousCommand.start();
     }
 
@@ -157,10 +189,23 @@ public class Robot extends IterativeRobot {
      */
     public void teleopPeriodic() {
         Scheduler.getInstance().run();
+        
+//        SmartDashboard.putBoolean("Grabby Open:", grabbyOpen.isRunning());
+//        SmartDashboard.putBoolean("Grabby Close:", grabbyClose.isRunning());
+        SmartDashboard.putBoolean("Tilt Up:", tiltUp.isRunning());
+        SmartDashboard.putBoolean("Tilt Down:", tiltDown.isRunning());
+        SmartDashboard.putBoolean("Up One Blind:", upOne.isRunning());
+        SmartDashboard.putBoolean("Down One:", downOne.isRunning());
+        SmartDashboard.putBoolean("Down All:", downAll.isRunning());
+        SmartDashboard.putBoolean("Down Bit:", downBit.isRunning());
+        
+        SmartDashboard.putNumber("Stacky Motor Current", Robot.stacky.getWinchCurrent());
 
-        if(RandomConstants.TESTING) {
-            drivey.resetPIDs();
-        }
+//        if(RandomConstants.TESTING) {
+//            drivey.resetPIDs();
+//            stacky.resetStackyPID();
+//            grabby.resetGrabbyPID();
+//        }
 
         SmartDashboard.putData(Scheduler.getInstance());
 
@@ -183,7 +228,7 @@ public class Robot extends IterativeRobot {
 
     //*/*//*/*//*/*/*/*/*//*/*/Hck
     public static double deadzone(double input) {
-        return Math.abs(input) < RandomConstants.DEADZONE ? 0 : input;
+        return Math.abs(input) < RandomConstants.DEFAULT_DEADZONE ? 0 : input;
     }
     
     public static double deadzone(double input, double deadzoneSize){

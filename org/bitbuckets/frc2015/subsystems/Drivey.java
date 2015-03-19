@@ -4,6 +4,8 @@ import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.tables.TableKeyNotDefinedException;
+
 import org.bitbuckets.frc2015.RandomConstants;
 import org.bitbuckets.frc2015.RobotMap;
 import org.bitbuckets.frc2015.util.EmptyPIDOutput;
@@ -17,11 +19,12 @@ import java.io.IOException;
  *
  */
 public class Drivey extends Subsystem {
+	//wheel speed variables
     private double FL;
     private double FR;
     private double RL;
     private double RR;
-
+    
     private CANTalon flController;
     private CANTalon frController;
     private CANTalon rlController;
@@ -35,7 +38,7 @@ public class Drivey extends Subsystem {
     private FileWriter csvWriterflEnc;
 
     /**
-     * The constructor. Sets up the speeds and talons with k values for the internal PID controller.
+     * The constructor. Sets up the speeds and CANTalons with k values for the internal PID controller.
      */
     public Drivey() {
         super();
@@ -57,29 +60,34 @@ public class Drivey extends Subsystem {
         serialGyroSource = new EmptyPIDSource();
         headingOut = new EmptyPIDOutput();
         headingController = new PIDController(0.3, 0.001, 0, 0, SerialPortManager.analogGyro, headingOut, 20);
-
+        
         FL = 0;
         FR = 0;
         RL = 0;
         RR = 0;
 
+        //initialize CANTalons with the proper indexes
         flController = new CANTalon(RobotMap.WHEEL_FL_MOTOR);
         frController = new CANTalon(RobotMap.WHEEL_FR_MOTOR);
         rlController = new CANTalon(RobotMap.WHEEL_RL_MOTOR);
         rrController = new CANTalon(RobotMap.WHEEL_RR_MOTOR);
 
+        //sets the wheel encoders to 0
         resetEncoders();
 
+        //puts CANTalons on Speed PID control
         flController.changeControlMode(CANTalon.ControlMode.Speed);
         frController.changeControlMode(CANTalon.ControlMode.Speed);
         rlController.changeControlMode(CANTalon.ControlMode.Speed);
         rrController.changeControlMode(CANTalon.ControlMode.Speed);
 
+        //Inputs the PID values outlined in RandomConstants
         flController.setPID(RandomConstants.DRIVE_KP, RandomConstants.DRIVE_KI, RandomConstants.DRIVE_KD, RandomConstants.DRIVE_KF, RandomConstants.DRIVE_IZONE, 0, 0);
         frController.setPID(RandomConstants.DRIVE_KP, RandomConstants.DRIVE_KI, RandomConstants.DRIVE_KD, RandomConstants.DRIVE_KF, RandomConstants.DRIVE_IZONE, 0, 0);
         rlController.setPID(RandomConstants.DRIVE_KP, RandomConstants.DRIVE_KI, RandomConstants.DRIVE_KD, RandomConstants.DRIVE_KF, RandomConstants.DRIVE_IZONE, 0, 0);
         rrController.setPID(RandomConstants.DRIVE_KP, RandomConstants.DRIVE_KI, RandomConstants.DRIVE_KD, RandomConstants.DRIVE_KF, RandomConstants.DRIVE_IZONE, 0, 0);
 
+        //reverses the sensors on each CANTalon
         flController.reverseSensor(true);
         frController.reverseSensor(true);
         rlController.reverseSensor(true);
@@ -99,6 +107,9 @@ public class Drivey extends Subsystem {
         //setDefaultCommand(new MySpecialCommand());
     }
 
+    /**
+     * Sets the values of the four drive encoders to 0.
+     */
     public void resetEncoders() {
         flController.setPosition(0);
         frController.setPosition(0);
@@ -106,11 +117,18 @@ public class Drivey extends Subsystem {
         rrController.setPosition(0);
     }
 
+    /**
+     * Sets the PID values on the four CANTalons to the values input through SmartDashboard.
+     */
     public void resetPIDs() {
-        flController.setPID(SmartDashboard.getNumber("KP"), SmartDashboard.getNumber("KI"), SmartDashboard.getNumber("KD"), SmartDashboard.getNumber("KF"), (int) SmartDashboard.getNumber("IZONE"), 0, 0);
-        frController.setPID(SmartDashboard.getNumber("KP"), SmartDashboard.getNumber("KI"), SmartDashboard.getNumber("KD"), SmartDashboard.getNumber("KF"), (int) SmartDashboard.getNumber("IZONE"), 0, 0);
-        rlController.setPID(SmartDashboard.getNumber("KP"), SmartDashboard.getNumber("KI"), SmartDashboard.getNumber("KD"), SmartDashboard.getNumber("KF"), (int) SmartDashboard.getNumber("IZONE"), 0, 0);
-        rrController.setPID(SmartDashboard.getNumber("KP"), SmartDashboard.getNumber("KI"), SmartDashboard.getNumber("KD"), SmartDashboard.getNumber("KF"), (int) SmartDashboard.getNumber("IZONE"), 0, 0);
+    	try{
+	        flController.setPID(SmartDashboard.getNumber("KP"), SmartDashboard.getNumber("KI"), SmartDashboard.getNumber("KD"), SmartDashboard.getNumber("KF"), (int) SmartDashboard.getNumber("IZONE"), 0, 0);
+	        frController.setPID(SmartDashboard.getNumber("KP"), SmartDashboard.getNumber("KI"), SmartDashboard.getNumber("KD"), SmartDashboard.getNumber("KF"), (int) SmartDashboard.getNumber("IZONE"), 0, 0);
+	        rlController.setPID(SmartDashboard.getNumber("KP"), SmartDashboard.getNumber("KI"), SmartDashboard.getNumber("KD"), SmartDashboard.getNumber("KF"), (int) SmartDashboard.getNumber("IZONE"), 0, 0);
+	        rrController.setPID(SmartDashboard.getNumber("KP"), SmartDashboard.getNumber("KI"), SmartDashboard.getNumber("KD"), SmartDashboard.getNumber("KF"), (int) SmartDashboard.getNumber("IZONE"), 0, 0);
+    	} catch(TableKeyNotDefinedException e){
+    		e.printStackTrace();
+    	}
 
         SmartDashboard.putNumber("KP", flController.getP());
         SmartDashboard.putNumber("KI", flController.getI());
@@ -211,6 +229,12 @@ public class Drivey extends Subsystem {
         return vTan * Math.abs(Math.cos(theta - (thetaR + Math.PI / 2))) + vxc * Math.cos(theta) + vyc * Math.sin(theta);
     }
 
+    /**
+     * Changes all four drive encoders to a new PID control mode.
+     * 
+     * @param mode
+     * @see CANTalon.ControlMode
+     */
     public void setEncoderSetting(CANTalon.ControlMode mode) {
         flController.changeControlMode(mode);
         frController.changeControlMode(mode);
@@ -218,11 +242,27 @@ public class Drivey extends Subsystem {
         rrController.changeControlMode(mode);
     }
 
+    /**
+     * Sets each of the four CANTalons to new setpoints.
+     * 
+     * @param flSet - Setpoint for the front left CANTalon.
+     * @param frSet - Setpoint for the front right CANTalon.
+     * @param rlSet - Setpoint for the back left CANTalon.
+     * @param rrSet - Setpoint for the back right CANTalon.
+     */
     public void setControllers(double flSet, double frSet, double rlSet, double rrSet) {
         flController.set(flSet);
         frController.set(frSet);
         rlController.set(rlSet);
         rrController.set(rrSet);
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public int[] getEncValues(){
+    	return new int[]{flController.getEncPosition(), frController.getEncPosition(), rlController.getEncPosition(), rrController.getEncPosition()};
     }
 }
 

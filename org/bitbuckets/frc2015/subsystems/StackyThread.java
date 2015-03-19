@@ -8,46 +8,37 @@ import org.bitbuckets.frc2015.command.StackyMoveDistance;
 import org.bitbuckets.frc2015.command.StackyUp;
 
 import edu.wpi.first.wpilibj.CANTalon.ControlMode;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class StackyThread extends SubsystemThread{
 	
-	StackyUp upOne;
-	StackyDown downOne;
-	StackyDownAll downAll;
-	StackyMoveDistance downBit;
+	private double position = 0;
 	
 	public StackyThread(long iterTime, String name) {
 		super(iterTime, name);
-        upOne = new StackyUp();
-        downOne = new StackyDown();
-        downAll = new StackyDownAll();
-        downBit = new StackyMoveDistance(-0.5);
-        
-        Robot.oi.operatorToteUpBlind.whenPressed(upOne);
-        Robot.oi.operatorToteDown.whenPressed(downOne);
-        Robot.oi.operatorToteDownAll.whenPressed(downAll);
-        Robot.oi.operatorToteDownBit.whenPressed(downBit);
 	}
 	
 	@Override
 	protected void execute(){
-        //***/*/*/*/*/*///*/*///HACK
 		//upOne when button sensors are activated & autopickup mode is engaged
-        if (Robot.oi.operatorToteUp.get() && Robot.stacky.getButtonsActive() && !upOne.isRunning() && !downAll.isRunning() && !downOne.isRunning()) {
-            upOne.start();
+		if(Robot.oi.operatorToteUp.get() && Robot.stacky.getButtonsActive()){
+            Robot.upOne.start();
         }
 
-        if (!upOne.isRunning() && !downAll.isRunning() && !downOne.isRunning()) {
+		//maybe move these back into their respective subsystems
+        if (!Robot.upOne.isRunning() && !Robot.downAll.isRunning() && !Robot.downOne.isRunning() && !Robot.downBit.isRunning()) {
             double speed = (Math.pow(Robot.oi.operator.getRawAxis(4), 3) - Math.pow(Robot.oi.operator.getRawAxis(3), 3))/2;
-            if(Math.abs(speed) >= RandomConstants.DEADZONE){
+            if(Math.abs(speed) >= RandomConstants.DEFAULT_DEADZONE){
                 Robot.stacky.setClosedLoop(false);
                 Robot.stacky.setWinchMotor(speed);
             }else if(Robot.stacky.getControlMode() == ControlMode.PercentVbus){
+            	position = Robot.stacky.getDistanceUp() * RandomConstants.ENC_TICK_PER_REV/ RandomConstants.STACKY_WINCH_DRUM_CIRCUMFERENCE;
+            	Robot.stacky.setWinchMotor(0);
                 Robot.stacky.setClosedLoop(true);
-                Robot.stacky.setWinchPosition(Robot.stacky.getDistanceUp() * RandomConstants.ENC_TICK_PER_REV/ RandomConstants.STACKY_WINCH_DRUM_CIRCUMFERENCE);
+                Robot.stacky.setWinchPosition(position);
             }
         }
-        //*/*////*/*/*///
+                
 	}
 
 }

@@ -1,12 +1,16 @@
 package org.bitbuckets.frc2015;
 
 
-public class RandomConstants {
+public class RandomConstants {    
+	
+	
+    ///////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////----MISC----//////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////
     /**
-     * The gear ratio of the gearbox between the encoder and the wheel in a wheel module.
+     * The deadband after which the stick is seen as "pressed";
      */
-    public static final double WHEEL_GEAR_RATIO = 70. / 24.;
-    
+    public static final double STICK_TO_BUTTON_DEADBAND = .2;
     /**
      * Default settle time for autonomous driving, in milliseconds.
      */
@@ -21,23 +25,22 @@ public class RandomConstants {
      */
     public static final double FUDGE_FACTOR = 1;
     /**
+     * An example deadzone value
+     */
+    public static final double DEFAULT_DEADZONE = 0.01;
+    /**
+     * Toggles various debug statements.
+     */
+    public static final boolean TESTING = true;
+    /**
      * Encoder ticks per revolution of a motor shaft.
      */
     public static final double ENC_TICK_PER_REV = 768.0;//256 enc ticks per rev, 4 ticks per enc tick
-
-    /**
-     * 
-     */
-    public static final double DRIVEY_ENC_TICK_PER_REV = 256.0 * WHEEL_GEAR_RATIO;
-
-    public static final double WHEEL_CIRCUMFERENCE = Math.PI / 3;
-
-    public static final double STACKY_WINCH_DRUM_CIRCUMFERENCE = 2 * Math.PI / 12;
-
-    public static final double GRABBY_WINCH_DRUM_CIRCUMFERENCE = 3 * Math.PI / 24;
-
-    public static final double DEADZONE = 0.01;
-
+    
+    
+    ///////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////----DRIVEY----////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////
     /**
      * Maximum translational speed in ft/s.(needs to be converted to ft/s)
      */
@@ -51,70 +54,151 @@ public class RandomConstants {
      */
     public static final double MAX_ROT_SPEED = 3;
     /**
-     * Maximum rotational acceleration in rad/s^2
+     * Maximum rotational acceleration in rad/s^2.
      */
     public static final double MAX_ROT_ACCEL = 3;
-
-    public static final double MAX_GRABBY_LIFTER_SPEED = 2;
-
-    public static final double MAX_GRABBY_LIFTER_ACCEL = 1;
-
+    /**
+     * The gear ratio of the gearbox between the encoder and the wheel in a wheel module.
+     */
+    public static final double WHEEL_GEAR_RATIO = 70. / 24.;
+    /**
+     * The approximate circumference of a drivetrain wheel.
+     */
+    public static final double WHEEL_CIRCUMFERENCE = Math.PI / 3;
+    /**
+     * Encoder ticks for one revolution of a wheel.
+     */
+    public static final double DRIVEY_ENC_TICK_PER_REV = 256.0 * WHEEL_GEAR_RATIO;
+    
+    
+    ///////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////----STACKY----////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////
     /**
      * The speed for the carriage while it is going fast.
      */
-    public static final double CARRIAGE_FAST_SPEED = .5;
+    public static final double CARRIAGE_FAST_SPEED = .7;
     /**
      * The speed for the carriage while it is going slowly.
      */
-    public static final double CARRIAGE_SLOW_SPEED = .35;
+    public static final double CARRIAGE_SLOW_SPEED = .5;
     /**
-     *
+     * The approximate circumference of the Stacky winch drum.
+     */
+    public static final double STACKY_WINCH_DRUM_CIRCUMFERENCE = 2 * Math.PI / 12;
+    /**
+     * Timeout for the StackyUp command, in seconds.
      */
     public static final double STACK_UP_TIMEOUT = 4;
     /**
-     * 
+     * Timeout for the StackyDownOne command, in seconds.
      */
     public static final double STACK_DOWN_ONE_TIMEOUT = 1.5;
     /**
-     * 
+     * Timeout for the StackyDownAll command, in seconds.
      */
     public static final double STACK_DOWN_ALL_TIMEOUT = 5;
+
+    
+    ///////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////----GRABBY----////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////
+    /**
+     * Maximum speed of Grabby's lift in rad/s.
+     */
+    public static final double MAX_GRABBY_LIFTER_SPEED = 1;
+    /**
+     * Maximum acceleration of Grabby's lift in rad/s^2.
+     */
+    public static final double MAX_GRABBY_LIFTER_ACCEL = 1;
     /**
      * 
-     */
-    public static final boolean TESTING = true;
-
-    //////////////////////////GRABBY/////////////////////////////
-    /**
-     *
      */
     public static final double GRABBY_CURRRENT_MAX = 8;
     /**
-     *
+     * 
      */
     public static final double GRAB_TIMEOUT = 2;
-    public static final double GRAB_SPEED = 1;
-
     /**
-     * The deadband after which the stick is seen as "pressed";
+     * 
      */
-    public static final double STICK_TO_BUTTON_DEADBAND = .5;
-
+    public static final double GRAB_SPEED = 1;
     /**
-     *
+     * The approximate circumference of the Grabby winch drum.
+     */
+    public static final double GRABBY_WINCH_DRUM_CIRCUMFERENCE = 3 * Math.PI / 24;
+    
+    
+    ///////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////----TILTY----////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////
+
+
+    
+    ///////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////----PID----///////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////
+    
+    /**
+     * Proportional constant for driving.
      */
     public static final double DRIVE_KP = 0.2;
+    /**
+     * Integral constants for driving.
+     */
     public static final double DRIVE_KI = 0.005;
+    /**
+     * Derivative constant for driving.
+     */
     public static final double DRIVE_KD = 0.01;
+    /**
+     * Feedforward constant for driving.
+     */
     public static final double DRIVE_KF = 0.01;
+    /**
+     * Integral zone for driving.
+     */
     public static final int DRIVE_IZONE = 50;
-
-    public static final double STACKY_KP = .3;
-    public static final double STACKY_KI = 0.005;
+    
+    /**
+     * Proportional constant for Stacky.
+     */
+    public static final double STACKY_KP = 1;
+    /**
+     * Integral constant for Stacky.
+     */
+    public static final double STACKY_KI = 0.00;
+    /**
+     * Derivative constant for Stacky.
+     */
     public static final double STACKY_KD = 0;
-    public static final int STACKY_IZONE = 50;
+    /**
+     * Feed Forward constant for Stacky.
+     */
+    public static final double STACKY_KF = 0;
+    /**
+     * Integral zone for Stacky.
+     */
+    public static final int STACKY_IZONE = 500;
 
+    /**
+     * Proportional constant for Grabby.
+     */
     public static final double GRABBY_KP = .3;
+    /**
+     * Integral constant for Grabby.
+     */
     public static final double GRABBY_KI = 0;
+    /**
+     * Derivative constant for Grabby.
+     */
     public static final double GRABBY_KD = 0;
+    /**
+     * Feed Forward constant for Grabby.
+     */
+    public static final double GRABBY_KF = 0;
+    /**
+     * Integral zone for Grabby.
+     */
+    public static final int GRABBY_IZONE = 50;
 }

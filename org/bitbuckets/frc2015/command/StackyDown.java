@@ -1,6 +1,8 @@
 package org.bitbuckets.frc2015.command;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import org.bitbuckets.frc2015.RandomConstants;
 import org.bitbuckets.frc2015.Robot;
 //TODO Fix Javadocs
@@ -29,12 +31,14 @@ public class StackyDown extends Command {
             finished = true;
         }
         timeInit = System.currentTimeMillis();
+        SmartDashboard.putString("StackyDown Diagnostic:", "Initialized");
     }
 
     /**
      * Called repeatedly when this Command is scheduled to run.
      */
     protected void execute() {
+    	SmartDashboard.putString("StackyDown Diagnostic:", "Executing");
         Robot.stacky.setWinchMotor(-1 * RandomConstants.CARRIAGE_SLOW_SPEED);
         if(Robot.stacky.getReedAbove()){
         	finished = true;
@@ -52,6 +56,7 @@ public class StackyDown extends Command {
      * Called once after <code>isFinished()</code> returns true.
      */
     protected void end() {
+    	SmartDashboard.putString("StackyDown Diagnostic:", "Ended");
         finished = false;
     	Robot.stacky.setWinchMotor(0);
         Robot.stacky.setClosedLoop(true);

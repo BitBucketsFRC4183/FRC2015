@@ -3,6 +3,8 @@ package org.bitbuckets.frc2015.subsystems;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.tables.TableKeyNotDefinedException;
+
 import org.bitbuckets.frc2015.RandomConstants;
 import org.bitbuckets.frc2015.Robot;
 import org.bitbuckets.frc2015.RobotMap;
@@ -25,12 +27,21 @@ public class Grabby extends Subsystem {
     public Grabby() {
         grabberController = new Talon(RobotMap.GRABBY_GRABBER);
         lifterController = new CANTalon(RobotMap.GRABBY_LIFTER);
+        lifterController.reverseOutput(true);
 
-        lifterController.setPID(RandomConstants.GRABBY_KP, RandomConstants.GRABBY_KI, RandomConstants.GRABBY_KD);
-        lifterController.changeControlMode(CANTalon.ControlMode.Speed);
+        lifterController.setPID(RandomConstants.GRABBY_KP, RandomConstants.GRABBY_KI, RandomConstants.GRABBY_KD, 0.0, RandomConstants.GRABBY_IZONE, 0, 0);
+        lifterController.changeControlMode(CANTalon.ControlMode.PercentVbus);
         lifterController.enableLimitSwitch(true, true);
+        
+        
 
         open = new DigitalInput(RobotMap.GRABBY_OPEN);
+        
+		SmartDashboard.putNumber("Grabby KP:", RandomConstants.GRABBY_KP);
+		SmartDashboard.putNumber("Grabby KI:", RandomConstants.GRABBY_KI);
+		SmartDashboard.putNumber("Grabby KD:", RandomConstants.GRABBY_KD);
+		SmartDashboard.putNumber("Grabby KF:", RandomConstants.GRABBY_KF);
+		SmartDashboard.putNumber("Grabby IZONE:", RandomConstants.GRABBY_IZONE);
     }
 
     public void initDefaultCommand() {
@@ -60,7 +71,7 @@ public class Grabby extends Subsystem {
      * @param speed The speed at which to make the grabber move in ft/s
      */
     public void setLifterMotor(double speed){
-        lifterController.set(speed * RandomConstants.ENC_TICK_PER_REV / RandomConstants.GRABBY_WINCH_DRUM_CIRCUMFERENCE);
+        lifterController.set(speed /* * RandomConstants.ENC_TICK_PER_REV / RandomConstants.GRABBY_WINCH_DRUM_CIRCUMFERENCE*/);
         SmartDashboard.putNumber("Limit Fault", lifterController.getFaultForLim());
         SmartDashboard.putNumber("Soft Limit Fault", lifterController.getFaultForSoftLim());
         SmartDashboard.putNumber("Hardware Faliure Fault", lifterController.getFaultHardwareFailure());
@@ -130,6 +141,20 @@ public class Grabby extends Subsystem {
      */
     public CANTalon getLifterController(){
     	return lifterController;
+    }
+    
+    public void resetGrabbyPID(){
+    	try{
+    		lifterController.setPID(SmartDashboard.getNumber("Grabby KP"), SmartDashboard.getNumber("Grabby KI"), SmartDashboard.getNumber("Grabby KD"), SmartDashboard.getNumber("Grabby KF"), (int) SmartDashboard.getNumber("Grabby IZONE"), 0, 0);
+    	} catch(TableKeyNotDefinedException e){
+    		e.printStackTrace();
+    	}
+    	
+        SmartDashboard.putNumber("Grabby KP", lifterController.getP());
+        SmartDashboard.putNumber("Grabby KI", lifterController.getI());
+        SmartDashboard.putNumber("Grabby KD", lifterController.getD());
+        SmartDashboard.putNumber("Grabby KF", lifterController.getF());
+        SmartDashboard.putNumber("Grabby IZONE", lifterController.getIZone());
     }
 }
 

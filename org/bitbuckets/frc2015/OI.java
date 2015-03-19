@@ -62,7 +62,7 @@ public class OI {
     public Button driverReverse = new JoystickButton(driver, 8);
     
     //Operator
-    public Button cancelCommands = new JoystickButton(operator, 4);
+    //public Button cancelCommands = new JoystickButton(operator, 4);
 
     //Tilty
     public POVHatDirButton operatorTiltUp = new POVHatDirButton(operator, Direction.UP);

@@ -4,8 +4,10 @@ import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.tables.TableKeyNotDefinedException;
 
 import org.bitbuckets.frc2015.RandomConstants;
+import org.bitbuckets.frc2015.Robot;
 import org.bitbuckets.frc2015.RobotMap;
 import org.bitbuckets.frc2015.control.DigitalInputLatch;
 import org.bitbuckets.frc2015.control.ElevatorStopLatch;
@@ -33,17 +35,24 @@ public class Stacky extends Subsystem {
      * The upper control reed switch
      */
     private DigitalInput reedAbove;
+    /**
+     * The Latch wrapper for the upper reed switch
+     */
     private DigitalInputLatch reedAboveLatch;
     /**
      * The upper control reed switch
      */
     private DigitalInput reedBelow;
+    /**
+     * The Latch wrapper for the lower reed switch
+     */
     private DigitalInputLatch reedBelowLatch;
     /**
      * Allows the top reed sensor to stop the elevator on a short timescale.
      */
     private ElevatorStopLatch elevatorStopLatch;
 
+    //deprecated since the limit switches are plugged directly into the Talon SRX.
 //    private DigitalInput limitTop;
 //    private DigitalInput limitBottom;
 
@@ -69,18 +78,23 @@ public class Stacky extends Subsystem {
     	
 		SmartDashboard.putBoolean("Winch enc too low", false);
     	
+		//initializes CANTalon for the winch
         winch = new CANTalon(RobotMap.WINCH_MOTOR);
 
+        //enables both limit switches for the winch
         winch.enableLimitSwitch(true, true);
 
+        //sets the PID values for the winch
         winch.setPID(RandomConstants.STACKY_KP, RandomConstants.STACKY_KI, RandomConstants.STACKY_KD, 0.0, RandomConstants.STACKY_IZONE, 0, 0);
 
+        //initializes all of the reed switches and their latches
         reedAbove = new DigitalInput(RobotMap.HALL_ABOVE);
         reedBelow = new DigitalInput(RobotMap.HALL_BELOW);
         reedAboveLatch = new DigitalInputLatch(reedAbove, 2L);
         reedBelowLatch = new DigitalInputLatch(reedBelow, 2L);
         elevatorStopLatch = new ElevatorStopLatch(reedAbove, 5L);
 
+        //again, deprecated since the limit switches go directly into the Talon SRX
 //        limitTop = new DigitalInput(RobotMap.SWITCH_TOP);
 //        limitBottom = new DigitalInput(RobotMap.SWITCH_BOTTOM);
 
@@ -97,6 +111,19 @@ public class Stacky extends Subsystem {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        
+
+		SmartDashboard.putNumber("Stacky KP:", RandomConstants.STACKY_KP);
+		SmartDashboard.putNumber("Stacky KI:", RandomConstants.STACKY_KI);
+		SmartDashboard.putNumber("Stacky KD:", RandomConstants.STACKY_KD);
+		SmartDashboard.putNumber("Stacky KF:", RandomConstants.STACKY_KF);
+		SmartDashboard.putNumber("Stacky IZONE:", RandomConstants.STACKY_IZONE);
+		
+		SmartDashboard.putNumber("Input Stacky KP:", RandomConstants.STACKY_KP);
+		SmartDashboard.putNumber("Input Stacky KI:", RandomConstants.STACKY_KI);
+		SmartDashboard.putNumber("Input Stacky KD:", RandomConstants.STACKY_KD);
+		SmartDashboard.putNumber("Input Stacky KF:", RandomConstants.STACKY_KF);
+		SmartDashboard.putNumber("Input Stacky IZONE:", RandomConstants.STACKY_IZONE);
     }
 
     /**
@@ -107,16 +134,17 @@ public class Stacky extends Subsystem {
     }
 
     /**
-     * Sets the speed of the winch if the {@link edu.wpi.first.wpilibj.CANJaguar.ControlMode} is <code>Disabled</code> or open loop.
+     * Sets the speed of the winch if the {@link edu.wpi.first.wpilibj.CANTalon.ControlMode} is <code>Disabled</code> or open loop.
      *
      * @param speed The speed to set the winch.
      */
     public void setWinchMotor(double speed) {
-    	if(winch.getEncPosition() <= -400 && isReset){
-    		speed = 0;
-    		SmartDashboard.putBoolean("Winch enc too low", true);
-    	}
+//    	if(winch.getEncPosition() <= -400 && isReset){
+//    		speed = 0;
+//    		SmartDashboard.putBoolean("Winch enc too low", true);
+//    	}
     	SmartDashboard.putNumber("Running winch at: ", speed);
+    	SmartDashboard.putString("Stacky winch mode:", winch.getControlMode().toString());
     	if (winch.getControlMode() == CANTalon.ControlMode.PercentVbus) {
             winch.set(speed);
             if (RandomConstants.TESTING) {
@@ -152,6 +180,11 @@ public class Stacky extends Subsystem {
         winch.changeControlMode(closed ? CANTalon.ControlMode.Position : CANTalon.ControlMode.PercentVbus);
     }
     
+    /**
+     * Wrapper method to start the top reed latch.
+     * 
+     * @param goal - Boolean indicating whether the reed is waiting for a rising or falling edge. True = rising, false = falling.
+     */
     public void startReedAbove(boolean goal){
     	try{
     		reedAboveLatch.start(goal);
@@ -160,6 +193,11 @@ public class Stacky extends Subsystem {
     	}
     }
     
+    /**
+     * Wrapper method to start the bottom reed latch.
+     * 
+     * @param goal - Boolean indicating whether the reed is waiting for a rising or falling edge. True = rising, false = falling.
+     */
     public void startReedBelow(boolean goal){
     	try{
     		reedBelowLatch.start(goal);
@@ -168,6 +206,11 @@ public class Stacky extends Subsystem {
     	}
     }
 
+    /**
+     * Wrapper method to start the top reed latch, in a way that will immediatly stop the elevator.
+     * 
+     * @param goal - Boolean indicating whether the reed is waiting for a rising or falling edge. True = rising, false = falling.
+     */
     public void startElevatorLatch(boolean goal){
         try{
             elevatorStopLatch.start(goal);
@@ -176,30 +219,57 @@ public class Stacky extends Subsystem {
         }
     }
     
+    /**
+     * Stops the top latch.
+     */
     public void stopReedAbove(){
     	reedAboveLatch.stopThread();
     }
 
+    /**
+     * Stops the bottom latch.
+     */
     public void stopReedBelow(){
     	reedBelowLatch.stopThread();
     }
 
+    /**
+     * Stops the auto-stop latch.
+     */
     public void stopElevatorLatch(){
         elevatorStopLatch.stopThread();
     }
 
+    /**
+     * Gets the current value of the top latch.
+     * 
+     * @return
+     */
     public boolean getReedAbove() {
         return reedAboveLatch.getValue();
     }
 
+    /**
+     * Gets the current value of the bottom latch.
+     * 
+     * @return
+     */
     public boolean getReedBelow() {
         return reedBelowLatch.getValue();
     }
 
+    /**
+     * Gets the current value of the autostop latch.
+     * 
+     * @return
+     */
     public boolean getElevatorLatch(){
         return elevatorStopLatch.getValue();
     }
 
+    /**
+     * Logs various values from Stacky.
+     */
     ///*/*/***/*/*////***////HACK
     public void logStuffs(int millis){
         try {
@@ -211,6 +281,9 @@ public class Stacky extends Subsystem {
         }
     }
 
+    /**
+     * Resets the file writer.
+     */
     public void resetFileStuff(){
         try {
             logthing.close();
@@ -221,6 +294,11 @@ public class Stacky extends Subsystem {
     }
     //*/**/*//*/*/*/***//*
 
+    /**
+     * Returns the control mode of the winch.
+     * 
+     * @return
+     */
     public CANTalon.ControlMode getControlMode(){
         return winch.getControlMode();
     }
@@ -250,10 +328,16 @@ public class Stacky extends Subsystem {
         return true;
     }
 
+    /**
+     * Increments the carriage index by one.
+     */
     public void upOne() {
         numUp++;
     }
 
+    /**
+     * Decrements the carriage index  by one.
+     */
     public void downOne() {
         numUp--;
     }
@@ -267,6 +351,10 @@ public class Stacky extends Subsystem {
         return numUp;
     }
 
+    /**
+     * Sets the carriage index.
+     * @param up
+     */
     public void setNumUp(int up) {
         numUp = up;
         if (numUp < 0) {
@@ -283,10 +371,22 @@ public class Stacky extends Subsystem {
         return !bumperLeft.get() && !bumperRight.get();
     }
 
+    /**
+     * Returns the winch encoder position in feet(?).
+     * 
+     * @return
+     */
     public double getDistanceUp() {
         return winch.getEncPosition() * RandomConstants.STACKY_WINCH_DRUM_CIRCUMFERENCE / RandomConstants.ENC_TICK_PER_REV;
     }
+    
+    public double getWinchCurrent(){
+    	return Robot.pdp.getCurrent(2);
+    }
 
+    /**
+     * Prints various values to the SmartDashboard for diagnostics.
+     */
     //*/*/*/*/*/*/*/*/*///*/****/HACK
     public void printStuff() {
         if (RandomConstants.TESTING) {
@@ -296,6 +396,23 @@ public class Stacky extends Subsystem {
             SmartDashboard.putBoolean("Reed Above", getReedAbove());
             SmartDashboard.putBoolean("Reed Below", getReedBelow());
         }
+    }
+    
+    /**
+     * 
+     */
+    public void resetStackyPID(){
+    	try{
+    		winch.setPID(SmartDashboard.getNumber("Input Stacky KP"), SmartDashboard.getNumber("Input Stacky KI"), SmartDashboard.getNumber("Input Stacky KD"), SmartDashboard.getNumber("Input Stacky KF"), (int) SmartDashboard.getNumber("Input Stacky IZONE"), 0, 0);
+    	} catch(TableKeyNotDefinedException e){
+    		e.printStackTrace();
+    	}
+    	
+        SmartDashboard.putNumber("Stacky KP", winch.getP());
+        SmartDashboard.putNumber("Stacky KI", winch.getI());
+        SmartDashboard.putNumber("Stacky KD", winch.getD());
+        SmartDashboard.putNumber("Stacky KF", winch.getF());
+        SmartDashboard.putNumber("Stacky IZONE", winch.getIZone());
     }
 }
 

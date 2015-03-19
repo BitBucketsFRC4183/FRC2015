@@ -15,6 +15,6 @@ import org.bitbuckets.frc2015.command.autonomous.DriveTime;
 public class AutoDriveTest extends CommandGroup {
 
     public AutoDriveTest() {
-        addSequential(new DriveTime(1L));
+        addSequential(new DriveTime(3L, 3.0));
     }
 }
