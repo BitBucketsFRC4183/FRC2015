@@ -1,26 +1,16 @@
 package org.bitbuckets.frc2015;
 
-import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.PowerDistributionPanel;
-import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.command.Scheduler;
-import edu.wpi.first.wpilibj.livewindow.LiveWindow;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
-import org.bitbuckets.frc2015.autonomous.*;
+import org.bitbuckets.frc2015.autonomous.AutoCanMove;
+import org.bitbuckets.frc2015.autonomous.AutoCanRetrieval;
+import org.bitbuckets.frc2015.autonomous.AutoDriveTest;
+import org.bitbuckets.frc2015.autonomous.DriveToAutoZone;
+import org.bitbuckets.frc2015.autonomous.ThreeTotePickupAutoMode;
 import org.bitbuckets.frc2015.command.StackyDown;
 import org.bitbuckets.frc2015.command.StackyDownAll;
 import org.bitbuckets.frc2015.command.StackyMoveDistance;
 import org.bitbuckets.frc2015.command.StackyUp;
 import org.bitbuckets.frc2015.command.TiltDown;
 import org.bitbuckets.frc2015.command.TiltUp;
-import org.bitbuckets.frc2015.command.autonomous.DrivePolar;
-import org.bitbuckets.frc2015.command.autonomous.DriveTime;
-import org.bitbuckets.frc2015.command.GrabbyClose;
-import org.bitbuckets.frc2015.command.GrabbyMoveDistance;
-import org.bitbuckets.frc2015.autonomous.AutoCanMove;
 import org.bitbuckets.frc2015.subsystems.Drivey;
 import org.bitbuckets.frc2015.subsystems.DriveyThread;
 import org.bitbuckets.frc2015.subsystems.Grabby;
@@ -30,6 +20,15 @@ import org.bitbuckets.frc2015.subsystems.StackyThread;
 import org.bitbuckets.frc2015.subsystems.Tilty;
 import org.bitbuckets.frc2015.subsystems.TiltyThread;
 import org.bitbuckets.frc2015.util.SerialPortManager;
+
+import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
+import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 /**
@@ -116,13 +115,17 @@ public class Robot extends IterativeRobot {
         //TODO make some sort of tag at start of scripts required, so that auto scripts, constant files, etc. don't get confused
         //AutoProgramGenerator.generateAutoPrograms();
 
-//        autoChooser.addObject("Take Can", new GrabbyClose());
-//        autoChooser.addObject("Grabby move", new GrabbyMoveDistance(1));
-//        autoChooser.addObject("Drive Polar Test", new DrivePolar(6, 90, 2));
-//        autoChooser.addObject("Grab can and move", (Command) new AutoCanMove());
-//        autoChooser.addObject("Grab can", (Command) new AutoCanPickup());
-//        SmartDashboard.putData("Auto Chooser", autoChooser);
-        autonomousCommand = (Command) new AutoCanPickup();
+
+        //autonomousCommand = new AutoDriveTest();
+        autoChooser.addDefault("Three Tote", new ThreeTotePickupAutoMode());
+        autoChooser.addObject("Drive to AutoZone", new DriveToAutoZone());
+        autoChooser.addObject("Drive Test", new AutoDriveTest());
+        autoChooser.addObject("Take Can", new AutoCanMove());
+        SmartDashboard.putData("Auto Chooser", autoChooser);
+        
+        SmartDashboard.putNumber("CanStepDuration", 0.2);
+        SmartDashboard.putNumber("CanStepSpeed", 0.5);
+        
     }
 
     /**
@@ -161,11 +164,10 @@ public class Robot extends IterativeRobot {
         //uncomment the following line for position based autoscripts, but ultimately each script should control it on its own.
 //        drivey.setEncoderSetting(ControlMode.Position);
         SerialPortManager.analogGyro.reset();
+        
+        autonomousCommand = (Command) new AutoCanRetrieval();
 
-//        autonomousCommand = (Command) autoChooser.getSelected();
-//        autonomousCommand = (Command) new AutoDriveTest();
-//        autonomousCommand = (Command) new DriveTime(4L, 4.0);
-//        autonomousCommand = (Command) new GrabbyClose();
+        //autonomousCommand = (Command) autoChooser.getSelected();
         if(autonomousCommand != null){
         	autonomousCommand.start();
         }
