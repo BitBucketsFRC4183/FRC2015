@@ -4,6 +4,7 @@ import org.bitbuckets.frc2015.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.tables.TableKeyNotDefinedException;
 
 /**
  *
@@ -15,18 +16,32 @@ public class CanStepGrab extends Command {
     double speed;
     long duration;
     boolean getDashboardVals;
+    String key;
     
     public CanStepGrab(double speed, long duration, boolean getDashboardVals, String key){
-    	
-    }
-
-	
-    public CanStepGrab(double speed, long duration, boolean getDashboardVals) {
-        requires(Robot.grabby);
+    	requires(Robot.grabby);
         finished = false;
         this.speed = speed;
         this.duration = duration;
         this.getDashboardVals = getDashboardVals;
+        this.key = key;
+        if(getDashboardVals){
+	        try{
+	        	duration = (long) SmartDashboard.getNumber(key+": CanStepDuration");
+	        } catch(TableKeyNotDefinedException e ) {
+	        	SmartDashboard.putNumber(key+": CanStepDuration", duration);
+	        }
+	        try{
+	        	speed = SmartDashboard.getNumber(key+": CanStepSpeed");
+	        } catch(TableKeyNotDefinedException e ) {
+	        	SmartDashboard.putNumber(key+": CanStepSpeed", speed);
+	        }
+        }
+    }
+
+	
+    public CanStepGrab(double speed, long duration, boolean getDashboardVals) {
+        this(speed, duration, getDashboardVals, "");
     }
 
 	/**
@@ -38,12 +53,12 @@ public class CanStepGrab extends Command {
 	 * @param speed - How fast the motor should run, from -1.0 to 1.0.
 	 */
     public CanStepGrab(double speed, long duration) {
-        this(speed, duration, true);
+        this(speed, duration, true, "");
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
-        motorThread = new Thread(new MotorThread(speed, duration, getDashboardVals));
+        motorThread = new Thread(new MotorThread(speed, duration, getDashboardVals, key));
         motorThread.start();
     }
 
@@ -72,11 +87,11 @@ public class CanStepGrab extends Command {
         double speed = 0;
         long timeInit = 0;
 
-        public MotorThread(double speed, long duration, boolean getDashboardVals){
+        public MotorThread(double speed, long duration, boolean getDashboardVals, String key){
             timeInit = System.currentTimeMillis();
             if(getDashboardVals){
-                this.duration = (long) SmartDashboard.getNumber("CanStepDuration", duration);
-                this.speed = SmartDashboard.getNumber("CanStepSpeed", speed);
+                this.duration = (long) SmartDashboard.getNumber(key+": CanStepDuration", duration);
+                this.speed = SmartDashboard.getNumber(key+"CanStepSpeed", speed);
             } else {
                 this.duration = duration;
                 this.speed = speed;

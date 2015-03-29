@@ -124,9 +124,6 @@ public class Robot extends IterativeRobot {
         autoChooser.addObject("Take Can", new AutoCanMove());
         SmartDashboard.putData("Auto Chooser", autoChooser);
         
-        SmartDashboard.putNumber("CanStepDuration", 0.2);
-        SmartDashboard.putNumber("CanStepSpeed", 0.5);
-        
     }
 
     /**
