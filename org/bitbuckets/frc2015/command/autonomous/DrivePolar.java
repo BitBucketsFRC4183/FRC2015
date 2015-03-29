@@ -46,13 +46,15 @@ public class DrivePolar extends Command {
 
         if (maxVel > RandomConstants.MAX_TRANS_SPEED) {
             maxVel = RandomConstants.MAX_TRANS_SPEED;
-            SmartDashboard.putString("Maximum tran speed", "is too high");
+            if(RandomConstants.TESTING){
+                SmartDashboard.putString("Maximum tran speed", "is too high");
+            }
         }
 
+        feetPerEncTick = RandomConstants.WHEEL_CIRCUMFERENCE / (4.0 * RandomConstants.DRIVEY_ENC_TICK_PER_REV * 348.0/256.0);
         profiler = new PositionMotionProfiler(radius, maxVel, RandomConstants.MAX_TRANS_ACCEL, .25);
         theta = angle;
         distance = 0;
-        feetPerEncTick = RandomConstants.WHEEL_CIRCUMFERENCE / RandomConstants.DRIVEY_ENC_TICK_PER_REV;
     }
 
     /**
@@ -76,17 +78,18 @@ public class DrivePolar extends Command {
         double targetY = distance * Math.sin(theta);
 
         if (RandomConstants.TESTING) {
+
             //SmartDashboard.putNumber("Autonomous velocity", velocity);
             SmartDashboard.putNumber("Autonomous position", distance);
-            System.out.println(Robot.drivey.getWheelSpeed(RobotMap.CENTER_X, RobotMap.CENTER_Y, RobotMap.WHEEL_FL_X, RobotMap.WHEEL_FL_Y, RobotMap.WHEEL_FL_THETA, targetX, targetY, correctionHeading) / feetPerEncTick);
+            SmartDashboard.putNumber("FL position set:", Robot.drivey.getWheelSpeed(RobotMap.CENTER_X, RobotMap.CENTER_Y, RobotMap.WHEEL_FL_X, RobotMap.WHEEL_FL_Y, RobotMap.WHEEL_FL_THETA, targetX, targetY, correctionHeading) / feetPerEncTick);
             System.out.println("Current time: " + System.currentTimeMillis() + "\tFinish time:" + profiler.getFinishTime());
         }
 
         Robot.drivey.setControllers(
-                Robot.drivey.getWheelSpeed(RobotMap.CENTER_X, RobotMap.CENTER_Y, RobotMap.WHEEL_FL_X, RobotMap.WHEEL_FL_Y, RobotMap.WHEEL_FL_THETA, targetX, targetY, correctionHeading) / feetPerEncTick,
-                Robot.drivey.getWheelSpeed(RobotMap.CENTER_X, RobotMap.CENTER_Y, RobotMap.WHEEL_FR_X, RobotMap.WHEEL_FR_Y, RobotMap.WHEEL_FR_THETA, targetX, targetY, correctionHeading) / feetPerEncTick,
-                Robot.drivey.getWheelSpeed(RobotMap.CENTER_X, RobotMap.CENTER_Y, RobotMap.WHEEL_RL_X, RobotMap.WHEEL_RL_Y, RobotMap.WHEEL_RL_THETA, targetX, targetY, correctionHeading) / feetPerEncTick,
-                Robot.drivey.getWheelSpeed(RobotMap.CENTER_X, RobotMap.CENTER_Y, RobotMap.WHEEL_RR_X, RobotMap.WHEEL_RR_Y, RobotMap.WHEEL_RR_THETA, targetX, targetY, correctionHeading) / feetPerEncTick);
+                Robot.drivey.getWheelSpeed(RobotMap.CENTER_X, RobotMap.CENTER_Y, RobotMap.WHEEL_FL_X, RobotMap.WHEEL_FL_Y, RobotMap.WHEEL_FL_THETA, targetX, targetY, 0) / feetPerEncTick,
+                Robot.drivey.getWheelSpeed(RobotMap.CENTER_X, RobotMap.CENTER_Y, RobotMap.WHEEL_FR_X, RobotMap.WHEEL_FR_Y, RobotMap.WHEEL_FR_THETA, targetX, targetY, 0) / feetPerEncTick,
+                Robot.drivey.getWheelSpeed(RobotMap.CENTER_X, RobotMap.CENTER_Y, RobotMap.WHEEL_RL_X, RobotMap.WHEEL_RL_Y, RobotMap.WHEEL_RL_THETA, targetX, targetY, 0) / feetPerEncTick,
+                Robot.drivey.getWheelSpeed(RobotMap.CENTER_X, RobotMap.CENTER_Y, RobotMap.WHEEL_RR_X, RobotMap.WHEEL_RR_Y, RobotMap.WHEEL_RR_THETA, targetX, targetY, 0) / feetPerEncTick);
 
         //Robot.drivey.drive(velocity * Math.cos(theta), velocity * Math.sin(theta), correctionHeading);
     }

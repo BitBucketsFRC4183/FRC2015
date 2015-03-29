@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.tables.TableKeyNotDefinedException;
 
 import org.bitbuckets.frc2015.RandomConstants;
 import org.bitbuckets.frc2015.RobotMap;
@@ -126,7 +125,7 @@ public class Drivey extends Subsystem {
 	        frController.setPID(SmartDashboard.getNumber("KP"), SmartDashboard.getNumber("KI"), SmartDashboard.getNumber("KD"), SmartDashboard.getNumber("KF"), (int) SmartDashboard.getNumber("IZONE"), 0, 0);
 	        rlController.setPID(SmartDashboard.getNumber("KP"), SmartDashboard.getNumber("KI"), SmartDashboard.getNumber("KD"), SmartDashboard.getNumber("KF"), (int) SmartDashboard.getNumber("IZONE"), 0, 0);
 	        rrController.setPID(SmartDashboard.getNumber("KP"), SmartDashboard.getNumber("KI"), SmartDashboard.getNumber("KD"), SmartDashboard.getNumber("KF"), (int) SmartDashboard.getNumber("IZONE"), 0, 0);
-    	} catch(TableKeyNotDefinedException e){
+    	} catch(Exception e){
     		e.printStackTrace();
     	}
 
@@ -189,12 +188,12 @@ public class Drivey extends Subsystem {
 //
 //        }
 
-//        if (RandomConstants.TESTING) {
-//            SmartDashboard.putNumber("FLEnc", flController.getEncPosition());
-//            SmartDashboard.putNumber("FREnc", frController.getEncPosition());
-//            SmartDashboard.putNumber("RLEnc", rlController.getEncPosition());
-//            SmartDashboard.putNumber("RREnc", rrController.getEncPosition());
-//
+        if (RandomConstants.TESTING) {
+            SmartDashboard.putNumber("FLEnc", flController.getEncPosition());
+            SmartDashboard.putNumber("FREnc", frController.getEncPosition());
+            SmartDashboard.putNumber("RLEnc", rlController.getEncPosition());
+            SmartDashboard.putNumber("RREnc", rrController.getEncPosition());
+
 //            SmartDashboard.putNumber("FLEncVel", flController.getEncVelocity());
 //            SmartDashboard.putNumber("FREncVel", frController.getEncVelocity());
 //            SmartDashboard.putNumber("RLEncVel", rlController.getEncVelocity());
@@ -204,7 +203,7 @@ public class Drivey extends Subsystem {
 //            SmartDashboard.putNumber("FR Speed", FR);
 //            SmartDashboard.putNumber("RL Speed", RL);
 //            SmartDashboard.putNumber("RR Speed", RR);
-//        }
+        }
     }
 
     /**
@@ -264,5 +263,20 @@ public class Drivey extends Subsystem {
     public int[] getEncValues(){
     	return new int[]{flController.getEncPosition(), frController.getEncPosition(), rlController.getEncPosition(), rrController.getEncPosition()};
     }
+
+    /**
+     *
+     * @param FL
+     * @param FR
+     * @param RL
+     * @param RR
+     */
+    public void setFeedForward(double FL, double FR, double RL, double RR){
+        flController.setF(FL);
+        frController.setF(FR);
+        rlController.setF(RL);
+        rrController.setF(RR);
+    }
+
 }
 

@@ -31,7 +31,7 @@ public class RandomConstants {
     /**
      * Toggles various debug statements.
      */
-    public static final boolean TESTING = true;
+    public static final boolean TESTING = false;
     /**
      * Encoder ticks per revolution of a motor shaft.
      */
@@ -118,7 +118,7 @@ public class RandomConstants {
     /**
      * 
      */
-    public static final double GRAB_TIMEOUT = 2;
+    public static final double GRAB_TIMEOUT = 3;
     /**
      * 
      */
@@ -163,11 +163,11 @@ public class RandomConstants {
     /**
      * Proportional constant for Stacky.
      */
-    public static final double STACKY_KP = 1;
+    public static final double STACKY_KP = 0.6;
     /**
      * Integral constant for Stacky.
      */
-    public static final double STACKY_KI = 0.00;
+    public static final double STACKY_KI = 0.0;
     /**
      * Derivative constant for Stacky.
      */
@@ -184,7 +184,7 @@ public class RandomConstants {
     /**
      * Proportional constant for Grabby.
      */
-    public static final double GRABBY_KP = .3;
+    public static final double GRABBY_KP = 1;
     /**
      * Integral constant for Grabby.
      */

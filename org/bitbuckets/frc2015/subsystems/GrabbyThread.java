@@ -59,8 +59,9 @@ public class GrabbyThread extends SubsystemThread{
 			} else if(Robot.grabby.getLifterController().getControlMode() == ControlMode.Position){
 			}
 		}
-		
-		SmartDashboard.putBoolean("Grabby is in %Vbus", Robot.grabby.getLifterController().getControlMode() == ControlMode.PercentVbus);
-		
+
+        if(RandomConstants.TESTING){
+            SmartDashboard.putBoolean("Grabby is in %Vbus", Robot.grabby.getLifterController().getControlMode() == ControlMode.PercentVbus);
+        }
 	}
 }

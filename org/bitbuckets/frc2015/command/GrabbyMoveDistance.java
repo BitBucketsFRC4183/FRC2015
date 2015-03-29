@@ -1,5 +1,6 @@
 package org.bitbuckets.frc2015.command;
 
+import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.command.Command;
 import org.bitbuckets.frc2015.RandomConstants;
 import org.bitbuckets.frc2015.Robot;
@@ -25,6 +26,7 @@ public class GrabbyMoveDistance extends Command {
      * Called just before this Command runs the first time.
      */
     protected void initialize() {
+        Robot.grabby.getLifterController().changeControlMode(CANTalon.ControlMode.PercentVbus);
         posInit = Robot.grabby.getVerticalPosition();
         timeInit = System.currentTimeMillis();
     }
@@ -47,11 +49,17 @@ public class GrabbyMoveDistance extends Command {
      * Called once after <code>isFinished()</code> returns true.
      */
     protected void end() {
+        Robot.grabby.setLifterMotor(0);
+        Robot.grabby.getLifterController().changeControlMode(CANTalon.ControlMode.Position);
+        Robot.grabby.getLifterController().set(Robot.grabby.getLifterController().get());
     }
 
     /**
      * Called when another command which requires one or more of the same subsystems is scheduled to run.
      */
     protected void interrupted() {
+        Robot.grabby.setLifterMotor(0);
+        Robot.grabby.getLifterController().changeControlMode(CANTalon.ControlMode.Position);
+        Robot.grabby.getLifterController().set(Robot.grabby.getLifterController().get());
     }
 }

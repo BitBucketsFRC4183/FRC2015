@@ -37,7 +37,9 @@ public class DriveRotate extends Command {
 
         if (maxVel > RandomConstants.MAX_ROT_SPEED) {
             maxVel = RandomConstants.MAX_ROT_SPEED;
-            SmartDashboard.putString("Maximum rot speed", "is too high");
+            if(RandomConstants.TESTING){
+                SmartDashboard.putString("Maximum rot speed", "is too high");
+            }
         }
 
         profiler = new PositionMotionProfiler(angle, maxVel, RandomConstants.MAX_ROT_ACCEL);

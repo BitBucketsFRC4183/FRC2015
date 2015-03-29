@@ -2,6 +2,7 @@ package org.bitbuckets.frc2015.control;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.bitbuckets.frc2015.RandomConstants;
 
 public class DigitalInputLatch implements Runnable {
 	
@@ -45,7 +46,11 @@ public class DigitalInputLatch implements Runnable {
 			System.out.println("Warning: attempted to start duplicate DigitalInputLatch thread.");
 			return;
 		}
-		SmartDashboard.putString("DigitalInputLatchThread "+input.getChannel(), "Thread started");
+
+        if(RandomConstants.TESTING){
+		    SmartDashboard.putString("DigitalInputLatchThread "+input.getChannel(), "Thread started");
+        }
+
 		this.goal = goal;
 		triggered = false;
 		thread = new Thread(this);
@@ -70,7 +75,9 @@ public class DigitalInputLatch implements Runnable {
 		triggered = true;
 		stopThread();
 		System.out.println("Edge detected on digitalinput " + input.getChannel());
-		SmartDashboard.putString("DigitalInputLatchStatus "+input.getChannel(), "Edge detected");
+        if(RandomConstants.TESTING){
+            SmartDashboard.putString("DigitalInputLatchStatus "+input.getChannel(), "Edge detected");
+        }
 	}
 	
 	/**
@@ -82,7 +89,10 @@ public class DigitalInputLatch implements Runnable {
 		}
 		thread.interrupt();
 		thread = null;
-		SmartDashboard.putString("DigitalInputLatchThread "+input.getChannel(), "Thread stopped");
+
+        if(RandomConstants.TESTING){
+            SmartDashboard.putString("DigitalInputLatchThread "+input.getChannel(), "Thread stopped");
+        }
 	}
 	
 	/**

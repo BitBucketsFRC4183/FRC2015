@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.tables.TableKeyNotDefinedException;
 
 import org.bitbuckets.frc2015.RandomConstants;
 import org.bitbuckets.frc2015.Robot;
@@ -112,18 +111,19 @@ public class Stacky extends Subsystem {
             e.printStackTrace();
         }
         
+        if(RandomConstants.TESTING){
+            SmartDashboard.putNumber("Stacky KP:", RandomConstants.STACKY_KP);
+            SmartDashboard.putNumber("Stacky KI:", RandomConstants.STACKY_KI);
+            SmartDashboard.putNumber("Stacky KD:", RandomConstants.STACKY_KD);
+            SmartDashboard.putNumber("Stacky KF:", RandomConstants.STACKY_KF);
+            SmartDashboard.putNumber("Stacky IZONE:", RandomConstants.STACKY_IZONE);
 
-		SmartDashboard.putNumber("Stacky KP:", RandomConstants.STACKY_KP);
-		SmartDashboard.putNumber("Stacky KI:", RandomConstants.STACKY_KI);
-		SmartDashboard.putNumber("Stacky KD:", RandomConstants.STACKY_KD);
-		SmartDashboard.putNumber("Stacky KF:", RandomConstants.STACKY_KF);
-		SmartDashboard.putNumber("Stacky IZONE:", RandomConstants.STACKY_IZONE);
-		
-		SmartDashboard.putNumber("Input Stacky KP:", RandomConstants.STACKY_KP);
-		SmartDashboard.putNumber("Input Stacky KI:", RandomConstants.STACKY_KI);
-		SmartDashboard.putNumber("Input Stacky KD:", RandomConstants.STACKY_KD);
-		SmartDashboard.putNumber("Input Stacky KF:", RandomConstants.STACKY_KF);
-		SmartDashboard.putNumber("Input Stacky IZONE:", RandomConstants.STACKY_IZONE);
+            SmartDashboard.putNumber("Input Stacky KP:", RandomConstants.STACKY_KP);
+            SmartDashboard.putNumber("Input Stacky KI:", RandomConstants.STACKY_KI);
+            SmartDashboard.putNumber("Input Stacky KD:", RandomConstants.STACKY_KD);
+            SmartDashboard.putNumber("Input Stacky KF:", RandomConstants.STACKY_KF);
+            SmartDashboard.putNumber("Input Stacky IZONE:", RandomConstants.STACKY_IZONE);
+        }
     }
 
     /**
@@ -143,8 +143,10 @@ public class Stacky extends Subsystem {
 //    		speed = 0;
 //    		SmartDashboard.putBoolean("Winch enc too low", true);
 //    	}
-    	SmartDashboard.putNumber("Running winch at: ", speed);
-    	SmartDashboard.putString("Stacky winch mode:", winch.getControlMode().toString());
+        if(RandomConstants.TESTING){
+            SmartDashboard.putNumber("Running winch at: ", speed);
+            SmartDashboard.putString("Stacky winch mode:", winch.getControlMode().toString());
+        }
     	if (winch.getControlMode() == CANTalon.ControlMode.PercentVbus) {
             winch.set(speed);
             if (RandomConstants.TESTING) {
@@ -404,7 +406,7 @@ public class Stacky extends Subsystem {
     public void resetStackyPID(){
     	try{
     		winch.setPID(SmartDashboard.getNumber("Input Stacky KP"), SmartDashboard.getNumber("Input Stacky KI"), SmartDashboard.getNumber("Input Stacky KD"), SmartDashboard.getNumber("Input Stacky KF"), (int) SmartDashboard.getNumber("Input Stacky IZONE"), 0, 0);
-    	} catch(TableKeyNotDefinedException e){
+    	} catch(Exception e){
     		e.printStackTrace();
     	}
     	

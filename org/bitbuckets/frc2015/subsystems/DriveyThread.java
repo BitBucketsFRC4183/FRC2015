@@ -79,20 +79,24 @@ public class DriveyThread extends SubsystemThread{
         
         //grab encoder values for diagnostics
         encoderValues = Robot.drivey.getEncValues();
-        
-		//prints various diagnostic numbers
-		SmartDashboard.putNumber("Driver forward input: ", forwardInput);
-		SmartDashboard.putNumber("Driver lateral input: ", lateralInput);
-		SmartDashboard.putNumber("Driver rotational input: ", rotInput);
-        SmartDashboard.putNumber("Time for drive() to get called", time3 - time2);
-        SmartDashboard.putNumber("Front Left Encoder Value:", encoderValues[0]);
-        SmartDashboard.putNumber("Front Right Encoder Value:", encoderValues[1]);
-        SmartDashboard.putNumber("Rear Left Encoder Value:", encoderValues[2]);
-        SmartDashboard.putNumber("Rear Right Encoder Value:", encoderValues[3]);
 
+        if(RandomConstants.TESTING){
+            //prints various diagnostic numbers
+            SmartDashboard.putNumber("Driver forward input: ", forwardInput);
+            SmartDashboard.putNumber("Driver lateral input: ", lateralInput);
+            SmartDashboard.putNumber("Driver rotational input: ", rotInput);
+            SmartDashboard.putNumber("Time for drive() to get called", time3 - time2);
+            SmartDashboard.putNumber("Front Left Encoder Value:", encoderValues[0]);
+            SmartDashboard.putNumber("Front Right Encoder Value:", encoderValues[1]);
+            SmartDashboard.putNumber("Rear Left Encoder Value:", encoderValues[2]);
+            SmartDashboard.putNumber("Rear Right Encoder Value:", encoderValues[3]);
+        }
 
         time4 = System.currentTimeMillis();
-        SmartDashboard.putNumber("Time for execute() method to run", time4 - time1);
+
+        if(RandomConstants.TESTING){
+            SmartDashboard.putNumber("Time for execute() method to run", time4 - time1);
+        }
 	}
 
 }

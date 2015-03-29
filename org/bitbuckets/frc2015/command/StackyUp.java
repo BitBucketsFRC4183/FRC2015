@@ -39,7 +39,9 @@ public class StackyUp extends Command {
     		finished = true;
     	}
     	//requires either that the command is blind, or that the button sensors are pressed
-	    SmartDashboard.putBoolean("StackyUp finshed (top switch) reached?", finished);
+        if(RandomConstants.TESTING){
+            SmartDashboard.putBoolean("StackyUp finshed (top switch) reached?", finished);
+        }
     	Robot.stacky.setWinchMotor(RandomConstants.CARRIAGE_FAST_SPEED);
     }
 

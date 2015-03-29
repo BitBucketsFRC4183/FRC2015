@@ -1,6 +1,7 @@
 package org.bitbuckets.frc2015.subsystems;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.bitbuckets.frc2015.RandomConstants;
 
 public class SubsystemThread implements Runnable{
 	
@@ -32,8 +33,12 @@ public class SubsystemThread implements Runnable{
 				if(iterTime > executeTime){
 					Thread.sleep(iterTime - executeTime);
 				}
-				SmartDashboard.putNumber(name + " sleep time", iterTime - executeTime);
-				SmartDashboard.putNumber(name + " cycle time", System.currentTimeMillis()-prevTime);
+
+                if(RandomConstants.TESTING){
+                    SmartDashboard.putNumber(name + " sleep time", iterTime - executeTime);
+                    SmartDashboard.putNumber(name + " cycle time", System.currentTimeMillis()-prevTime);
+                }
+
 				prevTime = System.currentTimeMillis();
 			}
 		} catch (InterruptedException e) {

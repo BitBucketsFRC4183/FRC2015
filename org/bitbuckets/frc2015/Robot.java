@@ -9,17 +9,18 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import org.bitbuckets.frc2015.autonomous.AutoCanMove;
-import org.bitbuckets.frc2015.autonomous.AutoDriveTest;
-import org.bitbuckets.frc2015.autonomous.DriveToAutoZone;
-import org.bitbuckets.frc2015.autonomous.ThreeTotePickupAutoMode;
+import org.bitbuckets.frc2015.autonomous.*;
 import org.bitbuckets.frc2015.command.StackyDown;
 import org.bitbuckets.frc2015.command.StackyDownAll;
 import org.bitbuckets.frc2015.command.StackyMoveDistance;
 import org.bitbuckets.frc2015.command.StackyUp;
 import org.bitbuckets.frc2015.command.TiltDown;
 import org.bitbuckets.frc2015.command.TiltUp;
+import org.bitbuckets.frc2015.command.autonomous.DrivePolar;
 import org.bitbuckets.frc2015.command.autonomous.DriveTime;
+import org.bitbuckets.frc2015.command.GrabbyClose;
+import org.bitbuckets.frc2015.command.GrabbyMoveDistance;
+import org.bitbuckets.frc2015.autonomous.AutoCanMove;
 import org.bitbuckets.frc2015.subsystems.Drivey;
 import org.bitbuckets.frc2015.subsystems.DriveyThread;
 import org.bitbuckets.frc2015.subsystems.Grabby;
@@ -115,12 +116,13 @@ public class Robot extends IterativeRobot {
         //TODO make some sort of tag at start of scripts required, so that auto scripts, constant files, etc. don't get confused
         //AutoProgramGenerator.generateAutoPrograms();
 
-        //autonomousCommand = new AutoDriveTest();
-        autoChooser.addDefault("Three Tote", new ThreeTotePickupAutoMode());
-        autoChooser.addObject("Drive to AutoZone", new DriveToAutoZone());
-        autoChooser.addObject("Drive Test", new AutoDriveTest());
-        autoChooser.addObject("Take Can", new AutoCanMove());
-        SmartDashboard.putData("Auto Chooser", autoChooser);
+//        autoChooser.addObject("Take Can", new GrabbyClose());
+//        autoChooser.addObject("Grabby move", new GrabbyMoveDistance(1));
+//        autoChooser.addObject("Drive Polar Test", new DrivePolar(6, 90, 2));
+//        autoChooser.addObject("Grab can and move", (Command) new AutoCanMove());
+//        autoChooser.addObject("Grab can", (Command) new AutoCanPickup());
+//        SmartDashboard.putData("Auto Chooser", autoChooser);
+        autonomousCommand = (Command) new AutoCanPickup();
     }
 
     /**
@@ -147,16 +149,26 @@ public class Robot extends IterativeRobot {
     }
 
     public void autonomousInit() {
+
+//        autoChooser.addObject("Take Can", new GrabbyClose());
+//        autoChooser.addObject("Grabby move", new GrabbyMoveDistance(1));
+//        autoChooser.addObject("Drive Polar Test", new DrivePolar(6, 90, 2));
+//        autoChooser.addObject("Grab can and move", (Command) new AutoCanMove());
+//        autoChooser.addObject("Grab can", (Command) new AutoCanPickup());
+
         // schedule the autonomous command (example)
         drivey.resetEncoders();
         //uncomment the following line for position based autoscripts, but ultimately each script should control it on its own.
 //        drivey.setEncoderSetting(ControlMode.Position);
         SerialPortManager.analogGyro.reset();
 
-        //autonomousCommand = (Command) autoChooser.getSelected();
-        //autonomousCommand = (Command) new AutoDriveTest();
-        autonomousCommand = (Command) new DriveTime(2L, 9.0);
-        autonomousCommand.start();
+//        autonomousCommand = (Command) autoChooser.getSelected();
+//        autonomousCommand = (Command) new AutoDriveTest();
+//        autonomousCommand = (Command) new DriveTime(4L, 4.0);
+//        autonomousCommand = (Command) new GrabbyClose();
+        if(autonomousCommand != null){
+        	autonomousCommand.start();
+        }
     }
 
     /**
@@ -189,17 +201,18 @@ public class Robot extends IterativeRobot {
      */
     public void teleopPeriodic() {
         Scheduler.getInstance().run();
-        
-//        SmartDashboard.putBoolean("Grabby Open:", grabbyOpen.isRunning());
-//        SmartDashboard.putBoolean("Grabby Close:", grabbyClose.isRunning());
-        SmartDashboard.putBoolean("Tilt Up:", tiltUp.isRunning());
-        SmartDashboard.putBoolean("Tilt Down:", tiltDown.isRunning());
-        SmartDashboard.putBoolean("Up One Blind:", upOne.isRunning());
-        SmartDashboard.putBoolean("Down One:", downOne.isRunning());
-        SmartDashboard.putBoolean("Down All:", downAll.isRunning());
-        SmartDashboard.putBoolean("Down Bit:", downBit.isRunning());
-        
-        SmartDashboard.putNumber("Stacky Motor Current", Robot.stacky.getWinchCurrent());
+        if(RandomConstants.TESTING){
+//            SmartDashboard.putBoolean("Grabby Open:", grabbyOpen.isRunning());
+//            SmartDashboard.putBoolean("Grabby Close:", grabbyClose.isRunning());
+            SmartDashboard.putBoolean("Tilt Up:", tiltUp.isRunning());
+            SmartDashboard.putBoolean("Tilt Down:", tiltDown.isRunning());
+            SmartDashboard.putBoolean("Up One Blind:", upOne.isRunning());
+            SmartDashboard.putBoolean("Down One:", downOne.isRunning());
+            SmartDashboard.putBoolean("Down All:", downAll.isRunning());
+            SmartDashboard.putBoolean("Down Bit:", downBit.isRunning());
+
+            SmartDashboard.putNumber("Stacky Motor Current", Robot.stacky.getWinchCurrent());
+        }
 
 //        if(RandomConstants.TESTING) {
 //            drivey.resetPIDs();
