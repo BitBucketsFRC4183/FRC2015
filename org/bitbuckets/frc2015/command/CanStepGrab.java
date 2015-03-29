@@ -9,20 +9,24 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  *
  */
 public class CanStepGrab extends Command {
-	
-	long timeInit = 0;
-	long duration = 0;
-	double speed = 0;
+
+    Thread motorThread;
+    public boolean finished = false;
+    double speed;
+    long duration;
+    boolean getDashboardVals;
+    
+    public CanStepGrab(double speed, long duration, boolean getDashboardVals, String key){
+    	
+    }
+
 	
     public CanStepGrab(double speed, long duration, boolean getDashboardVals) {
         requires(Robot.grabby);
-        if(getDashboardVals){
-	       	this.duration = (long) SmartDashboard.getNumber("CanStepDuration", duration);
-	       	this.speed = SmartDashboard.getNumber("CanStepSpeed", speed);
-        } else {
-        	this.duration = duration;
-        	this.speed = speed;
-        }
+        finished = false;
+        this.speed = speed;
+        this.duration = duration;
+        this.getDashboardVals = getDashboardVals;
     }
 
 	/**
@@ -33,25 +37,23 @@ public class CanStepGrab extends Command {
 	 * @param duration - How long this command should run in milliseconds.
 	 * @param speed - How fast the motor should run, from -1.0 to 1.0.
 	 */
-    public CanStepGrab(long duration, double speed) {
-        requires(Robot.grabby);
-       	this.duration = (long) SmartDashboard.getNumber("CanStepDuration", duration);
-       	this.speed = SmartDashboard.getNumber("CanStepSpeed", speed);
+    public CanStepGrab(double speed, long duration) {
+        this(speed, duration, true);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	timeInit = System.currentTimeMillis();
+        motorThread = new Thread(new MotorThread(speed, duration, getDashboardVals));
+        motorThread.start();
     }
 
     // Called repeatedly when this Command is scheduled to run
-    protected void execute() {
-    	Robot.grabby.setGrabMotor(speed);
+    protected void execute(){
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return System.currentTimeMillis() - timeInit > duration;
+        return finished;
     }
 
     // Called once after isFinished returns true
@@ -63,5 +65,36 @@ public class CanStepGrab extends Command {
     // subsystems is scheduled to run
     protected void interrupted() {
     	Robot.grabby.setGrabMotor(0);
+    }
+
+    public class MotorThread implements Runnable{
+        long duration = 0;
+        double speed = 0;
+        long timeInit = 0;
+
+        public MotorThread(double speed, long duration, boolean getDashboardVals){
+            timeInit = System.currentTimeMillis();
+            if(getDashboardVals){
+                this.duration = (long) SmartDashboard.getNumber("CanStepDuration", duration);
+                this.speed = SmartDashboard.getNumber("CanStepSpeed", speed);
+            } else {
+                this.duration = duration;
+                this.speed = speed;
+            }
+        }
+
+        @Override
+        public void run(){
+            Robot.grabby.setGrabMotor(speed);
+            while(System.currentTimeMillis()-timeInit < duration){
+                try{
+                    Thread.sleep(1);
+                } catch(InterruptedException e){
+                    e.printStackTrace();
+                }
+            }
+            finished = true;
+            Robot.grabby.setGrabMotor(0);
+        }
     }
 }

@@ -5,6 +5,7 @@ import org.bitbuckets.frc2015.autonomous.AutoCanRetrieval;
 import org.bitbuckets.frc2015.autonomous.AutoDriveTest;
 import org.bitbuckets.frc2015.autonomous.DriveToAutoZone;
 import org.bitbuckets.frc2015.autonomous.ThreeTotePickupAutoMode;
+import org.bitbuckets.frc2015.command.CanStepGrab;
 import org.bitbuckets.frc2015.command.StackyDown;
 import org.bitbuckets.frc2015.command.StackyDownAll;
 import org.bitbuckets.frc2015.command.StackyMoveDistance;
@@ -165,6 +166,7 @@ public class Robot extends IterativeRobot {
 //        drivey.setEncoderSetting(ControlMode.Position);
         SerialPortManager.analogGyro.reset();
         
+//        autonomousCommand = new CanStepGrab(0.5, 500, true);
         autonomousCommand = (Command) new AutoCanRetrieval();
 
         //autonomousCommand = (Command) autoChooser.getSelected();

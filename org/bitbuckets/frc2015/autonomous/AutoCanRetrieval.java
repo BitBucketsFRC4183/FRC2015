@@ -11,8 +11,10 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 public class AutoCanRetrieval extends CommandGroup {
     
     public  AutoCanRetrieval() {
-        addSequential(new CanStepGrab(1.0, 250, true));
-        addSequential(new Wait(1.0));
-        addSequential(new CanStepGrab(-0.5, 500, false));
+        addSequential(new CanStepGrab(0.75, 330, false));
+        addSequential(new Wait(0.5));
+        addSequential(new CanStepGrab(-0.15, 50, false));
+        addSequential(new Wait(0.1));
+        addSequential(new CanStepGrab(-0.5, 2000, false));
     }
 }
