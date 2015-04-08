@@ -26,16 +26,19 @@ public class CanStepGrab extends Command {
         this.getDashboardVals = getDashboardVals;
         this.key = key;
         if(getDashboardVals){
+        	SmartDashboard.putBoolean("Getting dashvalues", true);
 	        try{
-	        	duration = (long) SmartDashboard.getNumber(key+": CanStepDuration");
+	        	this.duration = (long) SmartDashboard.getNumber(key+": CanStepDuration");
 	        } catch(TableKeyNotDefinedException e ) {
 	        	SmartDashboard.putNumber(key+": CanStepDuration", duration);
 	        }
 	        try{
-	        	speed = SmartDashboard.getNumber(key+": CanStepSpeed");
+	        	this.speed = SmartDashboard.getNumber(key+": CanStepSpeed");
 	        } catch(TableKeyNotDefinedException e ) {
 	        	SmartDashboard.putNumber(key+": CanStepSpeed", speed);
 	        }
+        } else{
+        	SmartDashboard.putBoolean("Getting dashvalues", false);
         }
     }
 
