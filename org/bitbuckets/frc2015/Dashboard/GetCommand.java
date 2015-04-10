@@ -22,11 +22,10 @@ public class GetCommand extends Command {
     	} catch(TableKeyNotDefinedException e){
     		e.printStackTrace();
     		DashboardManager.updateStatus("Error: TableKeyNotDefinedException");
-    	}
-    	Command command = generateCommand(commandStr);
-    	if(command == null){
     		return;
     	}
+    	//need to add some exceptions for invalid commands or something
+    	Command command = generateCommand(commandStr);
     	DashboardManager.submitCommand(command);
     }
 
