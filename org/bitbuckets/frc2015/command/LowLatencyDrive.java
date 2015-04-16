@@ -10,17 +10,22 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * Use this for the Can Burglar driving
  */
 public class LowLatencyDrive extends Command {
+	
+	int[] inputs;
+	long time;
 
-    public LowLatencyDrive() {
+    public LowLatencyDrive(int[] inputs, long time) {
         requires(Robot.drivey);
+        this.inputs = inputs;
+        this.time = time;
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
     	Robot.drivey.setEncoderSetting(ControlMode.PercentVbus);
-    	Robot.drivey.setControllers(-1, -1, 1, 1);
+    	Robot.drivey.setControllers(inputs[0], inputs[1], inputs[2], inputs[3]);
     	try {
-			Thread.sleep(200);
+			Thread.sleep(time);
 		} catch (InterruptedException e) {}
     	SmartDashboard.putNumber("FLEncoder at end of 200ms of driving", Robot.drivey.getEncValues()[1]);
     	Robot.drivey.setEncoderSetting(ControlMode.Speed);

@@ -119,10 +119,11 @@ public class Robot extends IterativeRobot {
 
 
         //autonomousCommand = new AutoDriveTest();
-        autoChooser.addDefault("Three Tote", new ThreeTotePickupAutoMode());
-        autoChooser.addObject("Drive to AutoZone", new DriveToAutoZone());
-        autoChooser.addObject("Drive Test", new AutoDriveTest());
-        autoChooser.addObject("Take Can", new AutoCanMove());
+//        autoChooser.addObject("Drive to AutoZone", new DriveToAutoZone());
+//        autoChooser.addObject("Drive Test", new AutoDriveTest());
+//        autoChooser.addObject("Take Can", new AutoCanMove());
+        autoChooser.addDefault("Single Test", new CanStepGrab(1.0, 100, true, "Single Test"));
+        autoChooser.addObject("Stop Test", new AutoCanRetrieval());
         SmartDashboard.putData("Auto Chooser", autoChooser);
         
     }
@@ -164,13 +165,14 @@ public class Robot extends IterativeRobot {
 //        drivey.setEncoderSetting(ControlMode.Position);
         SerialPortManager.analogGyro.reset();
         
-        autonomousCommand = new CanStepGrab(0.5, 500, true, "test");
+//        autonomousCommand = new CanStepGrab(0.5, 500, true, "test");
 //        autonomousCommand = (Command) new AutoCanRetrieval();
 //        autonomousCommand = new LowLatencyDrive();
-
-        //autonomousCommand = (Command) autoChooser.getSelected();
+        autonomousCommand = (Command) autoChooser.getSelected();
+        
+        
         if(autonomousCommand != null){
-        	autonomousCommand.start();
+//        	autonomousCommand.start();
         }
     }
 

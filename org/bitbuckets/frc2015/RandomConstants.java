@@ -70,6 +70,10 @@ public class RandomConstants {
      */
     public static final double DRIVEY_ENC_TICK_PER_REV = 256.0 * WHEEL_GEAR_RATIO;
     
+	public static final double SMOOTHING_THRESHOLD = 0.2;
+	
+	public static final double SMOOTH_CHANGE = 0.1;
+
     
     ///////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////----STACKY----////////////////////////////////////

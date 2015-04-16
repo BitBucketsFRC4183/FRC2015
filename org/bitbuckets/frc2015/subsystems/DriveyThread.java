@@ -20,6 +20,11 @@ public class DriveyThread extends SubsystemThread{
 	private double lateralInput = 0;
 	private double rotInput = 0;
 	
+	private double oldForInput = 0;
+	private double oldLatInput = 0;
+	private double oldRotInput = 0;
+	private boolean smoothMode = false;
+	
 	private int[] encoderValues = new int[4];
 
 	public DriveyThread(long iterTime, String name) {
@@ -55,6 +60,29 @@ public class DriveyThread extends SubsystemThread{
 			rotInput -= Math.signum(forwardInput) * 0.02;
 		}
 		
+		if(Robot.oi.driverSlowMode.get() && smoothMode == false){
+			smoothMode = true;
+			oldForInput = forwardInput;
+			oldLatInput = lateralInput;
+			oldRotInput = rotInput;
+		} else if(smoothMode == true){
+			if(Math.abs(forwardInput - oldForInput) > RandomConstants.SMOOTHING_THRESHOLD){
+				oldForInput += RandomConstants.SMOOTH_CHANGE * Math.abs(forwardInput-oldForInput) / (forwardInput-oldForInput);
+				forwardInput = oldForInput;
+			}
+			if(Math.abs(lateralInput - oldLatInput) > RandomConstants.SMOOTHING_THRESHOLD){
+				oldLatInput += RandomConstants.SMOOTH_CHANGE * Math.abs(lateralInput-oldLatInput) / (lateralInput-oldLatInput);
+				lateralInput = oldLatInput;
+			}
+			if(Math.abs(rotInput - oldRotInput) > RandomConstants.SMOOTHING_THRESHOLD){
+				oldRotInput += RandomConstants.SMOOTH_CHANGE * Math.abs(rotInput-oldRotInput) / (rotInput-oldRotInput);
+				rotInput = oldRotInput;
+			}
+		} else {
+			smoothMode = false;
+		}
+		
+		
 		//allows the driver to reverse the input, effectively making grabby the front of the robot instead of stacky.
 		if(Robot.oi.driverReverse.get()){
 			forwardInput *= -1;
@@ -65,17 +93,17 @@ public class DriveyThread extends SubsystemThread{
 		//the following commented line allows removal of the slowmode code. Use this if the OI call is too slow, but this shouldn't ever be a problem.
 //        if(false){
 		//allows the driver to scale down his driving input by 1/2, allowing for consistent but gentle movement.
-        if(Robot.oi.driverSlowMode.get()){
-            Robot.drivey.drive(lateralInput * RandomConstants.MAX_TRANS_SPEED * RandomConstants.slowModeRatio,
-                          -1 * forwardInput * RandomConstants.MAX_TRANS_SPEED * RandomConstants.slowModeRatio,
-                               rotInput     * RandomConstants.MAX_ROT_SPEED   * RandomConstants.slowModeRatio);
-        } else{
+//        if(Robot.oi.driverSlowMode.get()){
+//            Robot.drivey.drive(lateralInput * RandomConstants.MAX_TRANS_SPEED * RandomConstants.slowModeRatio,
+//                          -1 * forwardInput * RandomConstants.MAX_TRANS_SPEED * RandomConstants.slowModeRatio,
+//                               rotInput     * RandomConstants.MAX_ROT_SPEED   * RandomConstants.slowModeRatio);
+//        } else{
             time2 = System.currentTimeMillis();
             Robot.drivey.drive(lateralInput * RandomConstants.MAX_TRANS_SPEED,
             		      -1 * forwardInput * RandomConstants.MAX_TRANS_SPEED,
             		           rotInput     * RandomConstants.MAX_ROT_SPEED);
         	time3 = System.currentTimeMillis();
-        }
+//        }
         
         //grab encoder values for diagnostics
         encoderValues = Robot.drivey.getEncValues();
