@@ -29,6 +29,16 @@ public class RobotMap {
      * Motors driving the winch for the elevator on {@link org.bitbuckets.frc2015.subsystems.Stacky}.
      */
     public static final int GRABBY_GRABBER = 4;
+    
+    /**
+     * The motor for driving the {@link org.bitbuckets.frc2015.subsystems.Shooty}.
+     */
+    public static final int SHOOTY_SHOOTER = 1;
+
+    /**
+     * The motor for driving the {@link org.bitbuckets.frc2015.subsystems.Shooty} winder.
+     */
+	public static final int SHOOTY_WINDER = 0;
 
 
     /////////////////////////////////////////////////////////////////////////////

@@ -48,7 +48,7 @@ public class RandomConstants {
     /**
      * Maximum translational acceleration in ft/s^2.(needs to be converted to ft/s^2)
      */
-    public static final double MAX_TRANS_ACCEL = 5;
+    public static final double MAX_TRANS_ACCEL = 30;
     /**
      * Maximum rotational speed in rad/s.
      */
@@ -134,11 +134,26 @@ public class RandomConstants {
     
     
     ///////////////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////----TILTY----////////////////////////////////////
+    /////////////////////////////////----SHOOTY----////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////
 
+    /**
+     * The speed at which the Talons running the tape measure shooter should be set to.
+     */
+	public static final double SHOOT_SPEED = 1;
+	
+	public static double WIND_MULTIPLIER = .75;
+	
+	public static final double RETRACT_SPEED = .75;
+	//TODO make final
+	/**
+	 * The length of time the shooter should run before it stops.
+	 */
+	public static double SHOOT_TIME = 225;
+	public static double UNWIND_TIME = 175;
+	public static final long WIND_TIME = 1100;
+	public static final long WIND_TIME_SHORT = 50;
 
-    
     ///////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////----PID----///////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////

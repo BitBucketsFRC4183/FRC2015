@@ -19,7 +19,7 @@ public class GrabbyMoveDistance extends Command {
      * The constructor for this {@link edu.wpi.first.wpilibj.command.Command}. It should use <code>requires()</code> to tell the compiler which subsystem it uses.
      */
     public GrabbyMoveDistance(double dist) {
-        profiler = new TrapezoidalMotionProfiler(dist, RandomConstants.MAX_GRABBY_LIFTER_SPEED, RandomConstants.MAX_GRABBY_LIFTER_ACCEL);
+        profiler = new TrapezoidalMotionProfiler(-1 * dist, RandomConstants.MAX_GRABBY_LIFTER_SPEED, RandomConstants.MAX_GRABBY_LIFTER_ACCEL);
     }
 
     /**

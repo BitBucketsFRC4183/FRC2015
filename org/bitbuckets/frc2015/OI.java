@@ -58,7 +58,7 @@ public class OI {
 
     ///////////////////BUTTONS//////////////////////////
     //Driver
-    public Button driverSlowMode = new JoystickButton(driver, 7);
+    public Button driverSmoothMode = new JoystickButton(driver, 7);
     public Button driverReverse = new JoystickButton(driver, 8);
     
     //Operator
@@ -78,6 +78,10 @@ public class OI {
     public Button operatorToteDown = new JoystickDirButton(operator, Direction.DOWN, 0, 1);
     public Button operatorToteDownAll = new JoystickButton(operator, 11);
     public Button operatorToteDownBit = new JoystickButton(operator, 3);
+    
+    //Shooty
+    public Button operatorTapeShoot = new JoystickButton(operator, 1);
+    public Button operatorTapeRetract = new JoystickButton(operator, 4);
 
     ////////////////////Console////////////////////
 //    public Button operatorToteUp = new JoystickButton(operator, 1);

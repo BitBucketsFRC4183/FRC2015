@@ -1,12 +1,8 @@
 package org.bitbuckets.frc2015;
 
-import org.bitbuckets.frc2015.autonomous.AutoCanMove;
 import org.bitbuckets.frc2015.autonomous.AutoCanRetrieval;
-import org.bitbuckets.frc2015.autonomous.AutoDriveTest;
-import org.bitbuckets.frc2015.autonomous.DriveToAutoZone;
-import org.bitbuckets.frc2015.autonomous.ThreeTotePickupAutoMode;
-import org.bitbuckets.frc2015.command.CanStepGrab;
-import org.bitbuckets.frc2015.command.LowLatencyDrive;
+import org.bitbuckets.frc2015.command.ShooterRetractShort;
+import org.bitbuckets.frc2015.command.ShooterShoot;
 import org.bitbuckets.frc2015.command.StackyDown;
 import org.bitbuckets.frc2015.command.StackyDownAll;
 import org.bitbuckets.frc2015.command.StackyMoveDistance;
@@ -17,6 +13,8 @@ import org.bitbuckets.frc2015.subsystems.Drivey;
 import org.bitbuckets.frc2015.subsystems.DriveyThread;
 import org.bitbuckets.frc2015.subsystems.Grabby;
 import org.bitbuckets.frc2015.subsystems.GrabbyThread;
+import org.bitbuckets.frc2015.subsystems.Shooty;
+import org.bitbuckets.frc2015.subsystems.ShootyThread;
 import org.bitbuckets.frc2015.subsystems.Stacky;
 import org.bitbuckets.frc2015.subsystems.StackyThread;
 import org.bitbuckets.frc2015.subsystems.Tilty;
@@ -47,6 +45,7 @@ public class Robot extends IterativeRobot {
     public static Grabby grabby;
     public static Stacky stacky;
     public static Tilty tilty;
+    public static Shooty shooty;
 
     public static PowerDistributionPanel pdp;
     private static Compressor compressor;
@@ -59,6 +58,7 @@ public class Robot extends IterativeRobot {
     public Thread grabbyThread;
     public Thread stackyThread;
     public Thread tiltyThread;
+    public Thread shootyThread;
     
 
 //    public static GrabbyOpen grabbyOpen;
@@ -69,6 +69,8 @@ public class Robot extends IterativeRobot {
     public static StackyDown downOne;
     public static StackyDownAll downAll;
     public static StackyMoveDistance downBit;
+    public static ShooterShoot shoot;
+    public static ShooterRetractShort retract;
 
     /**
      * This function is run when the robot is first started up and should be
@@ -80,6 +82,7 @@ public class Robot extends IterativeRobot {
         grabby = new Grabby();
         stacky = new Stacky();
         tilty = new Tilty();
+        shooty = new Shooty();
 
         SerialPortManager.init();
 
@@ -95,6 +98,8 @@ public class Robot extends IterativeRobot {
         downOne = new StackyDown();
         downAll = new StackyDownAll();
         downBit = new StackyMoveDistance(-0.5);
+        shoot = new ShooterShoot();
+        retract = new ShooterRetractShort();
         
 //        oi.operatorGrabOpen.whenPressed(grabbyOpen);
 //        oi.operatorGrabClose.whenPressed(grabbyClose);
@@ -104,6 +109,8 @@ public class Robot extends IterativeRobot {
 	    oi.operatorToteDown.whenPressed(downOne);
 	    oi.operatorToteDownAll.whenPressed(downAll);
 	    oi.operatorToteDownBit.whenPressed(downBit);
+//	    oi.operatorTapeShoot.whenPressed(shoot);
+	    oi.operatorTapeRetract.whenPressed(retract);
 
 
         ///////////////////COMMANDS////////////////
@@ -121,11 +128,13 @@ public class Robot extends IterativeRobot {
         //autonomousCommand = new AutoDriveTest();
 //        autoChooser.addObject("Drive to AutoZone", new DriveToAutoZone());
 //        autoChooser.addObject("Drive Test", new AutoDriveTest());
-//        autoChooser.addObject("Take Can", new AutoCanMove());
-        autoChooser.addDefault("Single Test", new CanStepGrab(1.0, 100, true, "Single Test"));
-        autoChooser.addObject("Stop Test", new AutoCanRetrieval());
-        SmartDashboard.putData("Auto Chooser", autoChooser);
-        
+//        autoChooser.addDefault("Take Can", new AutoCanMove());
+//        autoChooser.addDefault("Single Test", new CanStepGrab(1.0, 100, true, "Single Test"));
+//        autoChooser.addObject("Stop Test", new AutoCanRetrieval());
+//        SmartDashboard.putData("Auto Chooser", autoChooser);
+        SmartDashboard.putNumber("Shooting time", 100);
+        SmartDashboard.putNumber("Wind relative", 0.75);
+        SmartDashboard.putNumber("Unwind time", 50);
     }
 
     /**
@@ -144,6 +153,9 @@ public class Robot extends IterativeRobot {
     	}
     	if(tiltyThread != null){
 	    	tiltyThread.interrupt();
+    	}
+    	if(shootyThread != null){
+	    	shootyThread.interrupt();
     	}
     }
 
@@ -167,12 +179,15 @@ public class Robot extends IterativeRobot {
         
 //        autonomousCommand = new CanStepGrab(0.5, 500, true, "test");
 //        autonomousCommand = (Command) new AutoCanRetrieval();
+        autonomousCommand = (Command) new AutoCanRetrieval();
 //        autonomousCommand = new LowLatencyDrive();
-        autonomousCommand = (Command) autoChooser.getSelected();
+//        autonomousCommand = (Command) autoChooser.getSelected();
+        shootyThread = new Thread(new ShootyThread(10L, "Shooty Thread"));
+        shootyThread.start();
         
         
         if(autonomousCommand != null){
-//        	autonomousCommand.start();
+        	autonomousCommand.start();
         }
     }
 
@@ -194,11 +209,13 @@ public class Robot extends IterativeRobot {
         grabbyThread = new Thread(new GrabbyThread(100L, "Grabby Thread"));
         stackyThread = new Thread(new StackyThread(20L, "Stacky Thread"));
         tiltyThread  = new Thread(new TiltyThread(100L, "Tilty Thread"));
+        shootyThread = new Thread(new ShootyThread(10L, "Shooty Thread"));
         
         driveyThread.start();
         grabbyThread.start();
         stackyThread.start();
         tiltyThread.start();
+        shootyThread.start();
     }
 
     /**
@@ -224,7 +241,7 @@ public class Robot extends IterativeRobot {
 //            stacky.resetStackyPID();
 //            grabby.resetGrabbyPID();
 //        }
-
+        
         SmartDashboard.putData(Scheduler.getInstance());
 
         if (RandomConstants.TESTING) {

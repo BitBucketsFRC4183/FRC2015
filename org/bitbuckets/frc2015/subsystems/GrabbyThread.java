@@ -44,7 +44,7 @@ public class GrabbyThread extends SubsystemThread{
 		if(Robot.deadzone(Robot.oi.operator.getRawAxis(OI.LIFT), 0.04) != 0){
 			//moving
 			if(Robot.grabby.getLifterController().getControlMode() == ControlMode.PercentVbus){
-	        	Robot.grabby.setLifterMotor(Robot.deadzone(-1 * Robot.oi.operator.getRawAxis(OI.LIFT) * RandomConstants.MAX_GRABBY_LIFTER_SPEED, 0.04));
+	        	Robot.grabby.setLifterMotor(Robot.deadzone(Robot.oi.operator.getRawAxis(OI.LIFT) * RandomConstants.MAX_GRABBY_LIFTER_SPEED, 0.04));
 			//not moving -> moving
 			} else if(Robot.grabby.getLifterController().getControlMode() == ControlMode.Position){
 	        	Robot.grabby.getLifterController().changeControlMode(ControlMode.PercentVbus);

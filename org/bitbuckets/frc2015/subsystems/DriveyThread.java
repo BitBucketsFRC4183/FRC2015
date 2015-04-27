@@ -60,7 +60,7 @@ public class DriveyThread extends SubsystemThread{
 			rotInput -= Math.signum(forwardInput) * 0.02;
 		}
 		
-		if(Robot.oi.driverSlowMode.get() && smoothMode == false){
+		if(Robot.oi.driverSmoothMode.get() && smoothMode == false){
 			smoothMode = true;
 			oldForInput = forwardInput;
 			oldLatInput = lateralInput;

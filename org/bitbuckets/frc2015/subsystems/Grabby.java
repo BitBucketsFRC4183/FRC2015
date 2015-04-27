@@ -13,7 +13,7 @@ import org.bitbuckets.frc2015.RobotMap;
  */
 public class Grabby extends Subsystem {
     /**
-     * The motor to control the grabber *
+     * The motor to control the grabber
      */
     private Talon grabberController;
     private CANTalon lifterController;
