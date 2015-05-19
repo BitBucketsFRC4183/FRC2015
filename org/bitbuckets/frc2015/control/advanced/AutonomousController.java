@@ -58,44 +58,50 @@ public final class AutonomousController{
 		runner = new Thread(new Runnable(){
 			@Override
 			public void run() {
-				boolean somethingRunning;
-				long beforeTime;
-				while(!Thread.interrupted()){
-					somethingRunning = false;
-					beforeTime = System.currentTimeMillis();
-					if(paused == false && executorQueue.isEmpty() == false){
-						confirmPaused = false;
-						cullFinishedExecutors();
-						for(Executor e: activeExecutors){
-							if(e.sequential == true){
-								somethingRunning = true;
-								break;
-							}
-						}
-						if(somethingRunning == false){
-							Executor next;
-							do{
-								next = executorQueue.poll();
-								next.ae.start();
-								activeExecutors.add(next);
-							} while(executorQueue.isEmpty() == false && next.sequential == false);
-						}
-					} else if(paused == true){
-						confirmPaused = true;
-					}
-					try{
-						Thread.sleep(iterTime-(System.currentTimeMillis()-beforeTime));
-					} catch(InterruptedException e){
-						System.out.println("AutonomousController thread interrupted");
-						Thread.currentThread().interrupt();
-					} catch(IllegalArgumentException e){
-					}
-				}
+				runLoop();
 			}
 		});
 	}
 	
-	public static void cullFinishedExecutors(){
+	private static void runLoop(){
+		boolean sequentialRunning;
+		long loopStartTime;
+		while(!Thread.interrupted()){
+			sequentialRunning = false;
+			loopStartTime = System.currentTimeMillis();
+			if(paused == false && executorQueue.isEmpty() == false){
+				confirmPaused = false;
+				cullFinishedExecutors();
+				for(Executor e: activeExecutors){
+					if(e.sequential == true){
+						sequentialRunning = true;
+						break;
+					}
+				}
+				if(sequentialRunning == false){
+					Executor next;
+					do{
+						next = executorQueue.poll();
+						next.ae.start();
+						activeExecutors.add(next);
+						System.out.println("Executor queue size:\t" + executorQueue.size());
+						System.out.println("Active executors:\t" + activeExecutors.size());
+					} while(executorQueue.isEmpty() == false && next.sequential == false);
+				}
+			} else if(paused == true){
+				confirmPaused = true;
+			}
+			try{
+				Thread.sleep(iterTime-(System.currentTimeMillis()-loopStartTime));
+			} catch(InterruptedException e){
+				System.out.println("AutonomousController thread interrupted");
+				Thread.currentThread().interrupt();
+			} catch(IllegalArgumentException e){
+			}
+		}
+	}
+	
+	public static void cancelFinishedActions(){
 		activeExecutors.removeIf(e -> {
 			if(e.ae.isFinished() == true){
 				e.ae.cancel();
@@ -109,6 +115,7 @@ public final class AutonomousController{
 		executorQueue.clear();
 	}
 	
+	//TODO ensure nothing gets added while cleaning
 	public static boolean cleanUp(){
 		pause();
 		int timeout = 0;
@@ -119,7 +126,7 @@ public final class AutonomousController{
 			} catch (InterruptedException e1) {}
 		}
 		if(timeout >= 1000){
-			//say that it took too long to clean up
+			System.out.println("Pausing took >1second");
 			return false;
 		}
 		clearQueue();
@@ -130,6 +137,14 @@ public final class AutonomousController{
 		return true;
 	}
 	
+	public static void cancelActiveActions(){
+		
+	}
+	
+	public static void cancelType(AutonomousExecutable type){
+		
+	}
+	
 	
 	/**
 	 * Starts the static thread. If <code>Thread.start()</code> has not yet been invoked, this method will do so. If the thread is not paused, this method
@@ -138,6 +153,7 @@ public final class AutonomousController{
 	public static void start(){
 		if(runner == null || runner.isInterrupted() == true){
 			generateThread();
+			paused = false;
 			runner.start();
 		} else{
 			paused = false;

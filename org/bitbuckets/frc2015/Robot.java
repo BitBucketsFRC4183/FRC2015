@@ -1,6 +1,8 @@
 package org.bitbuckets.frc2015;
 
-import org.bitbuckets.frc2015.autonomous.AutoCanRetrieval;
+import org.bitbuckets.frc2015.command.GrabbyClose;
+import org.bitbuckets.frc2015.command.GrabbyMoveDistance;
+import org.bitbuckets.frc2015.command.GrabbyOpen;
 import org.bitbuckets.frc2015.command.ShooterRetractShort;
 import org.bitbuckets.frc2015.command.ShooterShoot;
 import org.bitbuckets.frc2015.command.StackyDown;
@@ -9,6 +11,10 @@ import org.bitbuckets.frc2015.command.StackyMoveDistance;
 import org.bitbuckets.frc2015.command.StackyUp;
 import org.bitbuckets.frc2015.command.TiltDown;
 import org.bitbuckets.frc2015.command.TiltUp;
+import org.bitbuckets.frc2015.command.Wait;
+import org.bitbuckets.frc2015.command.autonomous.DrivePolar;
+import org.bitbuckets.frc2015.control.advanced.AutonomousController;
+import org.bitbuckets.frc2015.control.advanced.CommandExecutor;
 import org.bitbuckets.frc2015.subsystems.Drivey;
 import org.bitbuckets.frc2015.subsystems.DriveyThread;
 import org.bitbuckets.frc2015.subsystems.Grabby;
@@ -135,6 +141,8 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putNumber("Shooting time", 100);
         SmartDashboard.putNumber("Wind relative", 0.75);
         SmartDashboard.putNumber("Unwind time", 50);
+        
+
     }
 
     /**
@@ -156,7 +164,8 @@ public class Robot extends IterativeRobot {
     	}
     	if(shootyThread != null){
 	    	shootyThread.interrupt();
-    	}
+    	}      
+    	AutonomousController.cleanUp();
     }
 
     public void disabledPeriodic() {
@@ -164,27 +173,24 @@ public class Robot extends IterativeRobot {
     }
 
     public void autonomousInit() {
-
-//        autoChooser.addObject("Take Can", new GrabbyClose());
-//        autoChooser.addObject("Grabby move", new GrabbyMoveDistance(1));
-//        autoChooser.addObject("Drive Polar Test", new DrivePolar(6, 90, 2));
-//        autoChooser.addObject("Grab can and move", (Command) new AutoCanMove());
-//        autoChooser.addObject("Grab can", (Command) new AutoCanPickup());
-
-        // schedule the autonomous command (example)
         drivey.resetEncoders();
         //uncomment the following line for position based autoscripts, but ultimately each script should control it on its own.
 //        drivey.setEncoderSetting(ControlMode.Position);
         SerialPortManager.analogGyro.reset();
         
-//        autonomousCommand = new CanStepGrab(0.5, 500, true, "test");
-//        autonomousCommand = (Command) new AutoCanRetrieval();
-        autonomousCommand = (Command) new AutoCanRetrieval();
-//        autonomousCommand = new LowLatencyDrive();
-//        autonomousCommand = (Command) autoChooser.getSelected();
-        shootyThread = new Thread(new ShootyThread(10L, "Shooty Thread"));
-        shootyThread.start();
-        
+//        AutonomousController.addParallel(new CommandExecutor(new StackyUp()));
+//        AutonomousController.addParallel(new CommandExecutor(new GrabbyClose()));
+//        AutonomousController.addSequential(new CommandExecutor(new Wait(5.0)));
+//        AutonomousController.addParallel(new CommandExecutor(new StackyUp()));
+//        AutonomousController.addParallel(new CommandExecutor(new GrabbyMoveDistance(2)));
+//        AutonomousController.addSequential(new CommandExecutor(new Wait(5.0)));
+//        AutonomousController.addParallel(new CommandExecutor(new StackyUp()));
+//        AutonomousController.addParallel(new CommandExecutor(new GrabbyOpen()));
+//        AutonomousController.addSequential(new CommandExecutor(new Wait(1.0)));
+
+        AutonomousController.addSequential(new CommandExecutor(new DrivePolar(2, 0, 1)));
+
+        AutonomousController.start();
         
         if(autonomousCommand != null){
         	autonomousCommand.start();
