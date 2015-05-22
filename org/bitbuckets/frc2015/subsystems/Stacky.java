@@ -304,6 +304,10 @@ public class Stacky extends Subsystem {
     public CANTalon.ControlMode getControlMode(){
         return winch.getControlMode();
     }
+    
+    public void setControlMode(CANTalon.ControlMode mode){
+    	winch.changeControlMode(mode);
+    }
 
     /**
      * Gets whether the top limit switch is active.

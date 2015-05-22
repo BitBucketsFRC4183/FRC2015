@@ -1,6 +1,7 @@
-package org.bitbuckets.frc2015.control.advanced;
+package org.bitbuckets.frc2015.control.advanced.kinematic;
 
-import org.bitbuckets.frc2015.control.advanced.profile.Profile;
+import org.bitbuckets.frc2015.control.advanced.MovementVector;
+
 
 /**
  * A base class for Kinematic Controllers. A kinematic controller provides translation from absolute coordinates to motor or output specific values. For example,
@@ -17,8 +18,6 @@ import org.bitbuckets.frc2015.control.advanced.profile.Profile;
  *
  */
 public abstract class KinematicController {
-
-	public abstract double verify(Profile<?> profile, long time);
 	
 	public abstract Double[] getOutputs(MovementVector input);
 	

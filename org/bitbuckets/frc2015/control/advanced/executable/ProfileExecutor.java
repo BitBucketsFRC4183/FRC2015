@@ -1,6 +1,12 @@
-package org.bitbuckets.frc2015.control.advanced;
+package org.bitbuckets.frc2015.control.advanced.executable;
 
+import org.bitbuckets.frc2015.control.advanced.DataRetriever;
+import org.bitbuckets.frc2015.control.advanced.DataSender;
+import org.bitbuckets.frc2015.control.advanced.MovementVector;
+import org.bitbuckets.frc2015.control.advanced.kinematic.KinematicController;
 import org.bitbuckets.frc2015.control.advanced.profile.Profile;
+import org.bitbuckets.frc2015.control.advanced.valueControl.ValueController;
+
 
 /**
  * 
@@ -45,13 +51,23 @@ public class ProfileExecutor extends AutonomousExecutable {
 	 */
 	@Override
 	public boolean verify(){
-		double drive = 0;
+		Double[] drive;
+		Double[] outputs;
 		for(long time = 1; time <= 15000; time++){
-			drive = kc.verify(profile, time);
-			if(drive <= 1){
-				continue;
-			} else if(drive > 1){
-				profile.generateSplines(drive);
+			outputs = kc.getOutputs(profile.getOutput(time));
+			drive = new Double[outputs.length];
+			for(int i = 0; i < outputs.length; i++){
+				drive[i] = Math.abs(outputs[i]);
+			}
+			Double maxWheelV = 0.0;
+			for(Double wheelV: drive){
+				if(wheelV > maxWheelV){
+					maxWheelV = wheelV;
+				}
+			}
+			if(maxWheelV > 1){
+				profile.regenerateSplines(maxWheelV);
+				time = 0;
 			}
 		}
 		return true;
