@@ -37,8 +37,8 @@ public final class AutonomousController{
 	 */
 	private AutonomousController(){}
 	
-	static LinkedList<Executor> executorQueue = new LinkedList<Executor>();
-	static ArrayList<Executor> activeExecutors = new ArrayList<Executor>();
+	static LinkedList<AutonomousExecutable> executorQueue = new LinkedList<AutonomousExecutable>();
+	static ArrayList<AutonomousExecutable> activeExecutors = new ArrayList<AutonomousExecutable>();
 	
 	private volatile static boolean paused;
 	private volatile static boolean confirmPaused;
@@ -52,7 +52,6 @@ public final class AutonomousController{
 	
 	/**
 	 * Initializes the controller's static thread as a new thread with an anonymous Runnable parameter, which gives the desired operation.
-	 * 
 	 */
 	private static void generateThread(){
 		runner = new Thread(new Runnable(){
@@ -63,6 +62,9 @@ public final class AutonomousController{
 		});
 	}
 	
+	/**
+	 * 
+	 */
 	private static void runLoop(){
 		boolean sequentialRunning;
 		long loopStartTime;
@@ -71,18 +73,18 @@ public final class AutonomousController{
 			loopStartTime = System.currentTimeMillis();
 			if(paused == false && executorQueue.isEmpty() == false){
 				confirmPaused = false;
-				cullFinishedExecutors();
-				for(Executor e: activeExecutors){
+				clearFinishedActions();
+				for(AutonomousExecutable e: activeExecutors){
 					if(e.sequential == true){
 						sequentialRunning = true;
 						break;
 					}
 				}
 				if(sequentialRunning == false){
-					Executor next;
+					AutonomousExecutable next;
 					do{
 						next = executorQueue.poll();
-						next.ae.start();
+						next.start();
 						activeExecutors.add(next);
 						System.out.println("Executor queue size:\t" + executorQueue.size());
 						System.out.println("Active executors:\t" + activeExecutors.size());
@@ -101,21 +103,51 @@ public final class AutonomousController{
 		}
 	}
 	
-	public static void cancelFinishedActions(){
+	/**
+	 * Cancels all currently running actions by calling their cancel() method and removing them from the List
+	 */
+	public static void cancelActiveActions(){
 		activeExecutors.removeIf(e -> {
-			if(e.ae.isFinished() == true){
-				e.ae.cancel();
+			e.cancel();
+			return true;
+		});
+	}
+	
+	/**
+	 * NYI
+	 * 
+	 * @param type
+	 */
+	public static void cancelType(AutonomousExecutable type){
+		
+	}
+	
+	/**
+	 * Clears out any actions which finished, as per the action's implementation of isFinished()
+	 */
+	public static void clearFinishedActions(){
+		activeExecutors.removeIf(e -> {
+			if(e.isFinished() == true){
+				e.cancel();
 				return true;
 			}
 			return false;
 		});
 	}
 	
+	/**
+	 * Clears all actions in the queue
+	 */
 	public static void clearQueue(){
 		executorQueue.clear();
 	}
 	
 	//TODO ensure nothing gets added while cleaning
+	/**
+	 * Cleans up and stops this Controller. Pauses, clears the queue, and removes all active actions.
+	 * 
+	 * @return
+	 */
 	public static boolean cleanUp(){
 		pause();
 		int timeout = 0;
@@ -130,22 +162,10 @@ public final class AutonomousController{
 			return false;
 		}
 		clearQueue();
-		activeExecutors.removeIf(e -> {
-			e.ae.cancel();
-			return true;
-		});
+		cancelActiveActions();
 		return true;
 	}
-	
-	public static void cancelActiveActions(){
-		
-	}
-	
-	public static void cancelType(AutonomousExecutable type){
-		
-	}
-	
-	
+
 	/**
 	 * Starts the static thread. If <code>Thread.start()</code> has not yet been invoked, this method will do so. If the thread is not paused, this method
 	 * does nothing. If the thread is paused, this method will unpause it.
@@ -162,51 +182,18 @@ public final class AutonomousController{
 	
 	/**
 	 * Pauses the static thread. If the thread is not running, this method will do nothing. If the thread is running and not paused, this method
-	 * will pause it. If the thread is paused, this method will do nothing. 
+	 * will pause it. If the thread is paused, this method will do nothing.
 	 */
 	public static void pause(){
 		paused = true;
 	}
 	
 	/**
-	 * Wraps an <code>AutonomousExecutable</code> with a flag indicating that it should not be run in parallel with the next action, and adds it to
-	 * the queue.
+	 * Adds an <code>AutonomousExecutable</code> to the queue.
 	 * 
 	 * @param ae is the AutonomousExecutable object to be added
 	 */
-	public static void addSequential(AutonomousExecutable ae){
-		executorQueue.offer(new Executor(ae, true));
+	public static void add(AutonomousExecutable ae){
+		executorQueue.offer(ae);
 	}
-	
-	/**
-	 * Wraps an <code>AutonomousExecutable</code> with a flag indicating that it should be run in parallel with the next action, and adds it to
-	 * the queue.
-	 * 
-	 * @param ae is the AutonomousExecutable object to be added
-	 */
-	public static void addParallel(AutonomousExecutable ae){
-		executorQueue.offer(new Executor(ae, false));
-	}
-
-	//TODO fix @see tag
-	/**
-	 * An static internal private class which wraps an AutonomousExecutable, adding a <code>sequential</code> flag. This indicates whether a particular
-	 * action should cause the controller to wait before starting the next action.
-	 * 
-	 * @author Miles Marchant
-	 * @version 0.9
-	 * @see AutonomousExecutor
-	 */
-	static private class Executor{
-		
-		AutonomousExecutable ae;
-		boolean sequential;
-		
-		public Executor(AutonomousExecutable ae, boolean sequential){
-			this.ae = ae;
-			this.sequential = sequential;
-		}
-	}
-
-
 }

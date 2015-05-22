@@ -8,6 +8,12 @@ package org.bitbuckets.frc2015.control.advanced;
  */
 public abstract class AutonomousExecutable extends Thread{
 	
+	public boolean sequential;
+	
+	public AutonomousExecutable(boolean sequential){
+		this.sequential = sequential;
+	}
+	
 	@Override
 	public abstract void run();
 	

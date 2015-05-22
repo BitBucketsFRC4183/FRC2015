@@ -6,7 +6,8 @@ public class CommandExecutor extends AutonomousExecutable{
 	
 	Command command;
 	
-	public CommandExecutor(Command command){
+	public CommandExecutor(Command command, boolean sequential){
+		super(sequential);
 		this.command = command;
 	}
 	

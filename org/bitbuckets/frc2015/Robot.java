@@ -188,8 +188,6 @@ public class Robot extends IterativeRobot {
 //        AutonomousController.addParallel(new CommandExecutor(new GrabbyOpen()));
 //        AutonomousController.addSequential(new CommandExecutor(new Wait(1.0)));
 
-        AutonomousController.addSequential(new CommandExecutor(new DrivePolar(2, 0, 1)));
-
         AutonomousController.start();
         
         if(autonomousCommand != null){

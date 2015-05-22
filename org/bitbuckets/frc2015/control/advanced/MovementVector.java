@@ -17,10 +17,14 @@ public class MovementVector {
 	 */
 	public double value;
 	/**
-	 * Direction of this vector. This can have many different meanings and thus different value ranges. A single motor may desire a movement vector with directions of 0 or 1,
-	 * while a translational vector may use this field as an angle argument.
+	 * Translational direction of this vector
 	 */
 	public double direction;
+	
+	/**
+	 * Rotation of the vector
+	 */
+	public double rotation;
 	
 	/**
 	 * Constructor for the MovementVector class. Simply sets the object's fields as the matching parameters.
@@ -28,9 +32,10 @@ public class MovementVector {
 	 * @param value      is a value given to this MovementVector
 	 * @param direction  is a direction given to this MovementVector
 	 */
-	public MovementVector(double value, double direction){
+	public MovementVector(double value, double direction, double rotation){
 		this.value = value;
 		this.direction = direction;
+		this.rotation = rotation;
 	}
 
 }

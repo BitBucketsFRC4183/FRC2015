@@ -1,5 +1,7 @@
 package org.bitbuckets.frc2015.control.advanced;
 
+import org.bitbuckets.frc2015.control.advanced.profile.Profile;
+
 /**
  * 
  * 
@@ -9,13 +11,13 @@ package org.bitbuckets.frc2015.control.advanced;
  */
 public class ProfileExecutor extends AutonomousExecutable {
 	
-	Profile profile;
+	Profile<MovementVector> profile;
 	long iterTime;
 	long startTime;
 	long currTime;
 	volatile boolean stop = false;
 	KinematicController kc;
-	ValueController vc;
+	ValueController<MovementVector, MovementVector> vc;
 	DataSender ds;
 	DataRetriever dr;
 	
@@ -28,7 +30,8 @@ public class ProfileExecutor extends AutonomousExecutable {
 	 * @param dr
 	 * @param iterTime
 	 */
-	public ProfileExecutor(Profile profile, KinematicController kc, ValueController vc, DataSender ds, DataRetriever dr, long iterTime){
+	public ProfileExecutor(Profile<MovementVector> profile, KinematicController kc, ValueController<MovementVector, MovementVector> vc, DataSender ds, DataRetriever dr, long iterTime, boolean sequential){
+		super(sequential);
 		this.profile = profile;
 		this.kc = kc;
 		this.vc = vc;
@@ -48,7 +51,7 @@ public class ProfileExecutor extends AutonomousExecutable {
 			if(drive <= 1){
 				continue;
 			} else if(drive > 1){
-				profile.generateComponents(drive);
+				profile.generateSplines(drive);
 			}
 		}
 		return true;
@@ -67,7 +70,12 @@ public class ProfileExecutor extends AutonomousExecutable {
 			
 			//execute the profile at the current time
 			currTime = System.currentTimeMillis();
-			ds.sendData(kc.getOutputs(vc.compute(profile, (Double[]) dr.retrieveData(), currTime - startTime)));
+			ds.sendData(
+					kc.getOutputs(
+							vc.compute(
+									profile.getOutput(currTime - startTime), (Double[]) dr.retrieveData())
+							)
+				);
 			if(profile.finished(currTime - startTime)){
 				this.interrupt();
 				continue;
