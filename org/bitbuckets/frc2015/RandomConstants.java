@@ -150,7 +150,7 @@ public class RandomConstants {
 	 * The length of time the shooter should run before it stops.
 	 */
 	public static double SHOOT_TIME = 225;
-	public static double UNWIND_TIME = 175;
+	public static double UNWIND_TIME = 190;
 	public static final long WIND_TIME = 1100;
 	public static final long WIND_TIME_SHORT = 50;
 

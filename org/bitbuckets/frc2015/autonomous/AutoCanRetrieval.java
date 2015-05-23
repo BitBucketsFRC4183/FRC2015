@@ -12,10 +12,10 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
  */
 public class AutoCanRetrieval extends CommandGroup {
     
-    public  AutoCanRetrieval() {
+    public AutoCanRetrieval() {
         addSequential(new ShooterShoot());
         addSequential(new Wait(0.250));
-        addSequential(new DrivePolar(6, Math.PI, 6));
+//        addSequential(new DrivePolar(6, Math.PI, 6));
         addSequential(new Wait(3));
         addSequential(new ShooterRetract());
     }
