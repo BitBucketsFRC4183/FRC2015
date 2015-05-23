@@ -15,6 +15,11 @@ public class MovementVector extends Hashtable<String, Double> {
 		return this.get(key);
 	}
 	
+	public MovementVector putValue(String key, Double value){
+		this.put(key, value);
+		return this;
+	}
+	
 	public MovementVector merge(MovementVector other){
 		this.putAll(other);
 		return this;

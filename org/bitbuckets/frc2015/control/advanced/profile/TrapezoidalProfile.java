@@ -44,7 +44,7 @@ public class TrapezoidalProfile extends Profile<MovementVector> {
 			
 		} else if(transSplines[transIndex].getEndTime() < time-profileStartTime){
 			transIndex++;
-			transVector = new MovementVector.VectorBuilder().translationAngle(values.getValue("translationAngle")).merge(transSplines[transIndex].calculate(time)).createVector();
+			transVector = transSplines[transIndex].calculate(time).putValue("translationAngle", values.getValue("translationAngle"));
 		}
 		
 		MovementVector rotVector = null;

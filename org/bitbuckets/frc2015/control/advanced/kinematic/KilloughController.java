@@ -4,9 +4,7 @@ import org.bitbuckets.frc2015.control.advanced.MovementVector;
 
 
 public class KilloughController extends KinematicController {
-	
-	double sqrt2 = Math.sqrt(2);
-	
+		
 	enum Wheel{
 		
 		FL(Math.PI/4, 1.0, -1.0, 1),

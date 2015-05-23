@@ -3,6 +3,7 @@ package org.bitbuckets.frc2015;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import org.bitbuckets.frc2015.command.GrabbyClose;
 import org.bitbuckets.frc2015.command.ShooterRetractShort;
 import org.bitbuckets.frc2015.command.ShooterShoot;
 import org.bitbuckets.frc2015.command.StackyDown;
@@ -12,12 +13,15 @@ import org.bitbuckets.frc2015.command.StackyUp;
 import org.bitbuckets.frc2015.command.TiltDown;
 import org.bitbuckets.frc2015.command.TiltUp;
 import org.bitbuckets.frc2015.control.advanced.AutonomousController;
+import org.bitbuckets.frc2015.control.advanced.executable.CommandExecutor;
 import org.bitbuckets.frc2015.control.advanced.DynamicDataRetriever;
 import org.bitbuckets.frc2015.control.advanced.DynamicDataSender;
 import org.bitbuckets.frc2015.control.advanced.executable.ProfileExecutor;
+import org.bitbuckets.frc2015.control.advanced.kinematic.KilloughController;
+import org.bitbuckets.frc2015.control.advanced.kinematic.LifterController;
 import org.bitbuckets.frc2015.control.advanced.kinematic.WinchController;
 import org.bitbuckets.frc2015.control.advanced.profile.TrapezoidalProfile;
-import org.bitbuckets.frc2015.control.advanced.valueControl.SimpleController;
+import org.bitbuckets.frc2015.control.advanced.valueControl.CascadingController;
 import org.bitbuckets.frc2015.subsystems.Drivey;
 import org.bitbuckets.frc2015.subsystems.DriveyThread;
 import org.bitbuckets.frc2015.subsystems.Grabby;
@@ -186,10 +190,11 @@ public class Robot extends IterativeRobot {
         SerialPortManager.analogGyro.reset();
         
         Robot.stacky.setControlMode(CANTalon.ControlMode.Speed);
+        //lift tote
         AutonomousController.add(new ProfileExecutor(
         		new TrapezoidalProfile(0, 5, 2, 1, 0, 0, 0),
         		new WinchController(),
-        		new SimpleController(0.5, 0.05),
+        		new CascadingController(0.5, 0.05),
         		new DynamicDataSender(new Consumer<Object[]>(){
 
 					@Override
@@ -208,16 +213,16 @@ public class Robot extends IterativeRobot {
         		}),
         		10L,
         		false));
-        // TODO change to claw
+        //raise claw
         AutonomousController.add(new ProfileExecutor(
         		new TrapezoidalProfile(0, 5, 2, 1, 0, 0, 0),
-        		new WinchController(),
-        		new SimpleController(0.5, 0.05),
+        		new LifterController(),
+        		new CascadingController(0.5, 0.05),
         		new DynamicDataSender(new Consumer<Object[]>(){
 
 					@Override
 					public void accept(Object[] t) {
-						Robot.stacky.setWinchMotor((double) t[0]);
+						Robot.grabby.setLifterMotor((double) t[0]);
 					}
         			
         		}),
@@ -225,12 +230,85 @@ public class Robot extends IterativeRobot {
 
 					@Override
 					public Object[] get() {
-						return new Double[]{Robot.stacky.getDistanceUp()};
+						return new Double[]{Robot.grabby.getVerticalPosition()};
 					}
         			
         		}),
         		10L,
-        		false));
+        		true));
+        //rotate
+        AutonomousController.add(new ProfileExecutor(
+        		new TrapezoidalProfile(0, 0, 0, 0, 5*Math.PI/6, 2, 1),
+        		new KilloughController(),
+        		new CascadingController(0.5, 0.05),
+        		new DynamicDataSender(new Consumer<Object[]>(){
+
+					@Override
+					public void accept(Object[] t) {
+						Robot.drivey.setControllers(-(double)t[0], -(double)t[1], -(double)t[2], -(double)t[3]);
+					}
+        			
+        		}),
+        		new DynamicDataRetriever(new Supplier<Object[]>(){
+
+					@Override
+					public Object[] get() {
+						int avgWheelEncValue = 0;
+						for(int i = 0; i < Robot.drivey.getEncValues().length; i++){
+							avgWheelEncValue += Robot.drivey.getEncValues()[i];
+						}
+						return new Double[]{(avgWheelEncValue / 4) * RandomConstants.DRIVEY_ENC_TICK_PER_REV / RandomConstants.WHEEL_CIRCUMFERENCE};
+					}
+        			
+        		}),
+        		10L,
+        		true));
+        //lower claw
+        AutonomousController.add(new ProfileExecutor(
+        		new TrapezoidalProfile(0, 5, 2, 1, 0, 0, 0),
+        		new LifterController(),
+        		new CascadingController(0.5, 0.05),
+        		new DynamicDataSender(new Consumer<Object[]>(){
+
+					@Override
+					public void accept(Object[] t) {
+						Robot.grabby.setLifterMotor(-(double) t[0]);
+					}
+        			
+        		}),
+        		new DynamicDataRetriever(new Supplier<Object[]>(){
+
+					@Override
+					public Object[] get() {
+						return new Double[]{Robot.grabby.getVerticalPosition()};
+					}
+        			
+        		}),
+        		10L,
+        		true));
+        AutonomousController.add(new CommandExecutor(new GrabbyClose(), true));
+        AutonomousController.add(new ProfileExecutor(
+        		new TrapezoidalProfile(0, 5, 2, 1, 0, 0, 0),
+        		new LifterController(),
+        		new CascadingController(0.5, 0.05),
+        		new DynamicDataSender(new Consumer<Object[]>(){
+
+					@Override
+					public void accept(Object[] t) {
+						Robot.grabby.setLifterMotor((double) t[0]);
+					}
+        			
+        		}),
+        		new DynamicDataRetriever(new Supplier<Object[]>(){
+
+					@Override
+					public Object[] get() {
+						return new Double[]{Robot.grabby.getVerticalPosition()};
+					}
+        			
+        		}),
+        		10L,
+        		true));
 
         AutonomousController.start();
         
